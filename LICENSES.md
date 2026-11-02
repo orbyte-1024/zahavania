@@ -19,3 +19,8 @@
 | @types/three | 0.187.0 | MIT |
 | Bricolage Grotesque (Google Fonts via next/font) | — | SIL Open Font License 1.1 |
 | DM Mono (Google Fonts via next/font) | — | SIL Open Font License 1.1 |
+| zod | 4.6.7 | MIT |
+| sharp | 0.35.5 | Apache-2.0 |
+| next-intl | 4.14.9 | MIT |
+| vitest | 5.1.0 | MIT |
+| vite | 8.3.5 | MIT |
