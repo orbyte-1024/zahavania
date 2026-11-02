@@ -14,8 +14,24 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project. The anon key is public by design. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only. Used only by local demo mode to read the seeded directory. |
 | `DEMO_MODE` | `true` skips authentication in local development. Ignored when `NODE_ENV=production`. |
+| `AI_CACHE_TTL_SECONDS` | How long a user's identical request is served from memory without calling the model (default 600, `0` disables). |
+| `DEMO_FALLBACK` | `off` (default), `on_error` (replay a recording when the model or network fails) or `always` (replay a recording before calling the model). |
+| `DEMO_RECORD` | `true` saves successful real results to `data/demo/`. Ignored when `NODE_ENV=production`. |
 
 Requests are authenticated with `Authorization: Bearer <supabase access token>` or the Supabase session cookie. Anonymous Supabase sessions (`signInAnonymously`) count as authenticated users.
+
+## Cache and demo fallback
+
+- Identical requests from the same user are answered from an in-memory cache for `AI_CACHE_TTL_SECONDS`, without calling the model or using the daily quota (`meta.cached: true`). Keys are SHA-256 hashes that include the user ID, so one user can never learn what another submitted. Entries are kept in memory only and expire after the TTL.
+- Demo scenarios can be recorded once in real mode and replayed when the network or the model fails, with `meta.replayed: true` and `meta.recordedAt`. The UI must show them as recorded results.
+
+To record the demo scenarios (each run is a real, paid model call):
+
+```bash
+DEMO_RECORD=true USE_MOCK=false DEMO_MODE=true npm run dev
+```
+
+Send each scenario once, check the files written to `data/demo/`, review them and commit them. They contain the scenario input and output, so record only public demo content, never confidential material. To replay them, set `DEMO_FALLBACK=on_error` (or `always` to skip the network entirely) and run `npm run build && npm start`. With the network off, Supabase cannot validate sessions, so offline rehearsals need `DEMO_MODE=true` in development.
 
 ## Text verification
 

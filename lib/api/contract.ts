@@ -40,7 +40,14 @@ export type VerifyTextSuccess = {
   ok: true;
   mock: boolean;
   result: ScoredVerification;
-  meta: { analyzedUrl: string | null; droppedSources: number; durationMs: number };
+  meta: {
+    analyzedUrl: string | null;
+    droppedSources: number;
+    durationMs: number;
+    cached: boolean;
+    replayed: boolean;
+    recordedAt: string | null;
+  };
 };
 
 export type VerifyTextErrorCode = CommonErrorCode | "url_not_allowed" | "url_unreachable" | "url_no_content";
@@ -57,6 +64,7 @@ export type SuggestExpertsSuccess = {
   missingProfiles: string[];
   regionBroadened: boolean;
   notice?: SuggestNotice;
+  meta: { durationMs: number; cached: boolean; replayed: boolean; recordedAt: string | null };
 };
 
 export type SuggestExpertsErrorCode = CommonErrorCode | "directory_unavailable";

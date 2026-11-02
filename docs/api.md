@@ -22,6 +22,7 @@ if (result.ok) {
 - Authentication: Supabase session cookie, or `Authorization: Bearer <access token>`. Anonymous Supabase sessions are accepted. `DEMO_MODE=true` skips this check outside production.
 - Responses carry `Cache-Control: no-store` and no CORS headers: call the API from the same origin.
 - Every response with `mock: true` is demonstration data and must be shown with a "Demonstration" badge.
+- `meta.cached: true` means the same user sent the same request a few minutes ago and the stored answer was returned. `meta.replayed: true` means the model or network was unavailable and a result recorded on `meta.recordedAt` was replayed: show it as a recorded result with its date.
 - Error body: `{ "ok": false, "error": { "code": string, "message": string, "fields"?: string[] } }`. `message` is generic English; translate from `code` in the UI. `fields` lists invalid input paths for `invalid_input`.
 
 | Code | Status | Meaning |
@@ -70,7 +71,8 @@ Success (`VerifyTextSuccess`):
     "globalIndex": 0,
     "globalBreakdown": [{ "code": "claim_contribution", "label": "...", "points": 0 }]
   },
-  "meta": { "analyzedUrl": "https://..." | null, "droppedSources": 0, "durationMs": 0 }
+  "meta": { "analyzedUrl": "https://..." | null, "droppedSources": 0, "durationMs": 0,
+            "cached": false, "replayed": false, "recordedAt": "2026-11-02T10:00:00.000Z" | null }
 }
 ```
 
@@ -109,7 +111,8 @@ Success (`SuggestExpertsSuccess`):
   "detectedDomains": ["health"],
   "missingProfiles": ["generic profile type"],
   "regionBroadened": false,
-  "notice": { "code": "topic_not_identified" | "no_matching_experts", "message": "..." }
+  "notice": { "code": "topic_not_identified" | "no_matching_experts", "message": "..." },
+  "meta": { "durationMs": 0, "cached": false, "replayed": false, "recordedAt": null }
 }
 ```
 

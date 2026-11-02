@@ -1,8 +1,10 @@
 import type { NextRequest } from "next/server";
 import { AiError, isMockMode, type AiUsage } from "@/lib/ai/client";
 import type { SuggestExpertsSuccess } from "@/lib/api/contract";
-import { suggestInputSchema } from "@/lib/ai/expert-schemas";
+import { createTtlCache, hashKey, normalizeText } from "@/lib/cache";
+import { suggestInputSchema, type SuggestInput } from "@/lib/ai/expert-schemas";
 import { ExpertDirectoryError } from "@/lib/db/experts";
+import { demoFallbackMode, isDemoRecording, readDemoRecording, writeDemoRecording } from "@/lib/demo/replay";
 import { readIntEnv } from "@/lib/env";
 import { suggestExperts } from "@/lib/experts/suggest";
 import { clientIp, createRateLimiter } from "@/lib/ratelimit";
@@ -28,7 +30,47 @@ type LogEntry = {
   candidateCount?: number;
   suggestionCount?: number;
   usage?: AiUsage | null;
+  served?: "cache" | "replay";
 };
+
+type SuggestPayload = Omit<SuggestExpertsSuccess, "ok" | "mock" | "meta">;
+
+const resultCache = createTtlCache<SuggestPayload>({
+  ttlMs: readIntEnv("AI_CACHE_TTL_SECONDS", 600, 0, 3_600) * 1_000,
+  maxEntries: 200,
+});
+
+function canonicalInput(input: SuggestInput) {
+  return {
+    topic: normalizeText(input.topic),
+    context: input.context ? normalizeText(input.context) : null,
+    lang: input.lang ?? null,
+    region: input.region ?? null,
+    languages: [...(input.languages ?? [])].sort(),
+    limit: input.limit,
+  };
+}
+
+function successBody(
+  payload: SuggestPayload,
+  extra: { mock: boolean; durationMs: number; cached: boolean; recordedAt: string | null },
+): SuggestExpertsSuccess {
+  return {
+    ok: true,
+    mock: extra.mock,
+    ...payload,
+    meta: {
+      durationMs: extra.durationMs,
+      cached: extra.cached,
+      replayed: extra.recordedAt !== null,
+      recordedAt: extra.recordedAt,
+    },
+  };
+}
+
+function isReplayable(error: unknown): boolean {
+  return error instanceof AiError || error instanceof ExpertDirectoryError;
+}
 
 function logRequest(entry: LogEntry) {
   const line = JSON.stringify({ route: "POST /api/sources/suggest", ...entry });
@@ -113,19 +155,52 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const userKey = hashKey(["sources-suggest", auth.userId, canonicalInput(input.data)]);
+  const demoKey = hashKey(["sources-suggest", canonicalInput(input.data)]);
+  const replayMode = isMockMode() ? "off" : demoFallbackMode();
+
+  const cached = resultCache.get(userKey);
+  if (cached) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, served: "cache" });
+    return jsonResponse(successBody(cached, { mock: false, durationMs: elapsed(), cached: true, recordedAt: null }));
+  }
+
+  if (replayMode === "always") {
+    const recording = await readDemoRecording<SuggestPayload>("sources-suggest", demoKey);
+    if (recording) {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, served: "replay" });
+      return jsonResponse(
+        successBody(recording.payload, { mock: false, durationMs: elapsed(), cached: false, recordedAt: recording.recordedAt }),
+      );
+    }
+  }
+
   const dailyCheck = dailyLimiter.check(auth.userId);
   if (!dailyCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
     return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
   }
 
-  if (!auth.supabase && !isMockMode()) {
-    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code: "supabase_config_missing" });
-    return errorResponse(503, "directory_unavailable", "The expert directory is not configured.");
-  }
-
   try {
+    if (!auth.supabase && !isMockMode()) {
+      throw new ExpertDirectoryError("supabase client unavailable");
+    }
     const result = await suggestExperts(auth.supabase, input.data);
+    const payload: SuggestPayload = {
+      suggestions: result.suggestions,
+      detectedDomains: result.detectedDomains,
+      missingProfiles: result.missingProfiles,
+      regionBroadened: result.regionBroadened,
+      ...(result.notice ? { notice: result.notice } : {}),
+    };
+    if (!result.mock) {
+      resultCache.set(userKey, payload);
+      if (isDemoRecording()) {
+        await writeDemoRecording("sources-suggest", demoKey, payload).catch(() =>
+          logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: "demo_record_failed" }),
+        );
+      }
+    }
     logRequest({
       userId: auth.userId,
       durationMs: elapsed(),
@@ -134,17 +209,20 @@ export async function POST(req: NextRequest) {
       suggestionCount: result.suggestionCount,
       usage: result.usage,
     });
-    return jsonResponse({
-      ok: true,
-      suggestions: result.suggestions,
-      detectedDomains: result.detectedDomains,
-      missingProfiles: result.missingProfiles,
-      regionBroadened: result.regionBroadened,
-      mock: result.mock,
-      ...(result.notice ? { notice: result.notice } : {}),
-    } satisfies SuggestExpertsSuccess);
+    return jsonResponse(
+      successBody(payload, { mock: result.mock, durationMs: elapsed(), cached: false, recordedAt: null }),
+    );
   } catch (error) {
     const mapped = mapError(error);
+    if (replayMode !== "off" && isReplayable(error)) {
+      const recording = await readDemoRecording<SuggestPayload>("sources-suggest", demoKey);
+      if (recording) {
+        logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: mapped.code, served: "replay" });
+        return jsonResponse(
+          successBody(recording.payload, { mock: false, durationMs: elapsed(), cached: false, recordedAt: recording.recordedAt }),
+        );
+      }
+    }
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: mapped.status, code: mapped.code });
     return errorResponse(mapped.status, mapped.code, mapped.message);
   }

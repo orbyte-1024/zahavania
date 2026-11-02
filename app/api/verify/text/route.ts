@@ -1,8 +1,10 @@
 import type { NextRequest } from "next/server";
-import { AiError, type AiUsage } from "@/lib/ai/client";
-import type { VerifyTextSuccess } from "@/lib/api/contract";
-import { verifyInputSchema } from "@/lib/ai/schemas";
+import { AiError, isMockMode, type AiUsage } from "@/lib/ai/client";
+import { verifyInputSchema, type VerifyInput } from "@/lib/ai/schemas";
 import { VerificationError, verifyContent } from "@/lib/ai/verify";
+import type { VerifyTextSuccess } from "@/lib/api/contract";
+import { createTtlCache, hashKey, normalizeText } from "@/lib/cache";
+import { demoFallbackMode, isDemoRecording, readDemoRecording, writeDemoRecording } from "@/lib/demo/replay";
 import { readIntEnv } from "@/lib/env";
 import { clientIp, createRateLimiter } from "@/lib/ratelimit";
 import { authenticate } from "@/lib/security/auth";
@@ -20,6 +22,45 @@ const dailyLimiter = createRateLimiter({
   windowMs: DAY_MS,
 });
 
+type VerifyPayload = Pick<VerifyTextSuccess, "result"> & Pick<VerifyTextSuccess["meta"], "analyzedUrl" | "droppedSources">;
+
+const resultCache = createTtlCache<VerifyPayload>({
+  ttlMs: readIntEnv("AI_CACHE_TTL_SECONDS", 600, 0, 3_600) * 1_000,
+  maxEntries: 200,
+});
+
+function canonicalInput(input: VerifyInput) {
+  return {
+    type: input.type,
+    lang: input.lang ?? null,
+    content: input.type === "text" ? normalizeText(input.content) : input.content.trim(),
+  };
+}
+
+function successBody(
+  payload: VerifyPayload,
+  extra: { mock: boolean; durationMs: number; cached: boolean; recordedAt: string | null },
+): VerifyTextSuccess {
+  return {
+    ok: true,
+    mock: extra.mock,
+    result: payload.result,
+    meta: {
+      analyzedUrl: payload.analyzedUrl,
+      droppedSources: payload.droppedSources,
+      durationMs: extra.durationMs,
+      cached: extra.cached,
+      replayed: extra.recordedAt !== null,
+      recordedAt: extra.recordedAt,
+    },
+  };
+}
+
+function isReplayable(error: unknown): boolean {
+  if (error instanceof AiError) return true;
+  return error instanceof SafeFetchError && error.code !== "invalid_url" && error.code !== "blocked_destination";
+}
+
 type LogEntry = {
   userId: string | null;
   durationMs: number;
@@ -29,6 +70,7 @@ type LogEntry = {
   usage?: AiUsage | null;
   attempts?: number;
   droppedSources?: number;
+  served?: "cache" | "replay";
 };
 
 function logRequest(entry: LogEntry) {
@@ -106,6 +148,26 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const userKey = hashKey(["verify-text", auth.userId, canonicalInput(input.data)]);
+  const demoKey = hashKey(["verify-text", canonicalInput(input.data)]);
+  const replayMode = isMockMode() ? "off" : demoFallbackMode();
+
+  const cached = resultCache.get(userKey);
+  if (cached) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, served: "cache" });
+    return jsonResponse(successBody(cached, { mock: false, durationMs: elapsed(), cached: true, recordedAt: null }));
+  }
+
+  if (replayMode === "always") {
+    const recording = await readDemoRecording<VerifyPayload>("verify-text", demoKey);
+    if (recording) {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, served: "replay" });
+      return jsonResponse(
+        successBody(recording.payload, { mock: false, durationMs: elapsed(), cached: false, recordedAt: recording.recordedAt }),
+      );
+    }
+  }
+
   const dailyCheck = dailyLimiter.check(auth.userId);
   if (!dailyCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
@@ -114,6 +176,19 @@ export async function POST(req: NextRequest) {
 
   try {
     const result = await verifyContent(input.data);
+    const payload: VerifyPayload = {
+      result: result.output,
+      analyzedUrl: result.analyzedUrl,
+      droppedSources: result.droppedSources,
+    };
+    if (!result.mock) {
+      resultCache.set(userKey, payload);
+      if (isDemoRecording()) {
+        await writeDemoRecording("verify-text", demoKey, payload).catch(() =>
+          logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: "demo_record_failed" }),
+        );
+      }
+    }
     logRequest({
       userId: auth.userId,
       durationMs: elapsed(),
@@ -122,18 +197,20 @@ export async function POST(req: NextRequest) {
       attempts: result.attempts,
       droppedSources: result.droppedSources,
     });
-    return jsonResponse({
-      ok: true,
-      mock: result.mock,
-      result: result.output,
-      meta: {
-        analyzedUrl: result.analyzedUrl,
-        droppedSources: result.droppedSources,
-        durationMs: elapsed(),
-      },
-    } satisfies VerifyTextSuccess);
+    return jsonResponse(
+      successBody(payload, { mock: result.mock, durationMs: elapsed(), cached: false, recordedAt: null }),
+    );
   } catch (error) {
     const mapped = mapError(error);
+    if (replayMode !== "off" && isReplayable(error)) {
+      const recording = await readDemoRecording<VerifyPayload>("verify-text", demoKey);
+      if (recording) {
+        logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: mapped.code, served: "replay" });
+        return jsonResponse(
+          successBody(recording.payload, { mock: false, durationMs: elapsed(), cached: false, recordedAt: recording.recordedAt }),
+        );
+      }
+    }
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: mapped.status, code: mapped.code, detail: mapped.detail });
     return errorResponse(mapped.status, mapped.code, mapped.message);
   }
