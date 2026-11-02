@@ -53,7 +53,7 @@ type OpenRouterParams = ChatCompletionCreateParamsNonStreaming & {
   plugins?: Array<{ id: "web"; max_results: number }>;
 };
 
-export const useMock = (): boolean => process.env.USE_MOCK === "true";
+export const isMockMode = (): boolean => process.env.USE_MOCK === "true";
 
 let client: OpenAI | null = null;
 
