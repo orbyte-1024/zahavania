@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { askJson, isMockMode } from "@/lib/ai/client";
+import { askJson, useMock as isMockMode } from "@/lib/llm";
 import { PING_SYSTEM, PING_USER } from "@/lib/ai/prompts/ping";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { data: { reponse } } = await askJson({
+    const { reponse } = await askJson({
       system: PING_SYSTEM,
       user: PING_USER,
       schema: PingSchema,
