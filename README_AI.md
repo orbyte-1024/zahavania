@@ -22,7 +22,8 @@ Requests are authenticated with `Authorization: Bearer <supabase access token>` 
 `POST /api/verify/text` with `{ "content": string, "type": "text" | "url", "lang"?: "mg" | "fr" | "en" }`.
 
 - `type: "url"` fetches the page server-side through `lib/security/safe-fetch.ts` (http/https only, public IPs only, standard ports, 8 s timeout, 2 MB, 3 re-checked redirects) and extracts the main text.
-- The model runs with OpenRouter web search. Any source whose URL was not returned by that search is dropped, and a claim left without sources becomes `insufficient` with a confidence index of 25 or less.
+- The model runs with OpenRouter web search. Any source whose URL was not returned by that search is dropped, and a claim left without sources becomes `insufficient`.
+- The model never sets the confidence index. `lib/score.ts` computes it per claim from source kind, stance, distinct domains, publication date and contradictions, returns a `breakdown` of `{ code, label, points }` items, and averages the claims into `globalIndex` with a `globalBreakdown`. `insufficient` is capped at 25 and `needs_verification` at 70. A `confirmed` claim needs at least 2 reliable independent domains and a `contradicted` claim needs at least 1 reliable contradicting source, otherwise the status is lowered to `needs_verification`.
 - Statuses are `confirmed`, `contradicted`, `insufficient` and `needs_verification`, never "true" or "false".
 
 ## Expert suggestions

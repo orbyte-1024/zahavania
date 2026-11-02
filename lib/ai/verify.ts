@@ -9,12 +9,12 @@ import {
   type VerifyOutput,
 } from "@/lib/ai/schemas";
 import { readIntEnv } from "@/lib/env";
+import { scoreVerification, type ScoredVerification } from "@/lib/score";
 import { safeFetchText } from "@/lib/security/safe-fetch";
 import { extractMainText } from "@/lib/web/extract-text";
 
 const VERIFY_TIMEOUT_MS = 45_000;
 const MIN_PAGE_TEXT_LENGTH = 80;
-export const NO_SOURCE_MAX_CONFIDENCE = 25;
 
 export class VerificationError extends Error {
   readonly code = "empty_page";
@@ -26,7 +26,7 @@ export class VerificationError extends Error {
 }
 
 export type VerifyResult = {
-  output: VerifyOutput;
+  output: ScoredVerification;
   mock: boolean;
   analyzedUrl: string | null;
   droppedSources: number;
@@ -61,12 +61,7 @@ export function keepOnlySearchedSources(
       return kept;
     });
     if (sources.length > 0) return { ...claim, sources };
-    return {
-      ...claim,
-      sources,
-      status: "insufficient",
-      confidenceIndex: Math.min(claim.confidenceIndex, NO_SOURCE_MAX_CONFIDENCE),
-    };
+    return { ...claim, sources, status: "insufficient" };
   });
 
   return { output: { ...output, claims }, droppedSources };
@@ -74,14 +69,13 @@ export function keepOnlySearchedSources(
 
 function mockResult(input: VerifyInput): VerifyResult {
   return {
-    output: {
+    output: scoreVerification({
       detectedLanguage: input.lang ?? "other",
       summary: "Demonstration result: USE_MOCK=true, no model or web search was called.",
       claims: [
         {
           text: input.type === "url" ? input.content : input.content.slice(0, 200),
           status: "insufficient",
-          confidenceIndex: 0,
           rationale: "Simulated response for development.",
           sources: [],
           contradictions: [],
@@ -89,7 +83,7 @@ function mockResult(input: VerifyInput): VerifyResult {
         },
       ],
       limitations: ["Simulated response: not a real verification."],
-    },
+    }),
     mock: true,
     analyzedUrl: input.type === "url" ? input.content : null,
     droppedSources: 0,
@@ -125,5 +119,5 @@ export async function verifyContent(input: VerifyInput): Promise<VerifyResult> {
   });
 
   const { output, droppedSources } = keepOnlySearchedSources(data, citedUrls);
-  return { output, mock: false, analyzedUrl, droppedSources, usage, attempts };
+  return { output: scoreVerification(output), mock: false, analyzedUrl, droppedSources, usage, attempts };
 }

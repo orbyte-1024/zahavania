@@ -4,12 +4,7 @@ import { createRateLimiter, isRateLimited } from "../lib/ratelimit.ts";
 import { isBlockedIp, SafeFetchError, validatePublicUrl } from "../lib/security/safe-fetch.ts";
 import { extractMainText } from "../lib/web/extract-text.ts";
 import { verifyInputSchema } from "../lib/ai/schemas.ts";
-import {
-  keepOnlySearchedSources,
-  NO_SOURCE_MAX_CONFIDENCE,
-  normalizeUrl,
-  verifyContent,
-} from "../lib/ai/verify.ts";
+import { keepOnlySearchedSources, normalizeUrl, verifyContent } from "../lib/ai/verify.ts";
 
 const source = (url) => ({
   title: "Title",
@@ -23,7 +18,6 @@ const source = (url) => ({
 const claim = (sources, overrides = {}) => ({
   text: "Claim",
   status: "confirmed",
-  confidenceIndex: 90,
   rationale: "Rationale",
   sources,
   contradictions: [],
@@ -114,7 +108,6 @@ test("sources not returned by web search are dropped and sourceless claims becom
   assert.equal(filtered.claims[0].status, "confirmed");
   assert.equal(filtered.claims[1].sources.length, 0);
   assert.equal(filtered.claims[1].status, "insufficient");
-  assert.ok(filtered.claims[1].confidenceIndex <= NO_SOURCE_MAX_CONFIDENCE);
 });
 
 test("mock mode never calls the model and is flagged as mock", async () => {
@@ -125,6 +118,7 @@ test("mock mode never calls the model and is flagged as mock", async () => {
     assert.equal(result.mock, true);
     assert.equal(result.usage, null);
     assert.equal(result.output.claims[0].sources.length, 0);
+    assert.equal(result.output.claims[0].confidenceIndex, 0);
   } finally {
     if (previous === undefined) delete process.env.USE_MOCK;
     else process.env.USE_MOCK = previous;
