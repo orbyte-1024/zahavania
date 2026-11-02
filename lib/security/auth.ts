@@ -1,10 +1,10 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { NextRequest } from "next/server";
 
 export type AuthResult =
-  | { ok: true; userId: string; demo: boolean }
+  | { ok: true; userId: string; demo: boolean; supabase: SupabaseClient | null }
   | { ok: false; reason: "missing_session" | "invalid_session" | "config_missing" };
 
 export function isDemoMode(): boolean {
@@ -17,8 +17,19 @@ function getBearerToken(req: NextRequest): string | null {
   return match?.[1]?.trim() || null;
 }
 
+function createDemoClient(): SupabaseClient | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceRoleKey) return null;
+  return createClient(url, serviceRoleKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
+
 export async function authenticate(req: NextRequest): Promise<AuthResult> {
-  if (isDemoMode()) return { ok: true, userId: "demo-user", demo: true };
+  if (isDemoMode()) {
+    return { ok: true, userId: "demo-user", demo: true, supabase: createDemoClient() };
+  }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -29,7 +40,10 @@ export async function authenticate(req: NextRequest): Promise<AuthResult> {
   if (!token && !hasSessionCookie) return { ok: false, reason: "missing_session" };
 
   const supabase = token
-    ? createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } })
+    ? createClient(url, anonKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+        global: { headers: { Authorization: `Bearer ${token}` } },
+      })
     : createServerClient(url, anonKey, {
         cookies: {
           getAll: () => req.cookies.getAll(),
@@ -39,5 +53,5 @@ export async function authenticate(req: NextRequest): Promise<AuthResult> {
 
   const { data, error } = token ? await supabase.auth.getUser(token) : await supabase.auth.getUser();
   if (error || !data.user) return { ok: false, reason: "invalid_session" };
-  return { ok: true, userId: data.user.id, demo: false };
+  return { ok: true, userId: data.user.id, demo: false, supabase };
 }
