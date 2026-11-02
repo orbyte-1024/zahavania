@@ -1,0 +1,16 @@
+{
+  "nav.verify": "Vérification",
+  "nav.angles": "Angles de reportage",
+  "nav.sources": "Sources",
+  "nav.assistant": "Assistant éditorial",
+  "nav.dossiers": "Dossiers",
+  "status.confirmed": "Confirmé",
+  "status.contradicted": "Contradit",
+  "status.insufficient": "Insuffisant",
+  "status.needsVerification": "À vérifier",
+  "label.confidence": "Indice de confiance",
+  "label.sources": "Sources",
+  "button.validate": "Valider",
+  "button.complete": "Compléter",
+  "button.reject": "Rejeter"
+}

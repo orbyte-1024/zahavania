@@ -1,0 +1,16 @@
+{
+  "nav.verify": "Verification",
+  "nav.angles": "Reporting angles",
+  "nav.sources": "Sources",
+  "nav.assistant": "Editorial assistant",
+  "nav.dossiers": "Dossiers",
+  "status.confirmed": "Confirmed",
+  "status.contradicted": "Contradicted",
+  "status.insufficient": "Insufficient",
+  "status.needsVerification": "Needs verification",
+  "label.confidence": "Confidence index",
+  "label.sources": "Sources",
+  "button.validate": "Validate",
+  "button.complete": "Complete",
+  "button.reject": "Reject"
+}
