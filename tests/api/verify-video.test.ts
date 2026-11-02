@@ -2,8 +2,22 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { NextRequest } from "next/server";
+
+const previousUseMock = process.env.USE_MOCK;
+
+beforeAll(() => {
+  process.env.USE_MOCK = "true";
+});
+
+afterAll(() => {
+  if (previousUseMock === undefined) {
+    delete process.env.USE_MOCK;
+  } else {
+    process.env.USE_MOCK = previousUseMock;
+  }
+});
 
 function generateVideoBytes(): Uint8Array {
   const tmpDir = mkdtempSync(join(tmpdir(), "checkeko-video-"));
@@ -19,9 +33,9 @@ function generateVideoBytes(): Uint8Array {
       "-pix_fmt",
       "yuv420p",
       "-c:v",
-      "libx264",
-      "-movflags",
-      "+faststart",
+      "mpeg4",
+      "-q:v",
+      "5",
       "-y",
       path,
     ],
