@@ -79,7 +79,7 @@ describe("POST /api/verify/image", () => {
     expect(status).toBe(400);
   });
 
-  it("accepts a file of exactly 5 MiB", async () => {
+  it("accepts a file of exactly 8 MiB", async () => {
     const bytes = pngOfSize(MAX_IMAGE_BYTES);
     const { status, body } = await postForm(
       formWith(bytes, "limite.png", "image/png"),
@@ -88,7 +88,7 @@ describe("POST /api/verify/image", () => {
     expect(body.file).toEqual({ format: "image/png", size: MAX_IMAGE_BYTES });
   });
 
-  it("rejects a file of 5 MiB + 1 byte", async () => {
+  it("rejects a file of 8 MiB + 1 byte", async () => {
     const bytes = pngOfSize(MAX_IMAGE_BYTES + 1);
     const { status, body } = await postForm(
       formWith(bytes, "trop-gros.png", "image/png"),

@@ -87,7 +87,7 @@ export function multipart(
     `--${boundary}\r\nContent-Disposition: form-data; name="image"; filename="${filename}"\r\n` +
       `Content-Type: ${declaredType}\r\n\r\n`,
   );
-  const tail = Buffer.from(`\r\n--${boundary}--\r\n`);
+  const tail = Buffer.from(`\r\n--${boundary}--\\r\\n`);
   return Buffer.concat([head, Buffer.from(bytes), tail]);
 }
 

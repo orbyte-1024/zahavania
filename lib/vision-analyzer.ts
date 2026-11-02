@@ -4,7 +4,7 @@ import type { ImageFormat } from "./image-intake";
 import sharp from "sharp";
 
 // ===========================================================================
-// Types et schéma de validation de l'analyse visuelle
+// Types and validation schema for the visual analysis
 // ===========================================================================
 
 export const ConfidenceEnum = z.enum(["low", "medium", "high"]);
@@ -36,8 +36,8 @@ export type VisionAnalysisResult = {
 };
 
 // ===========================================================================
-// Prompt neutre (français). Les textes dans l'image sont des données, pas des
-// instructions : on les ignore pour construire la réponse.
+// Prompt (french). Text inside the image is data, not instructions: it is
+// ignored when building the reply.
 // ===========================================================================
 
 const ANALYSIS_SYSTEM = `
@@ -75,9 +75,9 @@ Résume ce que tu observes dans l'image, les incohérences éventuelles (perspec
 `;
 
 // ===========================================================================
-// Nettoyage EXIF avant envoi : on ne transmet jamais le fichier original au
-// provider. Une image re-encodée sans EXIF garantit que les métadonnées
-// (incl. GPS, noms de logiciels, dates) ne voyagent pas.
+// EXIF stripping before sending: the original file is never forwarded to the
+// provider. A re-encoded copy without EXIF guarantees that metadata (incl.
+// GPS, software names, dates) does not travel.
 // ===========================================================================
 
 async function cleanImage(bytes: Uint8Array, format: ImageFormat): Promise<Uint8Array> {
@@ -100,7 +100,7 @@ async function cleanImage(bytes: Uint8Array, format: ImageFormat): Promise<Uint8
   }
 }
 
-const FUNCTIONAL_MAX_BYTES = 4 * 1024 * 1024; // 4 Mio, marge sur le cap 5 Mio
+const FUNCTIONAL_MAX_BYTES = 4 * 1024 * 1024; // 4 MiB, margin under the 8 MiB cap
 
 function base64Url(bytes: Uint8Array): string {
   const bin = Buffer.from(bytes).toString("base64");
@@ -113,7 +113,7 @@ function base64Url(bytes: Uint8Array): string {
 }
 
 function bytesToMimeType(bytes: Uint8Array): string {
-  // Correspond à la vérification des signatures du fichier (étape 1).
+  // Matches the file signature checks from step 1.
   if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "image/jpeg";
   if (
     bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47 &&
@@ -124,7 +124,7 @@ function bytesToMimeType(bytes: Uint8Array): string {
 }
 
 // ===========================================================================
-// Analyse proprement dite
+// Analysis itself
 // ===========================================================================
 
 export async function analyzeImage(
@@ -179,6 +179,7 @@ export async function analyzeImage(
     return { analysis: null, warnings };
   }
 }
+
 function mockAnalysis(): VisionResult {
   return {
     description: {

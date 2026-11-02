@@ -151,7 +151,8 @@ describe("POST /api/verify/image — EXIF metadata", () => {
     expect(status).toBe(200);
     expect(body.metadata.available).toBe(false);
     expect(body.metadata.hasGPS).toBe(false);
-    const unreadableWarning = body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE");    expect(unreadableWarning?.code).toBe("EXIF_UNREADABLE");
+    const unreadableWarning = body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE");
+    expect(unreadableWarning?.code).toBe("EXIF_UNREADABLE");
     const raw = JSON.stringify(body);
     expect(raw).not.toMatch(/IFD0|byteLength|offset/i);
     expectNoCoordinates(raw);

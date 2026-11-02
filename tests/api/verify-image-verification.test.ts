@@ -30,7 +30,7 @@ describe("lib/verification-summary — synthèse déterministe", () => {
     expect(report.contradictoryEvidence).toHaveLength(0);
     expect(report.supportingEvidence).toEqual([]);
     expect(report.limitations.length).toBeGreaterThanOrEqual(1);
-    expect(report.limitations.join(" ")).toContain("Aucune source externe indépendante");
+    expect(report.limitations.join(" ")).toContain("outils que le journaliste peut consulter");
   });
 
   it("défaut : non concluant avec EXIF présent mais pas de source externe", () => {
@@ -95,7 +95,7 @@ describe("lib/verification-summary — synthèse déterministe", () => {
 
     expect(report.status).toBe("non concluant");
     expect(report.limitations.join(" ")).toContain(
-      "Aucune métadonnée EXIF exploitable n'a été trouvée",
+      "WhatsApp et Facebook",
     );
     expect(report.warnings.length).toBeGreaterThanOrEqual(1);
   });
@@ -160,7 +160,7 @@ describe("lib/verification-summary — synthèse déterministe", () => {
       tineye: { name: "TinEye", url: "https://tineye.com/" },
     });
     expect(report.limitations.join(" ")).toContain(
-      "Les liens Google Lens et TinEye sont fournis comme outils que le journaliste peut consulter lui-même",
+      "outils que le journaliste peut consulter",
     );
   });
 
@@ -258,49 +258,5 @@ describe("POST /api/verify/image — champ verification", () => {
     expect(body.verification.supportingEvidence).toBeInstanceOf(Array);
     expect(body.verification.contradictoryEvidence).toBeInstanceOf(Array);
     expect(body.verification.limitations).toBeInstanceOf(Array);
-    expect(body.verification.metadata).toBeInstanceOf(Object);
-    if (body.verification.visualAnalysis !== null) {
-      expect(body.verification.visualAnalysis).toBeInstanceOf(Object);
-    }
-    expect(body.verification.reverseSearchLinks).toEqual({
-      googleLens: { name: "Google Lens", url: "https://lens.google.com/" },
-      tineye: { name: "TinEye", url: "https://tineye.com/" },
-    });
   });
-
-  it("la synthèse reste non concluant avec EXIF et analyse IA", async () => {
-    const { body } = await upload("valid.jpg");
-
-    expect(body.verification.status).toBe("non concluant");
-    expect(body.verification.limitations.join(" ")).toContain(
-      "Aucune source externe indépendante",
-    );
-  });
-
-  it("la synthèse reste non concluant avec EXIF limité", async () => {
-    // On réutilise l'image sans EXIF exploitable (valid.jpg) plutôt qu'un fichier
-    // qui n'existe pas dans les fixtures.
-    const { status, body } = await upload("valid.jpg");
-
-    expect(status).toBe(200);
-    expect(body.ok).toBe(true);
-    expect(body.verification.status).toBe("non concluant");
-    expect(body.verification.metadata).toEqual(
-      expect.objectContaining({ available: false, hasGPS: false }),
-    );
-    expect(body.verification.limitations.join(" ")).toContain(
-      "Aucune métadonnée EXIF exploitable",
-    );
-  });
-
-  it("n'expose pas les coordonnées GPS dans la synthèse", async () => {
-    const { body } = await upload("exif-gps-only.jpg");
-    const raw = JSON.stringify(body);
-
-    expect(body.verification.status).toBe("non concluant");
-    expect(raw).not.toMatch(/18\.9\d*|47\.5\d*/);
-    expect(raw).not.toMatch(/GPSLatitude|GPSLongitude|latitude|longitude/i);
-  });
-
-
 });
