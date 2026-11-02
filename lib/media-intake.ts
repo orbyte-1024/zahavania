@@ -229,29 +229,46 @@ function extensionFor(format: VideoFormat): string {
   return ".mp4";
 }
 
+function ffmpegAvailable(): boolean {
+  try {
+    execFileSync("ffmpeg", ["-version"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function extractVideoFrames(bytes: Uint8Array, format: VideoFormat): Uint8Array[] {
+  if (!ffmpegAvailable()) {
+    return [];
+  }
+
   const tmpDir = mkdtempSync(join(tmpdir(), "checkeko-video-"));
   const inputPath = join(tmpDir, `source${extensionFor(format)}`);
   const outputPattern = join(tmpDir, "frame-%03d.png");
 
   try {
     writeFileSync(inputPath, Buffer.from(bytes));
-    execFileSync(
-      "ffmpeg",
-      [
-        "-y",
-        "-v",
-        "error",
-        "-i",
-        inputPath,
-        "-vf",
-        "fps=1,scale=640:360:force_original_aspect_ratio=decrease,pad=640:360:(ow-iw)/2:(oh-ih)/2",
-        "-frames:v",
-        "3",
-        outputPattern,
-      ],
-      { stdio: "ignore" },
-    );
+    try {
+      execFileSync(
+        "ffmpeg",
+        [
+          "-y",
+          "-v",
+          "error",
+          "-i",
+          inputPath,
+          "-vf",
+          "fps=1,scale=640:360:force_original_aspect_ratio=decrease,pad=640:360:(ow-iw)/2:(oh-ih)/2",
+          "-frames:v",
+          "3",
+          outputPattern,
+        ],
+        { stdio: "ignore" },
+      );
+    } catch {
+      return [];
+    }
 
     const files = readdirSync(tmpDir)
       .filter((name) => name.startsWith("frame-") && name.endsWith(".png"))

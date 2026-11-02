@@ -38,12 +38,19 @@ export async function POST(req: NextRequest) {
 
     const videoFormat = result.format as VideoFormat;
     const frames = extractVideoFrames(result.bytes, videoFormat);
-    const analyses = await Promise.all(
-      frames.map((frame) => analyzeImage(frame, "image/png")),
-    );
+    const analyses = frames.length === 0
+      ? []
+      : await Promise.all(frames.map((frame) => analyzeImage(frame, "image/png")));
+
+    const warnings = analyses.flatMap((entry) => entry.warnings);
+    if (frames.length === 0) {
+      warnings.push({
+        code: "ANALYSE_IA_NON_DISPONIBLE",
+        message: "L’extraction des images-clés de la vidéo est indisponible dans cet environnement. La vérification reste non concluante.",
+      });
+    }
 
     const validAnalysis = analyses.find((entry) => entry.analysis !== null)?.analysis ?? null;
-    const warnings = analyses.flatMap((entry) => entry.warnings);
 
     const verification = buildVerification(
       null,
