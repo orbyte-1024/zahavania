@@ -7,6 +7,4 @@
 | @supabase/ssr | 0.12.7 | MIT |
 | @supabase/supabase-js | 2.118.0 | MIT |
 | server-only | 0.0.1 | MIT |
-| server-only | 0.0.1 | MIT |
-| @supabase/supabase-js | 2.118.0 | MIT |
-| @supabase/ssr | 0.12.7 | MIT |
+| sharp | 0.35.5 | Apache-2.0 |
