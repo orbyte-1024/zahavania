@@ -1,11 +1,11 @@
-# AGENTS.md — Checker-Ko (Hackathon FANILO)
+# AGENTS.md — Checkeko (Hackathon Checkeko)
 
 > Lis ce fichier en entier avant d'écrire du code. Il prime sur tes habitudes.
 > Pour Claude Code : créer un fichier `CLAUDE.md` contenant uniquement `@AGENTS.md`.
 
 ## 1. Mission
 
-Checker-Ko ("je vérifie" en malagasy) est un **assistant d'investigation journalistique**
+Checkeko ("je vérifie" en malagasy) est un **assistant d'investigation journalistique**
 pour Madagascar. Question centrale : *comment aider un journaliste à passer d'une
 information reçue à une information vérifiée, documentée et exploitable ?*
 
