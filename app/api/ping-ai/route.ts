@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { askJson, useMock as isMockMode } from "@/lib/llm";
-import { PING_SYSTEM, PING_USER } from "@/lib/prompts";
+import { askJson, isMockMode } from "@/lib/ai/client";
+import { PING_SYSTEM, PING_USER } from "@/lib/ai/prompts/ping";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 
 const PingSchema = z.object({ reponse: z.string().min(1) });
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { reponse } = await askJson({
+    const { data: { reponse } } = await askJson({
       system: PING_SYSTEM,
       user: PING_USER,
       schema: PingSchema,
