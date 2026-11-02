@@ -116,3 +116,22 @@ test("saved reports ignore corrupted storage and export readable text", () => {
   assert.match(text, /https:\/\/instat\.mg\/r/);
   assert.match(text, /- Limit/);
 });
+
+test("model output lists tolerate null and single strings but reject wrong types", async () => {
+  const { verifyOutputSchema, stringListSchema } = await import("../lib/ai/schemas.ts");
+  const { expertRankingSchema } = await import("../lib/ai/expert-schemas.ts");
+  assert.deepEqual(stringListSchema.parse(null), []);
+  assert.deepEqual(stringListSchema.parse("Check the INSTAT report"), ["Check the INSTAT report"]);
+  assert.equal(stringListSchema.safeParse([1, 2]).success, false);
+
+  const parsed = verifyOutputSchema.parse({
+    detectedLanguage: "fr",
+    summary: "Summary",
+    claims: [{ text: "Claim", status: "insufficient", rationale: "None", recommendedChecks: "Call the ministry", contradictions: null }],
+    limitations: null,
+  });
+  assert.deepEqual(parsed.claims[0].recommendedChecks, ["Call the ministry"]);
+  assert.deepEqual(parsed.claims[0].contradictions, []);
+  assert.deepEqual(parsed.limitations, []);
+  assert.deepEqual(expertRankingSchema.parse({ suggestions: [], missingProfiles: null }).missingProfiles, []);
+});

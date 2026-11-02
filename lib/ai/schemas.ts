@@ -20,6 +20,11 @@ export const verifyInputSchema = z
     }
   });
 
+export const stringListSchema = z.preprocess(
+  (value) => (value === null || value === undefined ? [] : typeof value === "string" ? [value] : value),
+  z.array(z.string()),
+);
+
 export const sourceSchema = z.object({
   title: z.string().min(1),
   url: z.url({ protocol: /^https?$/ }),
@@ -41,15 +46,15 @@ export const claimSchema = z.object({
   status: claimStatusSchema,
   rationale: z.string(),
   sources: z.array(sourceSchema).default([]),
-  contradictions: z.array(z.string()).default([]),
-  recommendedChecks: z.array(z.string()).default([]),
+  contradictions: stringListSchema,
+  recommendedChecks: stringListSchema,
 });
 
 export const verifyOutputSchema = z.object({
   detectedLanguage: z.enum(["mg", "fr", "en", "other"]),
   summary: z.string(),
   claims: z.array(claimSchema),
-  limitations: z.array(z.string()).default([]),
+  limitations: stringListSchema,
 });
 
 export type Language = z.infer<typeof languageSchema>;
@@ -111,7 +116,7 @@ export const angleSchema = z.object({
 export const anglesOutputSchema = z.object({
   lang: languageSchema,
   angles: z.array(angleSchema).min(ANGLES_MIN_COUNT).max(ANGLES_MAX_COUNT),
-  limitations: z.array(z.string()).default([]),
+  limitations: stringListSchema,
 });
 
 export type AngleClaimRef = z.infer<typeof angleClaimRefSchema>;

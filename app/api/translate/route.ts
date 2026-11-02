@@ -17,7 +17,7 @@ const dailyLimiter = createRateLimiter({
   windowMs: 24 * 60 * MINUTE_MS,
 });
 
-type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; usage?: AiUsage | null };
+type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; detail?: string; usage?: AiUsage | null };
 
 function logRequest(entry: LogEntry) {
   const line = JSON.stringify({ route: "POST /api/translate", ...entry });
@@ -93,7 +93,8 @@ export async function POST(req: NextRequest) {
       return errorResponse(504, "ai_timeout", "The translation took too long. Please try again.");
     }
     const code = error instanceof AiError ? error.code : "internal_error";
-    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code });
+    const detail = error instanceof Error ? `${error.name}: ${error.message}` : "unknown error";
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code, detail });
     return errorResponse(503, "ai_unavailable", "Translation is temporarily unavailable.");
   }
 }

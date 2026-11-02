@@ -10,6 +10,7 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 |---|---|
 | `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, key and model. Server-only, never prefixed `NEXT_PUBLIC_`. |
 | `USE_MOCK` | `false` by default. `true` returns deterministic demo data with `mock: true` and never calls the model, in development only: it is ignored when `NODE_ENV=production`. |
+| `AI_REASONING_TOKENS` | Extra token budget for models that reason before answering (default 2000). Reasoning shares the output budget, so without it a long reasoning cuts the JSON answer. |
 | `AI_FALLBACK_MODEL` | Optional second model. When the main model hits a rate limit, a provider error or invalid output, the request is retried once with it. |
 | `URL_FETCH_TIMEOUT_MS` | Time allowed to fetch a page for link verification (default 12000, between 3000 and 20000). |
 | `AI_MAX_TOKENS`, `AI_WEB_MAX_RESULTS`, `AI_DAILY_LIMIT_PER_USER` | Cost caps: output tokens, web results per verification, calls per user per day and per route. |

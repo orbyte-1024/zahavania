@@ -2,6 +2,7 @@ import "server-only";
 import OpenAI from "openai";
 import type { ChatCompletionCreateParamsNonStreaming } from "openai/resources/chat/completions";
 import type { ZodType } from "zod";
+import { readIntEnv } from "@/lib/env";
 
 const DEFAULT_BASE_URL = "https://openrouter.ai/api/v1";
 const DEFAULT_TIMEOUT_MS = 25_000;
@@ -51,6 +52,7 @@ export type AskJsonOptions<T> = {
 
 type OpenRouterParams = ChatCompletionCreateParamsNonStreaming & {
   plugins?: Array<{ id: "web"; max_results: number }>;
+  reasoning?: { effort: "low" | "medium" | "high"; exclude: boolean };
 };
 
 export const isMockMode = (): boolean => process.env.USE_MOCK === "true" && process.env.NODE_ENV !== "production";
@@ -97,7 +99,9 @@ async function requestOnce<T>(options: AskJsonOptions<T>, modelId: string) {
   const params: OpenRouterParams = {
     model: modelId,
     temperature: 0.2,
-    max_tokens: options.maxTokens ?? DEFAULT_MAX_TOKENS,
+    max_tokens: (options.maxTokens ?? DEFAULT_MAX_TOKENS) + readIntEnv("AI_REASONING_TOKENS", 2_000, 0, 8_000),
+    reasoning: { effort: "low", exclude: true },
+    response_format: { type: "json_object" },
     messages: [
       { role: "system", content: options.system },
       { role: "user", content: options.user },

@@ -31,6 +31,7 @@ type LogEntry = {
   suggestionCount?: number;
   usage?: AiUsage | null;
   served?: "cache" | "replay";
+  detail?: string;
 };
 
 type SuggestPayload = Omit<SuggestExpertsSuccess, "ok" | "mock" | "meta">;
@@ -223,7 +224,13 @@ export async function POST(req: NextRequest) {
         );
       }
     }
-    logRequest({ userId: auth.userId, durationMs: elapsed(), status: mapped.status, code: mapped.code });
+    logRequest({
+      userId: auth.userId,
+      durationMs: elapsed(),
+      status: mapped.status,
+      code: mapped.code,
+      detail: error instanceof Error ? `${error.name}: ${error.message}` : "unknown error",
+    });
     return errorResponse(mapped.status, mapped.code, mapped.message);
   }
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { languageSchema } from "@/lib/ai/schemas";
+import { languageSchema, stringListSchema } from "@/lib/ai/schemas";
 import { REGIONS } from "@/lib/constants/regions";
 
 export const MAX_TOPIC_LENGTH = 500;
@@ -20,7 +20,7 @@ export const suggestInputSchema = z
   .strict();
 
 export const topicClassificationSchema = z.object({
-  domains: z.array(z.string()).default([]),
+  domains: stringListSchema,
 });
 
 export const contributionTypeSchema = z.enum([
@@ -40,7 +40,7 @@ export const rankedSuggestionSchema = z.object({
 
 export const expertRankingSchema = z.object({
   suggestions: z.array(rankedSuggestionSchema).default([]),
-  missingProfiles: z.array(z.string()).default([]),
+  missingProfiles: stringListSchema,
 });
 
 export type SuggestInput = z.infer<typeof suggestInputSchema>;
