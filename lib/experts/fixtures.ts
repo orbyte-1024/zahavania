@@ -3,9 +3,9 @@ import type { ExpertRow } from "@/lib/db/experts";
 export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   {
     id: "00000000-0000-4000-8000-000000000001",
-    full_name: "Hery Rakoto Démo",
+    full_name: "RAJAONARISON Andy Williano",
     title: "Médecin de santé publique",
-    organization: "Ministère fictif de la Santé",
+    organization: "Centre de santé publique Mahasoa",
     org_type: "public_institution",
     domains: [
       "health",
@@ -18,8 +18,8 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "analamanga"
     ],
-    bio: "Profil fictif de démonstration. Santé publique, vaccination et données sanitaires à Madagascar.",
-    contact_email: "hery.rakoto@example.com",
+    bio: "Santé publique, vaccination et données sanitaires à Madagascar.",
+    contact_email: "andy.rajaonarison@example.com",
     contact_phone: "+261 00 000 00 01",
     consent_status: "granted",
     last_verified_at: "2026-08-15",
@@ -27,9 +27,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000002",
-    full_name: "Soa Rasoanaivo Démo",
+    full_name: "RAHARINIAINA Hajatiana Sandinah",
     title: "Enseignante-chercheuse en épidémiologie",
-    organization: "Université fictive d'Antananarivo",
+    organization: "Institut d'épidémiologie Fanantenana",
     org_type: "academic",
     domains: [
       "health",
@@ -43,8 +43,8 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "analamanga"
     ],
-    bio: "Profil fictif de démonstration. Épidémiologie, formation des soignants et santé communautaire.",
-    contact_email: "soa.rasoanaivo@example.com",
+    bio: "Épidémiologie, formation des soignants et santé communautaire.",
+    contact_email: "hajatiana.rahariniaina@example.com",
     contact_phone: "+261 00 000 00 02",
     consent_status: "granted",
     last_verified_at: "2026-10-01",
@@ -52,9 +52,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000003",
-    full_name: "Andry Ravelo Démo",
+    full_name: "Andry Ravelo",
     title: "Avocat",
-    organization: "Barreau fictif de Madagascar",
+    organization: "Cabinet Ravelo & Associés",
     org_type: "independent",
     domains: [
       "justice_law",
@@ -67,7 +67,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "analamanga"
     ],
-    bio: "Profil fictif de démonstration. Droit pénal, accès à la justice et droits des personnes vulnérables.",
+    bio: "Droit pénal, accès à la justice et droits des personnes vulnérables.",
     contact_email: "andry.ravelo@example.com",
     contact_phone: "+261 00 000 00 03",
     consent_status: "public_info",
@@ -76,9 +76,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000004",
-    full_name: "Lalao Andrianina Démo",
+    full_name: "Lalao Andrianina",
     title: "Économiste",
-    organization: "Observatoire fictif des politiques publiques",
+    organization: "Observatoire des politiques publiques Tsinjo",
     org_type: "independent",
     domains: [
       "economy_finance",
@@ -90,7 +90,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
       "en"
     ],
     regions: [],
-    bio: "Profil fictif de démonstration. Budget public, fiscalité et politiques économiques nationales.",
+    bio: "Budget public, fiscalité et politiques économiques nationales.",
     contact_email: "lalao.andrianina@example.com",
     contact_phone: "+261 00 000 00 04",
     consent_status: "granted",
@@ -99,9 +99,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000005",
-    full_name: "Tiana Rabe Démo",
+    full_name: "Tiana Rabe",
     title: "Agronome",
-    organization: "ONG fictive Tantely",
+    organization: "ONG Tantely",
     org_type: "ngo",
     domains: [
       "agriculture_food",
@@ -113,7 +113,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "vakinankaratra"
     ],
-    bio: "Profil fictif de démonstration. Cultures vivrières, semences et adaptation des exploitations familiales.",
+    bio: "Cultures vivrières, semences et adaptation des exploitations familiales.",
     contact_email: "tiana.rabe@example.com",
     contact_phone: "+261 00 000 00 05",
     consent_status: "public_info",
@@ -122,9 +122,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000006",
-    full_name: "Miora Rakotondrabe Démo",
+    full_name: "Miora Rakotondrabe",
     title: "Chercheuse en environnement",
-    organization: "Institut fictif de recherche sur le littoral",
+    organization: "Institut Ranomasina de recherche sur le littoral",
     org_type: "academic",
     domains: [
       "environment_climate",
@@ -137,7 +137,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "atsinanana"
     ],
-    bio: "Profil fictif de démonstration. Érosion côtière, mangroves et risques climatiques dans l'est.",
+    bio: "Érosion côtière, mangroves et risques climatiques dans l'est.",
     contact_email: "miora.rakotondrabe@example.com",
     contact_phone: "+261 00 000 00 06",
     consent_status: "granted",
@@ -146,9 +146,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000007",
-    full_name: "Faly Randria Démo",
+    full_name: "Faly Randria",
     title: "Ingénieur transports",
-    organization: "Société fictive Transport+",
+    organization: "Transport+ Conseil",
     org_type: "private",
     domains: [
       "infrastructure_transport",
@@ -161,7 +161,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "boeny"
     ],
-    bio: "Profil fictif de démonstration. Routes rurales, transport urbain et électrification des communes.",
+    bio: "Routes rurales, transport urbain et électrification des communes.",
     contact_email: "faly.randria@example.com",
     contact_phone: "+261 00 000 00 07",
     consent_status: "granted",
@@ -170,9 +170,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000008",
-    full_name: "Voahangy Ramiandrisoa Démo",
+    full_name: "Voahangy Ramiandrisoa",
     title: "Présidente d'association",
-    organization: "Association fictive Fanabeazana",
+    organization: "Association Fanabeazana",
     org_type: "association",
     domains: [
       "education",
@@ -185,7 +185,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "analamanga"
     ],
-    bio: "Profil fictif de démonstration. Éducation de base, alphabétisation et médiation culturelle.",
+    bio: "Éducation de base, alphabétisation et médiation culturelle.",
     contact_email: "voahangy.ramiandrisoa@example.com",
     contact_phone: "+261 00 000 00 08",
     consent_status: "public_info",
@@ -194,9 +194,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000009",
-    full_name: "Toky Razafindrakoto Démo",
+    full_name: "Toky Razafindrakoto",
     title: "Journaliste spécialisé",
-    organization: "Média fictif TechMada",
+    organization: "Haino Vaovao Numérique",
     org_type: "media",
     domains: [
       "technology_digital",
@@ -210,7 +210,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "analamanga"
     ],
-    bio: "Profil fictif de démonstration. Usages numériques, désinformation en ligne et médias locaux.",
+    bio: "Usages numériques, désinformation en ligne et médias locaux.",
     contact_email: "toky.razafindrakoto@example.com",
     contact_phone: "+261 00 000 00 09",
     consent_status: "granted",
@@ -219,9 +219,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000010",
-    full_name: "Naina Rakotomalala Démo",
+    full_name: "Naina Rakotomalala",
     title: "Géologue",
-    organization: "Université fictive de Toliara",
+    organization: "Centre d'études minières du Sud",
     org_type: "academic",
     domains: [
       "mining_extractives",
@@ -234,7 +234,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "atsimo_andrefana"
     ],
-    bio: "Profil fictif de démonstration. Mines artisanales, ressources minérales et impacts environnementaux.",
+    bio: "Mines artisanales, ressources minérales et impacts environnementaux.",
     contact_email: "naina.rakotomalala@example.com",
     contact_phone: "+261 00 000 00 10",
     consent_status: "public_info",
@@ -243,9 +243,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000011",
-    full_name: "Fanja Andriamihaja Démo",
+    full_name: "Fanja Andriamihaja",
     title: "Analyste politiques",
-    organization: "Institution fictive de veille citoyenne",
+    organization: "Collectif de veille citoyenne Mahery",
     org_type: "public_institution",
     domains: [
       "governance_politics",
@@ -259,7 +259,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "analamanga"
     ],
-    bio: "Profil fictif de démonstration. Gouvernance locale, élections, sécurité publique et recensements.",
+    bio: "Gouvernance locale, élections, sécurité publique et recensements.",
     contact_email: "fanja.andriamihaja@example.com",
     contact_phone: "+261 00 000 00 11",
     consent_status: "granted",
@@ -268,9 +268,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000012",
-    full_name: "Solo Ravelonarivo Démo",
+    full_name: "Solo Ravelonarivo",
     title: "Anthropologue",
-    organization: "Association fictive Kultur'Aina",
+    organization: "Association Kultur'Aina",
     org_type: "association",
     domains: [
       "culture_society",
@@ -282,7 +282,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "diana"
     ],
-    bio: "Profil fictif de démonstration. Cultures locales, radio communautaire et transmission des savoirs.",
+    bio: "Cultures locales, radio communautaire et transmission des savoirs.",
     contact_email: "solo.ravelonarivo@example.com",
     contact_phone: "+261 00 000 00 12",
     consent_status: "public_info",
@@ -291,9 +291,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000013",
-    full_name: "Hanta Rakotoarisoa Démo",
+    full_name: "Hanta Rakotoarisoa",
     title: "Avocate",
-    organization: "ONG fictive Vontsona",
+    organization: "ONG Vontsona",
     org_type: "ngo",
     domains: [
       "human_rights_gender",
@@ -306,7 +306,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "atsimo_atsinanana"
     ],
-    bio: "Profil fictif de démonstration. Droits des femmes, violences basées sur le genre et aide juridique.",
+    bio: "Droits des femmes, violences basées sur le genre et aide juridique.",
     contact_email: "hanta.rakotoarisoa@example.com",
     contact_phone: "+261 00 000 00 13",
     consent_status: "granted",
@@ -315,9 +315,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000014",
-    full_name: "Jean-Marc Fabrice Démo",
+    full_name: "Jean-Marc Fabrice",
     title: "Consultant en développement rural",
-    organization: "Cabinet fictif FM Conseil",
+    organization: "FM Conseil",
     org_type: "private",
     domains: [
       "economy_finance",
@@ -330,7 +330,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "menabe"
     ],
-    bio: "Profil fictif de démonstration. Filières agricoles, financement rural et coopératives. Consentement en attente.",
+    bio: "Filières agricoles, financement rural et coopératives. Consentement en attente.",
     contact_email: "jean-marc.fabrice@example.com",
     contact_phone: "+261 00 000 00 14",
     consent_status: "pending",
@@ -339,9 +339,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000015",
-    full_name: "Elia Andrianjafy Démo",
+    full_name: "Elia Andrianjafy",
     title: "Médecin urgentiste",
-    organization: "ONG fictive Salama",
+    organization: "ONG Salama",
     org_type: "ngo",
     domains: [
       "disaster_risk",
@@ -354,7 +354,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
     regions: [
       "vatovavy"
     ],
-    bio: "Profil fictif de démonstration. Secours d'urgence, cyclones et santé communautaire. Consentement en attente.",
+    bio: "Secours d'urgence, cyclones et santé communautaire. Consentement en attente.",
     contact_email: "elia.andrianjafy@example.com",
     contact_phone: "+261 00 000 00 15",
     consent_status: "pending",
@@ -363,9 +363,9 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
   },
   {
     id: "00000000-0000-4000-8000-000000000016",
-    full_name: "Mamy Rakotobe Démo",
+    full_name: "Mamy Rakotobe",
     title: "Consultant médias",
-    organization: "Réseau fictif des communicateurs",
+    organization: "Réseau des communicateurs Feo",
     org_type: "independent",
     domains: [
       "media_communication",
@@ -376,7 +376,7 @@ export const FIXTURE_EXPERTS: readonly ExpertRow[] = [
       "fr"
     ],
     regions: [],
-    bio: "Profil fictif de démonstration. Médias, information locale et outils numériques. Consentement retiré.",
+    bio: "Médias, information locale et outils numériques. Consentement retiré.",
     contact_email: "mamy.rakotobe@example.com",
     contact_phone: "+261 00 000 00 16",
     consent_status: "revoked",
