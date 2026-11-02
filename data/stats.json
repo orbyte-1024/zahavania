@@ -1,0 +1,466 @@
+{
+  "retrievedAt": "2026-11-02",
+  "indicators": [
+    {
+      "id": "SP.POP.TOTL",
+      "label": {
+        "mg": "Isan'ny mponina",
+        "fr": "Population totale",
+        "en": "Total population"
+      },
+      "sourceName": "Population, total",
+      "unit": "people",
+      "decimals": 0,
+      "value": 32740678,
+      "period": "2025",
+      "series": [
+        {
+          "year": 2016,
+          "value": 26099952
+        },
+        {
+          "year": 2017,
+          "value": 26788375
+        },
+        {
+          "year": 2018,
+          "value": 27494926
+        },
+        {
+          "year": 2019,
+          "value": 28219554
+        },
+        {
+          "year": 2020,
+          "value": 28953556
+        },
+        {
+          "year": 2021,
+          "value": 29691083
+        },
+        {
+          "year": 2022,
+          "value": 30437261
+        },
+        {
+          "year": 2023,
+          "value": 31195932
+        },
+        {
+          "year": 2024,
+          "value": 31964956
+        },
+        {
+          "year": 2025,
+          "value": 32740678
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/SP.POP.TOTL?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/SP.POP.TOTL?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "SI.POV.DDAY",
+      "label": {
+        "mg": "Fahantrana (latsaky ny 3 $ isan'andro)",
+        "fr": "Pauvreté (moins de 3 $ par jour)",
+        "en": "Poverty (under $3 a day)"
+      },
+      "sourceName": "Poverty headcount ratio at $3.00 a day (2021 PPP) (% of population)",
+      "unit": "%",
+      "decimals": 1,
+      "value": 69.2,
+      "period": "2021",
+      "series": [
+        {
+          "year": 1980,
+          "value": 61.7
+        },
+        {
+          "year": 1993,
+          "value": 83.1
+        },
+        {
+          "year": 1997,
+          "value": 80.7
+        },
+        {
+          "year": 1999,
+          "value": 78.5
+        },
+        {
+          "year": 2001,
+          "value": 57.5
+        },
+        {
+          "year": 2005,
+          "value": 55.3
+        },
+        {
+          "year": 2010,
+          "value": 65.3
+        },
+        {
+          "year": 2012,
+          "value": 67.3
+        },
+        {
+          "year": 2021,
+          "value": 69.2
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/SI.POV.DDAY?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/SI.POV.DDAY?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "NY.GDP.PCAP.CD",
+      "label": {
+        "mg": "PIB isan'olona",
+        "fr": "PIB par habitant",
+        "en": "GDP per capita"
+      },
+      "sourceName": "GDP per capita (current US$)",
+      "unit": "USD",
+      "decimals": 0,
+      "value": 599.265294255357,
+      "period": "2025",
+      "series": [
+        {
+          "year": 2016,
+          "value": 453.970714522463
+        },
+        {
+          "year": 2017,
+          "value": 491.866848718929
+        },
+        {
+          "year": 2018,
+          "value": 500.45718552916
+        },
+        {
+          "year": 2019,
+          "value": 499.818837622534
+        },
+        {
+          "year": 2020,
+          "value": 450.771615205157
+        },
+        {
+          "year": 2021,
+          "value": 483.469463351195
+        },
+        {
+          "year": 2022,
+          "value": 504.059106969168
+        },
+        {
+          "year": 2023,
+          "value": 514.064076551927
+        },
+        {
+          "year": 2024,
+          "value": 550.37875528856
+        },
+        {
+          "year": 2025,
+          "value": 599.265294255357
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/NY.GDP.PCAP.CD?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/NY.GDP.PCAP.CD?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "FP.CPI.TOTL.ZG",
+      "label": {
+        "mg": "Fiakaran'ny vidim-piainana",
+        "fr": "Inflation annuelle",
+        "en": "Annual inflation"
+      },
+      "sourceName": "Inflation, consumer prices (annual %)",
+      "unit": "%",
+      "decimals": 1,
+      "value": 8.05052431791227,
+      "period": "2025",
+      "series": [
+        {
+          "year": 2016,
+          "value": 6.04456028298412
+        },
+        {
+          "year": 2017,
+          "value": 8.59006119668708
+        },
+        {
+          "year": 2018,
+          "value": 8.59795823787684
+        },
+        {
+          "year": 2019,
+          "value": 5.62530573954355
+        },
+        {
+          "year": 2020,
+          "value": 4.19455227376978
+        },
+        {
+          "year": 2021,
+          "value": 5.81087199133074
+        },
+        {
+          "year": 2022,
+          "value": 8.16059031991844
+        },
+        {
+          "year": 2023,
+          "value": 9.87432675044888
+        },
+        {
+          "year": 2024,
+          "value": 7.61335784313723
+        },
+        {
+          "year": 2025,
+          "value": 8.05052431791227
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/FP.CPI.TOTL.ZG?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "SP.URB.TOTL.IN.ZS",
+      "label": {
+        "mg": "Mponina an-tanàn-dehibe",
+        "fr": "Population urbaine",
+        "en": "Urban population"
+      },
+      "sourceName": "Urban population (% of total population)",
+      "unit": "%",
+      "decimals": 1,
+      "value": 32.9017070836898,
+      "period": "2025",
+      "series": [
+        {
+          "year": 2016,
+          "value": 29.4239466316878
+        },
+        {
+          "year": 2017,
+          "value": 29.671033028335
+        },
+        {
+          "year": 2018,
+          "value": 29.9181125346909
+        },
+        {
+          "year": 2019,
+          "value": 30.3046972370204
+        },
+        {
+          "year": 2020,
+          "value": 30.7019474167548
+        },
+        {
+          "year": 2021,
+          "value": 31.1137123216036
+        },
+        {
+          "year": 2022,
+          "value": 31.5397813465886
+        },
+        {
+          "year": 2023,
+          "value": 31.9799438860946
+        },
+        {
+          "year": 2024,
+          "value": 32.4339893339844
+        },
+        {
+          "year": 2025,
+          "value": 32.9017070836898
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/SP.URB.TOTL.IN.ZS?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "IT.NET.USER.ZS",
+      "label": {
+        "mg": "Mpampiasa Internet",
+        "fr": "Utilisateurs d'Internet",
+        "en": "Internet users"
+      },
+      "sourceName": "Individuals using the Internet (% of population)",
+      "unit": "%",
+      "decimals": 1,
+      "value": 18.67790031,
+      "period": "2024",
+      "series": [
+        {
+          "year": 2015,
+          "value": 4.173999786
+        },
+        {
+          "year": 2016,
+          "value": 4.713699818
+        },
+        {
+          "year": 2017,
+          "value": 6.406000137
+        },
+        {
+          "year": 2018,
+          "value": 7.747799873
+        },
+        {
+          "year": 2019,
+          "value": 9.379400253
+        },
+        {
+          "year": 2020,
+          "value": 11.35470009
+        },
+        {
+          "year": 2021,
+          "value": 13.74590015
+        },
+        {
+          "year": 2022,
+          "value": 17.81170082
+        },
+        {
+          "year": 2023,
+          "value": 18.24080086
+        },
+        {
+          "year": 2024,
+          "value": 18.67790031
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/IT.NET.USER.ZS?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/IT.NET.USER.ZS?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "EG.ELC.ACCS.ZS",
+      "label": {
+        "mg": "Fahazoana herinaratra",
+        "fr": "Accès à l'électricité",
+        "en": "Access to electricity"
+      },
+      "sourceName": "Access to electricity (% of population)",
+      "unit": "%",
+      "decimals": 1,
+      "value": 42.5,
+      "period": "2024",
+      "series": [
+        {
+          "year": 2015,
+          "value": 23.8
+        },
+        {
+          "year": 2016,
+          "value": 22.9
+        },
+        {
+          "year": 2017,
+          "value": 24.1
+        },
+        {
+          "year": 2018,
+          "value": 36.5
+        },
+        {
+          "year": 2019,
+          "value": 31
+        },
+        {
+          "year": 2020,
+          "value": 32
+        },
+        {
+          "year": 2021,
+          "value": 35.1
+        },
+        {
+          "year": 2022,
+          "value": 36.1
+        },
+        {
+          "year": 2023,
+          "value": 39.4
+        },
+        {
+          "year": 2024,
+          "value": 42.5
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/EG.ELC.ACCS.ZS?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "SE.ADT.LITR.ZS",
+      "label": {
+        "mg": "Mahay mamaky teny sy manoratra (olon-dehibe)",
+        "fr": "Alphabétisation des adultes",
+        "en": "Adult literacy"
+      },
+      "sourceName": "Literacy rate, adult total (% of people ages 15 and above)",
+      "unit": "%",
+      "decimals": 1,
+      "value": 74.6900024414062,
+      "period": "2021",
+      "series": [
+        {
+          "year": 2000,
+          "value": 70.6900024414062
+        },
+        {
+          "year": 2012,
+          "value": 71.5699996948242
+        },
+        {
+          "year": 2018,
+          "value": 76.6800003051758
+        },
+        {
+          "year": 2021,
+          "value": 74.6900024414062
+        }
+      ],
+      "source": {
+        "publisher": "World Bank — World Development Indicators",
+        "url": "https://data.worldbank.org/indicator/SE.ADT.LITR.ZS?locations=MG",
+        "apiUrl": "https://api.worldbank.org/v2/country/MDG/indicator/SE.ADT.LITR.ZS?format=json&per_page=60"
+      },
+      "updatedAt": "2026-10-08"
+    }
+  ],
+  "agenda": []
+}

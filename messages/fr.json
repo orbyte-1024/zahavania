@@ -11,13 +11,55 @@
     "skip": "Aller au contenu"
   },
   "modules": {
-    "verify": { "name": "Vérifier une information", "short": "Vérifier", "desc": "Un texte ou un lien. Les affirmations sont isolées, confrontées aux sources trouvées par la recherche web, et notées par le code.", "need": "BESOIN 1", "state": "EN SERVICE" },
-    "image": { "name": "Authentifier une image", "short": "Image", "desc": "Métadonnées EXIF, analyse visuelle présentée comme des indices, liens de recherche inversée. Jamais « vrai » ni « faux ».", "need": "BESOIN 2", "state": "EN SERVICE" },
-    "monitor": { "name": "Veille nationale", "short": "Veille", "desc": "Les flux RSS des médias malgaches, filtrés par source, langue et sujet. Titre, lien et extrait seulement.", "need": "BESOIN 3", "state": "EN PRÉPARATION" },
-    "translate": { "name": "Traduire", "short": "Traduire", "desc": "Malagasy, français, anglais. Le malagasy généré est toujours marqué « à relire ».", "need": "BESOIN 4", "state": "EN SERVICE" },
-    "experts": { "name": "Trouver un expert", "short": "Experts", "desc": "Un sujet, une région, une langue. Les experts viennent uniquement de l'annuaire consenti, jamais du modèle.", "need": "BESOIN 6", "state": "EN SERVICE" },
-    "stats": { "name": "Chiffres et agenda", "short": "Chiffres", "desc": "Quelques indicateurs clés, chacun avec sa source, sa période et sa date de mise à jour.", "need": "BESOIN 7", "state": "EN PRÉPARATION" },
-    "angles": { "name": "Angles de reportage", "short": "Angles", "desc": "Trois à cinq angles construits sur les seules affirmations confirmées, avec questions et profils à interroger.", "need": "BESOIN 8", "state": "EN SERVICE" }
+    "verify": {
+      "name": "Vérifier une information",
+      "short": "Vérifier",
+      "desc": "Un texte ou un lien. Les affirmations sont isolées, confrontées aux sources trouvées par la recherche web, et notées par le code.",
+      "need": "BESOIN 1",
+      "state": "EN SERVICE"
+    },
+    "image": {
+      "name": "Authentifier une image",
+      "short": "Image",
+      "desc": "Métadonnées EXIF, analyse visuelle présentée comme des indices, liens de recherche inversée. Jamais « vrai » ni « faux ».",
+      "need": "BESOIN 2",
+      "state": "EN SERVICE"
+    },
+    "monitor": {
+      "name": "Veille nationale",
+      "short": "Veille",
+      "desc": "Les flux RSS des médias malgaches, filtrés par source, langue et sujet. Titre, lien et extrait seulement.",
+      "need": "BESOIN 3",
+      "state": "EN PRÉPARATION"
+    },
+    "translate": {
+      "name": "Traduire",
+      "short": "Traduire",
+      "desc": "Malagasy, français, anglais. Le malagasy généré est toujours marqué « à relire ».",
+      "need": "BESOIN 4",
+      "state": "EN SERVICE"
+    },
+    "experts": {
+      "name": "Trouver un expert",
+      "short": "Experts",
+      "desc": "Un sujet, une région, une langue. Les experts viennent uniquement de l'annuaire consenti, jamais du modèle.",
+      "need": "BESOIN 6",
+      "state": "EN SERVICE"
+    },
+    "stats": {
+      "name": "Chiffres et agenda",
+      "short": "Chiffres",
+      "desc": "Quelques indicateurs clés, chacun avec sa source, sa période et sa date de mise à jour.",
+      "need": "BESOIN 7",
+      "state": "EN SERVICE"
+    },
+    "angles": {
+      "name": "Angles de reportage",
+      "short": "Angles",
+      "desc": "Trois à cinq angles construits sur les seules affirmations confirmées, avec questions et profils à interroger.",
+      "need": "BESOIN 8",
+      "state": "EN SERVICE"
+    }
   },
   "landing": {
     "kicker": "CHECKEKO — VÉRIFICATION POUR LES RÉDACTIONS DE MADAGASCAR",
@@ -25,7 +67,18 @@
     "line2a": "on la",
     "line2b": "vérifie.",
     "positioning": "Sources, experts, contexte. En trois langues.",
-    "floaters": ["CAPTURE · WHATSAPP", "DÉPÊCHE · 08:42", "PDF · COMMUNIQUÉ", "CHIFFRE DE 2019 ?", "VIDÉO · TIKTOK", "AUDIO · RADIO", "LIEN RACCOURCI", "SANS SOURCE", "PHOTO · FACEBOOK", "TRANSFÉRÉ ×38"],
+    "floaters": [
+      "CAPTURE · WHATSAPP",
+      "DÉPÊCHE · 08:42",
+      "PDF · COMMUNIQUÉ",
+      "CHIFFRE DE 2019 ?",
+      "VIDÉO · TIKTOK",
+      "AUDIO · RADIO",
+      "LIEN RACCOURCI",
+      "SANS SOURCE",
+      "PHOTO · FACEBOOK",
+      "TRANSFÉRÉ ×38"
+    ],
     "manifesto": {
       "before": "Checkeko ne dit jamais vrai ou faux. Il montre les sources, mesure leur solidité et signale ce qui manque. Au bout du compte, c'est",
       "boxed": "le journaliste",
@@ -40,9 +93,18 @@
     "motto": {
       "kicker": "CE QUI GUIDE CHAQUE VÉRIFICATION",
       "words": [
-        { "word": "Sourcer", "hint": "Aucune affirmation sans un lien que l'on peut ouvrir." },
-        { "word": "Croiser", "hint": "Trois articles qui copient le même communiqué comptent pour un." },
-        { "word": "Décider", "hint": "L'outil classe les preuves ; la conclusion reste humaine." }
+        {
+          "word": "Sourcer",
+          "hint": "Aucune affirmation sans un lien que l'on peut ouvrir."
+        },
+        {
+          "word": "Croiser",
+          "hint": "Trois articles qui copient le même communiqué comptent pour un."
+        },
+        {
+          "word": "Décider",
+          "hint": "L'outil classe les preuves ; la conclusion reste humaine."
+        }
       ]
     },
     "process": {
@@ -52,9 +114,21 @@
       "claim": "« Le prix du riz a doublé en un mois. »",
       "cta": "Ouvrir l'outil →",
       "steps": [
-        { "name": "Coller", "meta": "ÉTAPE — 01", "desc": "Un message, un article ou un lien. Le texte n'est jamais écrit dans nos journaux." },
-        { "name": "Chercher", "meta": "ÉTAPE — 02", "desc": "Le modèle interroge le web. Toute source qu'il cite sans l'avoir trouvée est retirée." },
-        { "name": "Peser", "meta": "ÉTAPE — 03", "desc": "Le code calcule l'indice à partir du type de source, de leur indépendance et de leur date." }
+        {
+          "name": "Coller",
+          "meta": "ÉTAPE — 01",
+          "desc": "Un message, un article ou un lien. Le texte n'est jamais écrit dans nos journaux."
+        },
+        {
+          "name": "Chercher",
+          "meta": "ÉTAPE — 02",
+          "desc": "Le modèle interroge le web. Toute source qu'il cite sans l'avoir trouvée est retirée."
+        },
+        {
+          "name": "Peser",
+          "meta": "ÉTAPE — 03",
+          "desc": "Le code calcule l'indice à partir du type de source, de leur indépendance et de leur date."
+        }
       ]
     },
     "rule": {
@@ -65,10 +139,23 @@
       "author": "RÈGLE N° 1 DE CHECKEKO"
     },
     "objections": {
-      "items": ["Pas de verdict.", "Pas de source inventée.", "Pas de texte dans nos journaux."],
+      "items": [
+        "Pas de verdict.",
+        "Pas de source inventée.",
+        "Pas de texte dans nos journaux."
+      ],
       "finale": "Juste des",
       "pill": "preuves.",
-      "trail": ["CONFIRMÉ", "SOURCE OFFICIELLE", "À VÉRIFIER", "MÉDIA INDÉPENDANT", "INSUFFISANT", "CONTREDIT", "DATÉ DE 2019", "LIEN ↗"]
+      "trail": [
+        "CONFIRMÉ",
+        "SOURCE OFFICIELLE",
+        "À VÉRIFIER",
+        "MÉDIA INDÉPENDANT",
+        "INSUFFISANT",
+        "CONTREDIT",
+        "DATÉ DE 2019",
+        "LIEN ↗"
+      ]
     },
     "footer": {
       "kicker": "UNE INFORMATION À VÉRIFIER ?",
@@ -134,7 +221,12 @@
     "auto": "Automatique",
     "submit": "Vérifier",
     "example": "Le taux de pauvreté à Madagascar a atteint 75 % en 2022 selon l'INSTAT, et le prix du riz a doublé en un mois à Antananarivo.",
-    "stages": ["Lecture du texte", "Recherche des sources", "Croisement des sources", "Calcul de l'indice"],
+    "stages": [
+      "Lecture du texte",
+      "Recherche des sources",
+      "Croisement des sources",
+      "Calcul de l'indice"
+    ],
     "globalIndex": "Indice de confiance global",
     "indexNote": "Ce n'est pas une probabilité : l'indice mesure la qualité des preuves.",
     "why": "Pourquoi cet indice ?",
@@ -151,9 +243,21 @@
     "reject": "Rejeter",
     "toAngles": "Chercher des angles",
     "toExperts": "Trouver un expert",
-    "kind": { "official": "Officielle", "independent": "Indépendante", "other": "Autre" },
-    "stance": { "supports": "confirme", "contradicts": "contredit", "context": "contexte" },
-    "empty": "Aucune affirmation vérifiable n'a été trouvée dans ce texte."
+    "kind": {
+      "official": "Officielle",
+      "independent": "Indépendante",
+      "other": "Autre"
+    },
+    "stance": {
+      "supports": "confirme",
+      "contradicts": "contredit",
+      "context": "contexte"
+    },
+    "empty": "Aucune affirmation vérifiable n'a été trouvée dans ce texte.",
+    "modeImage": "Image",
+    "save": "Enregistrer dans Mes dossiers",
+    "saved": "Enregistré ✓",
+    "saveFailed": "Enregistrement impossible sur cet appareil"
   },
   "score": {
     "official_source": "Sources officielles",
@@ -193,7 +297,13 @@
     "national": "National",
     "missing": "Profils absents de l'annuaire",
     "broadened": "Peu d'experts dans cette région : la recherche a été élargie à tout le pays.",
-    "contribution": { "confirm": "Peut confirmer", "explain": "Peut expliquer", "contradict": "Peut contredire", "field_testimony": "Témoignage de terrain", "data": "Peut fournir des données" }
+    "contribution": {
+      "confirm": "Peut confirmer",
+      "explain": "Peut expliquer",
+      "contradict": "Peut contredire",
+      "field_testimony": "Témoignage de terrain",
+      "data": "Peut fournir des données"
+    }
   },
   "image": {
     "title": "Authentifier une image",
@@ -215,8 +325,16 @@
     "gps": "GPS présent (non conservé)",
     "reverse": "Recherche inversée",
     "reverseNote": "L'image n'est pas envoyée à ces services : ouvrez-les et déposez-la vous-même.",
-    "provenance": { "metadata": "Métadonnées", "visualAnalysis": "Analyse visuelle", "externalSource": "Source externe" },
-    "verdict": { "indices concordants": "Indices concordants", "indices contradictoires": "Indices contradictoires", "non concluant": "Non concluant" }
+    "provenance": {
+      "metadata": "Métadonnées",
+      "visualAnalysis": "Analyse visuelle",
+      "externalSource": "Source externe"
+    },
+    "verdict": {
+      "indices concordants": "Indices concordants",
+      "indices contradictoires": "Indices contradictoires",
+      "non concluant": "Non concluant"
+    }
   },
   "translate": {
     "title": "Traduire",
@@ -246,21 +364,52 @@
     "data": "Données à chercher",
     "basedOn": "Appuyé sur",
     "verifyFirst": "À vérifier d'abord",
-    "format": { "brief": "Brève", "investigation": "Enquête", "radio_report": "Reportage radio" }
+    "format": {
+      "brief": "Brève",
+      "investigation": "Enquête",
+      "radio_report": "Reportage radio"
+    }
   },
   "monitor": {
     "title": "Veille nationale",
     "lead": "Cet écran affichera les flux RSS des médias malgaches. Il est en préparation : rien n'est affiché tant que les flux n'ont pas été audités.",
     "rulesTitle": "Ce que la veille montrera",
-    "rules": ["Le titre, le lien et un court extrait, jamais l'article entier.", "La source, la langue et la date de publication.", "Un bouton pour proposer des angles à partir d'un sujet."],
+    "rules": [
+      "Le titre, le lien et un court extrait, jamais l'article entier.",
+      "La source, la langue et la date de publication.",
+      "Un bouton pour proposer des angles à partir d'un sujet."
+    ],
     "next": "Prochaine étape : lister les médias qui publient un flux RSS utilisable, avec la date de l'audit."
   },
   "stats": {
-    "title": "Chiffres et agenda",
-    "lead": "Cet écran réunira quelques indicateurs clés et les publications à venir. Il est en préparation : aucun chiffre n'est affiché sans sa source.",
-    "rulesTitle": "Chaque chiffre affichera",
-    "rules": ["Sa source, avec un lien.", "Sa période de référence.", "Sa date de mise à jour."],
-    "next": "Prochaine étape : saisir à la main les premiers indicateurs, sourcés."
+    "title": "Chiffres clés",
+    "lead": "Les derniers chiffres publiés pour Madagascar par la Banque mondiale. Chaque valeur indique son année, sa source et sa date de mise à jour.",
+    "retrieved": "Données récupérées le {date}",
+    "period": "ANNÉE DE RÉFÉRENCE : {year}",
+    "range": "ÉVOLUTION {from} → {to}",
+    "updated": "Mis à jour par la source le {date}",
+    "stale": "CHIFFRE DE {year}",
+    "agendaTitle": "Agenda",
+    "agendaEmpty": "Aucune publication ni conférence de presse saisie pour l'instant. Chaque date ajoutée devra citer sa source."
   },
-  "locale": { "mg": "Malagasy", "fr": "Français", "en": "English" }
+  "locale": {
+    "mg": "Malagasy",
+    "fr": "Français",
+    "en": "English"
+  },
+  "files": {
+    "kicker": "SUR CET APPAREIL",
+    "short": "Mes dossiers",
+    "title": "Mes dossiers",
+    "lead": "Les vérifications que vous avez choisi d'enregistrer. Elles restent dans ce navigateur et ne sont jamais envoyées à un serveur.",
+    "empty": "Aucun dossier enregistré pour l'instant. Lancez une vérification, puis cliquez sur « Enregistrer dans Mes dossiers ».",
+    "start": "Vérifier une information",
+    "savedOn": "Enregistré le",
+    "open": "Ouvrir",
+    "close": "Refermer",
+    "export": "Exporter en texte",
+    "delete": "Supprimer",
+    "confirmDelete": "Confirmer la suppression",
+    "cancel": "Annuler"
+  }
 }

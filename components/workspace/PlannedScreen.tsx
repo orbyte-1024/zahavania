@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { ModuleGlyph } from "@/components/ModuleGlyph";
 import { Badge, ScreenHeader, rise, stagger } from "@/components/workspace/ui";
 
-export function PlannedScreen({ id }: { id: "monitor" | "stats" }) {
+export function PlannedScreen({ id }: { id: "monitor" }) {
   const t = useTranslations(id);
   const tm = useTranslations(`modules.${id}`);
   const rules = t.raw("rules") as string[];
