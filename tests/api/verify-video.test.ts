@@ -15,11 +15,10 @@ afterAll(() => {
   }
 });
 
-async function generateVideoBytes(): Promise<Uint8Array> {
+async function generateVideoBytes(): Promise<Uint8Array<ArrayBuffer>> {
   const { readFileSync } = await import("node:fs");
-  return new Uint8Array(
-    readFileSync(new URL("../fixtures/video-valid.mp4", import.meta.url)),
-  );
+  const file = readFileSync(new URL("../fixtures/video-valid.mp4", import.meta.url));
+  return new Uint8Array(file) as Uint8Array<ArrayBuffer>;
 }
 
 async function postFormVideo(body: FormData) {
