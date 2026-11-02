@@ -8,8 +8,17 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? locale
     : routing.defaultLocale;
 
+  let messages;
+  if (resolvedLocale === "mg") {
+    messages = (await import("@/messages/mg.json")).default;
+  } else if (resolvedLocale === "fr") {
+    messages = (await import("@/messages/fr.json")).default;
+  } else {
+    messages = (await import("@/messages/en.json")).default;
+  }
+
   return {
     locale: resolvedLocale,
-    messages: (await import(`../../messages/${resolvedLocale}.json`)).default,
+    messages,
   };
 });

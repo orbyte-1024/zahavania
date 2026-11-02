@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { askJson, useMock as isMockMode } from "@/lib/llm";
-import { PING_SYSTEM, PING_USER } from "@/lib/prompts";
+import { PING_SYSTEM, PING_USER } from "@/lib/ai/prompts/ping";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 
 const PingSchema = z.object({ reponse: z.string().min(1) });
