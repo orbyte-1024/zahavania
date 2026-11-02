@@ -1,0 +1,35 @@
+# dependencies (reinstalled inside the image from the lockfile)
+node_modules
+.pnp
+.pnp.*
+
+# build output (rebuilt inside the image)
+.next
+out
+build
+coverage
+
+# version control and tooling
+.git
+.gitignore
+.github
+.vscode
+.idea
+
+# secrets: never bake environment files into the image
+.env
+.env.*
+!.env.example
+
+# documentation and Docker files (not needed to build the app)
+*.md
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# logs and caches
+*.log
+npm-debug.log*
+*.tsbuildinfo
+.vercel
+.DS_Store

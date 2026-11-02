@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: checker-ko:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    # Real secrets (LLM_API_KEY, AI_MODEL, USE_MOCK...) stay in .env.local,
+    # which is git-ignored and read at runtime, never at build time.
+    env_file:
+      - path: .env.local
+        required: false
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      DATABASE_URL: postgresql://${POSTGRES_USER:-checkeko}:${POSTGRES_PASSWORD:-checkeko}@db:5432/${POSTGRES_DB:-checkeko}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-checkeko}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-checkeko}
+      POSTGRES_DB: ${POSTGRES_DB:-checkeko}
+    # Not published by default: the app reaches the DB as `db:5432` on the
+    # compose network, and publishing 5432 clashes with a local PostgreSQL.
+    # Uncomment to connect with psql / a GUI client from the host:
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-checkeko} -d ${POSTGRES_DB:-checkeko}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db-data:
