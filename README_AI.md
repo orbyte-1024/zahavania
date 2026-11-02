@@ -54,7 +54,7 @@ npx supabase db push
 psql "$SUPABASE_DB_URL" -f supabase/seed.sql
 ```
 
-`supabase db push` does not run the seed automatically, hence the `psql` command.
+`supabase db push` does not run the seed automatically, hence the `psql` command. If `psql` is not installed, paste the contents of `supabase/seed.sql` into the Supabase SQL editor.
 
 ### 3. Run and test
 
