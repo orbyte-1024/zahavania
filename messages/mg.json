@@ -1,0 +1,16 @@
+{
+  "nav.verify": "Fanaraha-maso",
+  "nav.angles": "Soni-potoana",
+  "nav.sources": "Loharano",
+  "nav.assistant": "Mpampianatra",
+  "nav.dossiers": "Dossiers",
+  "status.confirmed": "Tamin'ny porofo",
+  "status.contradicted": "Voalohany tsy marina",
+  "status.insufficient": "Tsy ampy",
+  "status.needsVerification": "Mila fanamarinana",
+  "label.confidence": "Fahatokisan-tena",
+  "label.sources": "Loharano",
+  "button.validate": "Marina",
+  "button.complete": "Famaranana",
+  "button.reject": "Tsia"
+}
