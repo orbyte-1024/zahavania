@@ -7,10 +7,13 @@ const URL_UNDER_TEST = "http://localhost/api/verify/image";
 let calls = 0;
 
 /** Each request gets its own client IP: the shared rate limiter allows 10/minute per IP. */
-function baseHeaders(contentType?: string): Record<string, string> {
+function baseHeaders(
+  contentType?: string,
+  ip?: string,
+): Record<string, string> {
   calls += 1;
   const headers: Record<string, string> = {
-    "x-forwarded-for": `10.9.${Math.floor(calls / 250)}.${calls % 250}`,
+    "x-forwarded-for": ip ?? `10.9.${Math.floor(calls / 250)}.${calls % 250}`,
   };
   if (contentType) headers["content-type"] = contentType;
   return headers;
@@ -32,8 +35,11 @@ function bytesFor(bytes: Uint8Array): Uint8Array<ArrayBuffer> {
   return copy;
 }
 
-export function postForm(form: FormData) {
-  return send({ method: "POST", body: form, headers: baseHeaders() });
+/** `ip` pins the caller address, for tests that need to reach the rate limit. */
+export function postForm(form: FormData, ip?: string) {
+  return send(
+    { method: "POST", body: form, headers: baseHeaders(undefined, ip) },
+  );
 }
 
 export function postRaw(body: Uint8Array, contentType: string) {
