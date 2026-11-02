@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { askJson, useMock as isMockMode } from "@/lib/llm";
+import { askJson, useMock as isMockMode } from "@/lib/ai/client";
 
 const PingSchema = z.object({ reponse: z.string().min(1) });
 
