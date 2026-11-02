@@ -28,9 +28,13 @@ function extractJson(raw: string): unknown {
   return JSON.parse(text.slice(start, end + 1));
 }
 
+type ChatContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };
+
 type AskJsonOptions<T> = {
   system: string;
-  user: string;
+  user: string | ChatContentPart[];
   schema: ZodType<T>;
   model?: string;
 };

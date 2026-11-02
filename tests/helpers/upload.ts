@@ -91,6 +91,6 @@ export function multipart(
   return Buffer.concat([head, Buffer.from(bytes), tail]);
 }
 
-export function fixture(name: string): Buffer {
-  return readFileSync(new URL(`../fixtures/${name}`, import.meta.url));
+export function fixture(name: string): Uint8Array {
+  return readFileSync(new URL(`../fixtures/${name}`, import.meta.url)) as Uint8Array;
 }
