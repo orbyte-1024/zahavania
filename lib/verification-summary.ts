@@ -3,7 +3,7 @@ import type { VisionResult } from "./vision-analyzer";
 import type { ReverseSearch } from "./reverse-search";
 
 // ===========================================================================
-// Types de statut et de rapport de vérification
+// Verification status and report types
 // ===========================================================================
 
 export type VerificationStatus =
@@ -32,7 +32,7 @@ export type VerificationReport = {
 };
 
 // ===========================================================================
-// Warnings compatibles avec les deux sources
+// Warnings shared by both sources
 // ===========================================================================
 
 export type VisionWarning = {
@@ -41,35 +41,50 @@ export type VisionWarning = {
 };
 
 // ===========================================================================
-// Principe décisionnel (règles mission §2-§3)
+// Decision principles (mission §2-§3)
 // ===========================================================================
 //
-// - Les statuts "indices concordants" / "indices contradictoires" exigent des
+// - "indices concordants" / "indices contradictoires" require sufficient
+//   evidence from sufficiently independent sources.
+//
+// - "indicateurs concordants" et "indicateurs contradictoires" demandent des
 //   preuves suffisantes issues de sources suffisamment indépendantes.
 //
-// - Avec les fonctionnalités actuelles (EXIF, analyse IA, liens de recherche
-//   inversée sans résultats réels), il n'existe aucune source externe indé-
-//   pendante ayant réellement corroboré l'image. Le statut "indices concordants"
-//   reste donc inaccessible.
+// - With current features (EXIF, IA analysis, reverse-search links without
+//   real results), there is no externally independent source that has actually
+//   corroborated the image. "indices concordants" therefore stays unreachable.
 //
-// - Une observation issue du même modèle IA ne constitue pas plusieurs sources
-//   indépendantes de corroboration.
+// - Les observations issues du même modèle IA ne constituent pas plusieurs
+//   sources indépendantes de corroboration.
+//
+// - A contradiction can only be declared if solid evidence (not only an
+//   uncertain IA observation) reveals a substantial inconsistency. An
+//   anomaly noted only by IA is not enough.
 //
 // - Une contradiction ne peut être déclarée que si des preuves solides (non
-//   uniquement une observation IA incertaine) révèlent une incohérence substan-
-//   tielle. Une anomalie visuelle signalée uniquement par l'IA ne suffit pas.
+//   uniquement une observation IA incertaine) révèlent une incohérence
+//   substantielle. Une anomalie visuelle signalée uniquement par l'IA ne
+//   suffit pas.
 //
-// - En l'absence de preuves suffisantes, le statut par défaut est "non concluant".
+// - Without sufficient evidence, the default status is "non concluant".
 //
-// - L'absence d'EXIF, une IA indisponible, ou des indices incertains mènent au
-//   statut par défaut : l'absence n'est pas une preuve de falsification.
+// - En l'absence de preuves suffisantes, le statut par défaut est "non
+//   concluant".
 //
-// - Une erreur technique ne doit jamais être interprétée comme un indice de
-//   falsification.
+// - Missing EXIF, unavailable IA, or uncertain hints all lead to the default
+//   status: absence is not evidence of falsification.
+//
+// - L'absence d'EXIF, une IA indisponible ou des indices incertains mènent
+//   au statut par défaut : l'absence n'est pas une preuve de falsification.
+//
+// - A technical error must never be interpreted as an authenticity signal.
+//
+// - Une erreur technique ne doit jamais être interprétée comme un indice
+//   d'authenticité ou de falsification.
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// Construction des preuves à partir des données disponibles.
+// Evidence construction from available data.
 // ---------------------------------------------------------------------------
 
 function observationsFromVision(
@@ -94,16 +109,24 @@ function observationsFromVision(
 }
 
 /**
- * Combinaison de confiance :
+ * Confidence combination:
  *   - "high"  → "high"
- *   - "medium" → "medium" (sauf s'il y a un high)
- *   - "low"   → "low"   (sauf s'il y a un medium ou high)
+ *   - "medium" → "medium" (unless there is a high)
+ *   - "low"   → "low"   (unless there is a medium or high)
  *
- * Utilisé pour exprimer la confiance globale d'un ensemble d'observations
- * provenant de la même source (ex. toutes issues de l'analyse IA).
+ * Used to express the overall confidence of a set of observations
+ * coming from the same source (for example all from IA analysis).
  */
+function combineConfidence(
+  items: Array<{ confidence: "low" | "medium" | "high" }>,
+): "low" | "medium" | "high" {
+  if (items.some((i) => i.confidence === "high")) return "high";
+  if (items.some((i) => i.confidence === "medium")) return "medium";
+  return "low";
+}
+
 // ---------------------------------------------------------------------------
-// Construction du rapport de vérification.
+// Build the verification report.
 // ---------------------------------------------------------------------------
 
 export function buildVerification(
@@ -117,14 +140,14 @@ export function buildVerification(
   const contradictoryEvidence: EvidenceItem[] = [];
   const limitations: string[] = [];
 
-  // On recueille les observations IA (si disponibles).
+  // Collect IA observations (if available).
   const visualObservations: Array<{ text: string; confidence: "low" | "medium" | "high" }> =
     visualAnalysis === null
       ? []
       : observationsFromVision(visualAnalysis);
 
   // ---------------------------------------------------------------------------
-  // Preuves de soutien (éléments pertinents, mais pas preuve de vérité)
+  // Supporting evidence (relevant elements, but not proof of truth)
   // ---------------------------------------------------------------------------
 
   if (metadata !== null) {
@@ -156,8 +179,7 @@ export function buildVerification(
         confidence: "medium",
       });
     }
-    // La présence de GPS est un élément, mais n'infirmme ni ne prouve quoi que ce soit
-    // concernant l'authenticité de l'image.
+    // GPS presence is an element but does not confirm or refute authenticity.
     if (metadata.hasGPS) {
       supportingEvidence.push({
         provenance: "metadata",
@@ -168,10 +190,8 @@ export function buildVerification(
     }
   }
 
-  // Observations IA utiles (description cohérente, localisation, absence d'anomalie
-  // majeure) sont conservées comme éléments, jamais comme preuve de vérité.
   if (visualAnalysis !== null) {
-    // Description générale : on la garde comme élément de contexte.
+    // General description: kept as context, never as proof.
     if (visualAnalysis.description.text) {
       supportingEvidence.push({
         provenance: "visualAnalysis",
@@ -180,7 +200,7 @@ export function buildVerification(
       });
     }
 
-    // Indices de lieu : éléments contextuels, jamais preuve d'un lieu réel.
+    // Location clues: contextual elements, never proof of a real location.
     for (const obs of visualAnalysis.locationClues) {
       if (obs.text) {
         supportingEvidence.push({
@@ -191,7 +211,7 @@ export function buildVerification(
       }
     }
 
-    // Absence d'anomalie majeure : un élément à noter, jamais preuve d'authenticité.
+    // No major anomaly noted: worth mentioning, never proof of authenticity.
     if (visualAnalysis.visualInconsistencies.length === 0) {
       supportingEvidence.push({
         provenance: "visualAnalysis",
@@ -203,30 +223,30 @@ export function buildVerification(
   }
 
   // ---------------------------------------------------------------------------
-  // Preuves contradictoires
+  // Contradictory evidence
   // ---------------------------------------------------------------------------
 
-  // Une contradiction ne peut être déclarée que si des preuves solides (non
-  // uniquement une observation IA incertaine) révèlent une incohérence substan-
-  // tielle. En l'absence de telles preuves, aucune contradiction n'est déclarée.
+  // A contradiction can only be declared if solid evidence (not only an
+  // uncertain IA observation) reveals a substantial inconsistency. Without
+  // such evidence, no contradiction is declared.
   //
-  // Les observations IA de génération artificielle (possibleAIGenerationIndicators)
-  // sont des indices, pas des preuves de fausseté — même à confiance "high".
+  // IA generation indicators (possibleAIGenerationIndicators) are hints, not
+  // proof of falsity — even at "high" confidence.
   //
-  // Règle : une anomalie visuelle signalée uniquement par l'IA ne suffit pas.
+  // Rule: an anomaly noted only by IA is not enough.
   // ---------------------------------------------------------------------------
 
-  // Pour l'instant, sans source externe indépendante validée, on ne peut produire
-  // aucune preuve contradictoire solide : on reste en "non concluant".
+  // For now, without a validated external source, no solid contradictory
+  // evidence can be produced: the status stays "non concluant".
   //
-  // (Si plus tard une source externe valide révèle une contradiction, elle sera
-  // intégrée via un appel externe ; ce n'est pas le cas aujourd'hui.)
+  // (If later a validated external source reveals a contradiction, it would
+  // be integrated via an external call; that is not the case today.)
 
   // ---------------------------------------------------------------------------
   // Limitations
   // ---------------------------------------------------------------------------
 
-  // Limitations liées à l'IA
+  // IA-related limitations.
   if (visualAnalysis === null) {
     limitations.push(
       "L'analyse visuelle automatique est indisponible. Les indices qui dépendent de cette analyse ne peuvent pas être produits.",
@@ -238,7 +258,7 @@ export function buildVerification(
       );
     }
 
-    // Si l'IA n'a relevé que des indices incertains, on le signale.
+    // If IA only raised uncertain hints, say so.
     if (
       visualAnalysis.possibleAIGenerationIndicators.length > 0 &&
       visualAnalysis.possibleAIGenerationIndicators.every(
@@ -250,7 +270,7 @@ export function buildVerification(
       );
     }
 
-    // Si l'IA n'a relevé aucun indice significatif, on le note.
+    // If IA found no meaningful signal, note it.
     if (
       visualObservations.length === 0 &&
       visualAnalysis.visualInconsistencies.length === 0 &&
@@ -258,69 +278,49 @@ export function buildVerification(
     ) {
       limitations.push("L'analyse visuelle n'a relevé aucun indice significatif.");
     }
+
+    // Multiple observations from the same model are not several independent sources.
+    limitations.push(
+      "Plusieurs observations peuvent provenir du même modèle d'intelligence artificielle ; elles ne forment pas plusieurs sources indépendantes.",
+    );
   }
 
-  // Limitation liée aux métadonnées EXIF
+  // EXIF-related limitations.
   if (metadata === null || !metadata.available) {
     limitations.push(
-      "Aucune métadonnée EXIF exploitable n'a été trouvée. Certaines plateformes, notamment WhatsApp et Facebook, peuvent supprimer les métadonnées lors du partage des images. Leur absence ne constitue pas un indice de falsification.",
+      "Aucune métadonnée exploitable n'a été trouvée. Certaines plateformes, notamment WhatsApp et Facebook, peuvent supprimer les métadonnées lors du partage des images.",
     );
   }
 
-  // Limitation générale : absence de source externe indépendante validée.
-  if (reverseSearchLinks.googleLens && reverseSearchLinks.tineye) {
+  // EXIF and IA observations alone are not independent sources.
+  if (metadata !== null && metadata.available && visualAnalysis !== null) {
     limitations.push(
-      "Aucune source externe indépendante n'a encore été consultée pour corroborer ou infirmer l'image. Les liens de recherche inversée sont fournis comme outils que le journaliste peut consulter lui-même, mais aucun résultat n'est associé à l'image à ce stade.",
+      "Les informations EXIF et les observations de l'analyse visuelle proviennent de la même image et ne constituent pas, à elles seules, plusieurs sources indépendantes de corroboration.",
     );
   }
 
-  // Limitation des liens de recherche inversée
-  if (reverseSearchLinks.googleLens && reverseSearchLinks.tineye) {
-    limitations.push(
-      "Les liens Google Lens et TinEye sont fournis comme outils que le journaliste peut consulter lui-même. Ils ne constituent pas des résultats de recherche et n'ont pas été utilisés pour établir le statut.",
-    );
-  }
-
-  // Limitation concernant les observations provenant du même modèle IA
-  if (visualAnalysis !== null && visualObservations.length > 0) {
-    limitations.push(
-      "Plusieurs observations peuvent provenir du même modèle d'intelligence artificielle. Elles ne constituent pas plusieurs sources indépendantes de corroboration.",
-    );
-  }
-
+  // Reverse search links are tools, not results.
+  limitations.push(
+    "Les liens de recherche inversée sont des outils que le journaliste peut consulter. Leur présence ne constitue pas un résultat de recherche.",
+  );
 
   // ---------------------------------------------------------------------------
-  // Statut
+  // Status determination
   // ---------------------------------------------------------------------------
 
-  // Règle : avec les fonctionnalités actuelles, il n'existe aucune source exter-
-  // ne indépendante ayant réellement corroboré l'image.
-  //
-  // Par conséquent, le statut "indices concordants" reste inaccessible.
-  //
-  // Règle : une contradiction ne peut être déclarée que si des preuves solides
-  // révèlent une incohérence substantielle. Sans telle preuve, on ne peut pas
-  // déclarer "indices contradictoires".
-  //
-  // Statut par défaut : "non concluant".
-  // ---------------------------------------------------------------------------
-
+  // "indices concordants" needs real corroboration from an independent
+  // source. With current features, that never happens, so the status cannot
+  // become "indices concordants".
   const status: VerificationStatus = "non concluant";
 
-  // ---------------------------------------------------------------------------
-  // Synthèse
-  // ---------------------------------------------------------------------------
-
-  const summary = buildSummary(metadata, visualAnalysis, status, limitations);
-
-  // ---------------------------------------------------------------------------
-  // Rapport final
-  // ---------------------------------------------------------------------------
-
-  const warnings: Array<MetadataWarning | VisionWarning> = [
-    ...exifWarnings,
-    ...visionWarnings,
-  ];
+  // A deterministic summary consistent with the evidence.
+  const summary = buildSummary(
+    metadata,
+    visualAnalysis,
+    exifWarnings,
+    visionWarnings,
+    limitations,
+  );
 
   return {
     status,
@@ -331,84 +331,61 @@ export function buildVerification(
     metadata,
     visualAnalysis,
     reverseSearchLinks,
-    warnings,
+    warnings: [...exifWarnings, ...visionWarnings],
   };
 }
-
-// ---------------------------------------------------------------------------
-// Construction de la synthèse textuelle.
-// ---------------------------------------------------------------------------
 
 function buildSummary(
   metadata: ImageMetadata | null,
   visualAnalysis: VisionResult | null,
-  status: VerificationStatus,
+  exifWarnings: MetadataWarning[],
+  visionWarnings: VisionWarning[],
   limitations: string[],
 ): string {
   const parts: string[] = [];
 
-  parts.push(
-    status === "non concluant"
-      ? "Les informations disponibles ne permettent pas de conclure sur l'authenticité de l'image."
-      : status === "indices concordants"
-        ? "Plusieurs éléments indépendants corroborent les informations examinées."
-        : "Des éléments solides révèlent une contradiction.",
-  );
-
-  if (metadata !== null && metadata.available) {
-    if (metadata.dateTaken !== null) {
-      parts.push(
-        `La date de prise de vue déclarée dans les métadonnées est ${metadata.dateTaken}.`,
-      );
-    }
-    if (metadata.camera !== null) {
-      parts.push(`L'appareil photographique déclaré est ${metadata.camera}.`);
-    }
-    if (metadata.software !== null) {
-      parts.push(`Un logiciel de traitement (${metadata.software}) a été détecté dans les métadonnées.`);
-    }
-    if (metadata.hasGPS) {
-      parts.push(
-        `Des coordonnées GPS sont présentes dans les métadonnées, mais leur présence ne prouve pas que la photo a été prise à l'endroit indiqué.`,
-      );
-    }
+  if (exifWarnings.some((w) => w.code === "EXIF_UNREADABLE")) {
+    parts.push("Les métadonnées EXIF n'ont pas pu être lues.");
+  } else if (metadata === null || !metadata.available) {
+    parts.push(
+      "Aucune métadonnée EXIF exploitable n'a été trouvée. Leur absence ne prouve pas que l'image est fausse.",
+    );
+  } else {
+    const facts: string[] = [];
+    if (metadata.dateTaken) facts.push(`date de prise de vue : ${metadata.dateTaken}`);
+    if (metadata.creationDate) facts.push(`date de création : ${metadata.creationDate}`);
+    if (metadata.camera) facts.push(`appareil : ${metadata.camera}`);
+    if (metadata.software) facts.push(`logiciel : ${metadata.software}`);
+    if (metadata.hasGPS) facts.push("coordonnées GPS présentes dans les métadonnées");
+    parts.push(`Métadonnées EXIF : ${facts.join(" ; ")}.`);
   }
 
-  if (visualAnalysis !== null) {
-    if (visualAnalysis.description.text) {
+  if (visionWarnings.some((w) => w.code === "ANALYSE_IA_NON_DISPONIBLE")) {
+    parts.push("L'analyse visuelle est indisponible.");
+  } else if (visualAnalysis === null) {
+    parts.push("Aucune analyse visuelle n'a pu être produite.");
+  } else {
+    const vd = visualAnalysis.description.text;
+    if (vd) parts.push(`Analyse visuelle (IA) : ${vd}`);
+    if (visualAnalysis.visualInconsistencies.length > 0) {
       parts.push(
-        `L'analyse visuelle décrit l'image comme ${visualAnalysis.description.text.toLowerCase()}.`,
+        `Incohérences visuelles possiblement relevées : ${visualAnalysis.visualInconsistencies.map((o) => o.text).join(" ; ")}`,
       );
     }
-    if (visualAnalysis.locationClues.length > 0) {
-      const clues = visualAnalysis.locationClues
-        .map((o) => o.text)
-        .join(" ; ");
-      parts.push(`Des indices de lieu ont été relevés : ${clues.toLowerCase()}.`);
-    }
-    if (visualAnalysis.visualInconsistencies.length > 0) {
-      const anomalies = visualAnalysis.visualInconsistencies
-        .map((o) => o.text)
-        .join(" ; ");
-      parts.push(`Des incohérences visuelles ont été relevées : ${anomalies.toLowerCase()}.`);
-    }
     if (visualAnalysis.possibleAIGenerationIndicators.length > 0) {
-      const indicators = visualAnalysis.possibleAIGenerationIndicators
-        .map((o) => o.text)
-        .join(" ; ");
       parts.push(
-        `Des indices de génération artificielle ont été relevés : ${indicators.toLowerCase()}. Ces indices ne prouvent pas à eux seuls que l'image est fausse.`,
+        `Indices possibles de génération par IA : ${visualAnalysis.possibleAIGenerationIndicators.map((o) => o.text).join(" ; ")}`,
       );
     }
   }
 
   if (limitations.length > 0) {
-    parts.push(
-      "Des limites empêchent de conclure définitivement : " +
-        limitations.slice(0, 2).join(" ; ") +
-        (limitations.length > 2 ? " ; et d'autres limites." : "."),
-    );
+    parts.push(`Limites : ${limitations.join(" ; ")}`);
   }
+
+  parts.push(
+    "La vérification reste non concluante : les éléments disponibles ne permettent pas d'affirmer que l'image est authentique ou falsifiée.",
+  );
 
   return parts.join(" ");
 }

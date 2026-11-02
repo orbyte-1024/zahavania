@@ -4,6 +4,7 @@
  * addresses and never accepts a client-supplied URL, so no open redirect (and
  * no parameter tampering) can be built from user input.
  */
+
 export type ReverseSearchService = {
   /** Product name, safe to display as-is. */
   name: string;
@@ -35,4 +36,3 @@ export function reverseSearchLinks(): ReverseSearch {
     tineye: { ...DESTINATIONS.tineye },
   };
 }
-
