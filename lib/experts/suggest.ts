@@ -34,6 +34,9 @@ const MAX_REASON_LENGTH = 600;
 
 const EMAIL_PATTERN = /[\w.+-]+@[\w.-]+\.[a-z]{2,}/i;
 const PHONE_PATTERN = /(?:\+261|0\d)[\d\s().-]{6,}/;
+const CAPITALIZED_WORD_PATTERN = /[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ'’-]+/g;
+const GENERIC_PROFILE_WORD_PATTERN =
+  /(?:expert|specialist|spécialiste|researcher|chercheur|analyst|analyste|journalist|journaliste|doctor|médecin|lawyer|avocat|professor|professeur|engineer|ingénieur|anthropologist|anthropologue|economist|économiste|agronomist|agronome|geologist|géologue|consultant|consultante|sociologist|sociologue|statistician|statisticien|scientist|scientifique|teacher|enseignant|nurse|infirmier|midwife|sage-femme)/i;
 
 export type ExpertSuggestion = {
   id: string;
@@ -179,6 +182,12 @@ function sanitizeReason(reason: string): string {
     .slice(0, MAX_REASON_LENGTH);
 }
 
+function looksLikeProperName(value: string): boolean {
+  const capitalizedWords = value.match(CAPITALIZED_WORD_PATTERN) ?? [];
+  if (capitalizedWords.length < 2) return false;
+  return !GENERIC_PROFILE_WORD_PATTERN.test(value);
+}
+
 function sanitizeMissingProfiles(profiles: readonly string[]): string[] {
   const result: string[] = [];
   const seen = new Set<string>();
@@ -187,6 +196,7 @@ function sanitizeMissingProfiles(profiles: readonly string[]): string[] {
     const value = profile.replace(/\s+/g, " ").trim();
     if (value.length < 3 || value.length > 160) continue;
     if (EMAIL_PATTERN.test(value) || PHONE_PATTERN.test(value)) continue;
+    if (looksLikeProperName(value)) continue;
     const key = value.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
