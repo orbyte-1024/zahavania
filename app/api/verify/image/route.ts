@@ -1,13 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { readImageMetadata } from "@/lib/exif";
+import { readImageMetadata, type MetadataWarning } from "@/lib/exif";
 import { acceptUploadedImage } from "@/lib/image-intake";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 import { reverseSearchLinks } from "@/lib/reverse-search";
+import { analyzeImage } from "@/lib/vision-analyzer";
 
 export async function POST(req: NextRequest) {
-  // Built once per request from server-side constants: no network call, so it
-  // works even if Google Lens or TinEye is unreachable. It is also returned on
-  // failures, because the journalist can still search the image by hand.
   const reverseSearch = reverseSearchLinks();
 
   if (isRateLimited(clientIp(req))) {
@@ -30,17 +28,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { metadata, warnings } = await readImageMetadata(
+    const { metadata, warnings: exifWarnings } = await readImageMetadata(
       result.bytes,
       result.format,
     );
+
+    const vision = await analyzeImage(result.bytes, result.format);
 
     return NextResponse.json({
       ok: true,
       file: { format: result.format, size: result.size },
       metadata,
-      warnings,
+      warnings: [...exifWarnings, ...vision.warnings] as MetadataWarning[],
       reverseSearch,
+      analysis: vision.analysis ?? undefined,
     });
   } catch (e) {
     console.error(
