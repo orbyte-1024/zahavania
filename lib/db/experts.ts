@@ -113,20 +113,48 @@ function rankCandidates(experts: ExpertRow[], domains: Domain[]): ExpertRow[] {
     .slice(0, MAX_CANDIDATES);
 }
 
-export async function findExpertCandidates(
-  supabase: SupabaseClient,
+function filterRows(
+  rows: readonly ExpertRow[],
+  search: ExpertCandidateSearch,
+  region: string | undefined,
+): ExpertRow[] {
+  const domains = new Set<string>(search.domains);
+  const languages = new Set<string>(search.languages ?? []);
+  return rows.filter(
+    (row) =>
+      isConsented(row.consent_status) &&
+      row.domains.some((domain) => domains.has(domain)) &&
+      (!region || row.regions.length === 0 || row.regions.includes(region)) &&
+      (languages.size === 0 || row.languages.some((language) => languages.has(language))),
+  );
+}
+
+async function findCandidates(
+  query: (region: string | undefined) => Promise<ExpertRow[]>,
   search: ExpertCandidateSearch,
 ): Promise<ExpertCandidateResult> {
-  const experts = await queryExperts(supabase, search, search.region);
-  const ranked = rankCandidates(experts, search.domains);
+  const ranked = rankCandidates(await query(search.region), search.domains);
 
   if (ranked.length >= 3 || !search.region) {
     return { experts: ranked, regionBroadened: false };
   }
 
-  const broadened = await queryExperts(supabase, search, undefined);
   return {
-    experts: rankCandidates(broadened, search.domains),
+    experts: rankCandidates(await query(undefined), search.domains),
     regionBroadened: true,
   };
+}
+
+export function findExpertCandidates(
+  supabase: SupabaseClient,
+  search: ExpertCandidateSearch,
+): Promise<ExpertCandidateResult> {
+  return findCandidates((region) => queryExperts(supabase, search, region), search);
+}
+
+export function findFixtureCandidates(
+  rows: readonly ExpertRow[],
+  search: ExpertCandidateSearch,
+): Promise<ExpertCandidateResult> {
+  return findCandidates(async (region) => filterRows(rows, search, region), search);
 }

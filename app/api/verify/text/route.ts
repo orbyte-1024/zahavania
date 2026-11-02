@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { AiError, type AiUsage } from "@/lib/ai/client";
+import type { VerifyTextSuccess } from "@/lib/api/contract";
 import { verifyInputSchema } from "@/lib/ai/schemas";
 import { VerificationError, verifyContent } from "@/lib/ai/verify";
 import { readIntEnv } from "@/lib/env";
@@ -130,7 +131,7 @@ export async function POST(req: NextRequest) {
         droppedSources: result.droppedSources,
         durationMs: elapsed(),
       },
-    });
+    } satisfies VerifyTextSuccess);
   } catch (error) {
     const mapped = mapError(error);
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: mapped.status, code: mapped.code, detail: mapped.detail });

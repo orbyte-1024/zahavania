@@ -117,8 +117,8 @@ test("mock mode never calls the model and is flagged as mock", async () => {
     const result = await verifyContent({ content: "Claim", type: "text", lang: "fr" });
     assert.equal(result.mock, true);
     assert.equal(result.usage, null);
-    assert.equal(result.output.claims[0].sources.length, 0);
-    assert.equal(result.output.claims[0].confidenceIndex, 0);
+    assert.equal(result.attempts, 0);
+    assert.equal(result.droppedSources, 0);
   } finally {
     if (previous === undefined) delete process.env.USE_MOCK;
     else process.env.USE_MOCK = previous;

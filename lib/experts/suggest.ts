@@ -20,7 +20,16 @@ import {
 } from "@/lib/ai/prompts/rank-experts";
 import type { Language } from "@/lib/ai/schemas";
 import { filterDomains, type Domain } from "@/lib/constants/domains";
-import { findExpertCandidates, type ExpertRow, type OrgType } from "@/lib/db/experts";
+import {
+  ExpertDirectoryError,
+  findExpertCandidates,
+  findFixtureCandidates,
+  type ExpertCandidateResult,
+  type ExpertCandidateSearch,
+  type ExpertRow,
+  type OrgType,
+} from "@/lib/db/experts";
+import { FIXTURE_EXPERTS } from "@/lib/experts/fixtures";
 import { applySuggestionGuard } from "@/lib/experts/guard";
 import { buildMockRanking, detectMockDomains } from "@/lib/experts/mock";
 
@@ -228,8 +237,18 @@ function toSuggestion(expert: ExpertRow, ranked: RankedSuggestion): ExpertSugges
   };
 }
 
+function findCandidates(
+  supabase: SupabaseClient | null,
+  search: ExpertCandidateSearch,
+  mock: boolean,
+): Promise<ExpertCandidateResult> {
+  if (supabase) return findExpertCandidates(supabase, search);
+  if (mock) return findFixtureCandidates(FIXTURE_EXPERTS, search);
+  throw new ExpertDirectoryError("supabase client unavailable");
+}
+
 export async function suggestExperts(
-  supabase: SupabaseClient,
+  supabase: SupabaseClient | null,
   input: SuggestInput,
 ): Promise<SuggestExpertsResult> {
   const mock = isMockMode();
@@ -261,11 +280,11 @@ export async function suggestExperts(
     };
   }
 
-  const { experts, regionBroadened } = await findExpertCandidates(supabase, {
-    domains: detectedDomains,
-    region: input.region,
-    languages: input.languages,
-  });
+  const { experts, regionBroadened } = await findCandidates(
+    supabase,
+    { domains: detectedDomains, region: input.region, languages: input.languages },
+    mock,
+  );
 
   if (experts.length === 0) {
     return {

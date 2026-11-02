@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
-import { AiError, type AiUsage } from "@/lib/ai/client";
+import { AiError, isMockMode, type AiUsage } from "@/lib/ai/client";
+import type { SuggestExpertsSuccess } from "@/lib/api/contract";
 import { suggestInputSchema } from "@/lib/ai/expert-schemas";
 import { ExpertDirectoryError } from "@/lib/db/experts";
 import { readIntEnv } from "@/lib/env";
@@ -118,7 +119,7 @@ export async function POST(req: NextRequest) {
     return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
   }
 
-  if (!auth.supabase) {
+  if (!auth.supabase && !isMockMode()) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code: "supabase_config_missing" });
     return errorResponse(503, "directory_unavailable", "The expert directory is not configured.");
   }
@@ -141,7 +142,7 @@ export async function POST(req: NextRequest) {
       regionBroadened: result.regionBroadened,
       mock: result.mock,
       ...(result.notice ? { notice: result.notice } : {}),
-    });
+    } satisfies SuggestExpertsSuccess);
   } catch (error) {
     const mapped = mapError(error);
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: mapped.status, code: mapped.code });

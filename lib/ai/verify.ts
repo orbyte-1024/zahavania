@@ -1,5 +1,11 @@
 import "server-only";
-import { askJson, isMockMode, type AiUsage } from "@/lib/ai/client";
+import { AiError, askJson, isMockMode, type AiUsage } from "@/lib/ai/client";
+import {
+  emptyVerifyFixture,
+  MOCK_EMPTY_MARKER,
+  MOCK_ERROR_MARKER,
+  verifyFixture,
+} from "@/lib/ai/fixtures/verify";
 import { buildVerifyUserMessage, VERIFY_SYSTEM_PROMPT } from "@/lib/ai/prompts/verify";
 import {
   MAX_CONTENT_LENGTH,
@@ -68,22 +74,13 @@ export function keepOnlySearchedSources(
 }
 
 function mockResult(input: VerifyInput): VerifyResult {
+  const lang = input.lang ?? "fr";
+  const marker = input.content.trim().toLowerCase();
+  if (marker.startsWith(MOCK_ERROR_MARKER)) throw new AiError("provider_error", "mock error scenario");
+  const output = marker.startsWith(MOCK_EMPTY_MARKER) ? emptyVerifyFixture(lang) : verifyFixture(lang);
+
   return {
-    output: scoreVerification({
-      detectedLanguage: input.lang ?? "other",
-      summary: "Demonstration result: USE_MOCK=true, no model or web search was called.",
-      claims: [
-        {
-          text: input.type === "url" ? input.content : input.content.slice(0, 200),
-          status: "insufficient",
-          rationale: "Simulated response for development.",
-          sources: [],
-          contradictions: [],
-          recommendedChecks: ["Disable USE_MOCK to run a real verification."],
-        },
-      ],
-      limitations: ["Simulated response: not a real verification."],
-    }),
+    output: scoreVerification(output),
     mock: true,
     analyzedUrl: input.type === "url" ? input.content : null,
     droppedSources: 0,
