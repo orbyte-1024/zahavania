@@ -21,7 +21,7 @@ describe("POST /api/verify/image", () => {
       formWith(jpeg, "photo.jpg", "image/jpeg"),
     );
     expect(status).toBe(200);
-    expect(body).toEqual({
+    expect(body).toMatchObject({
       ok: true,
       file: { format: "image/jpeg", size: jpeg.byteLength },
     });
@@ -48,7 +48,12 @@ describe("POST /api/verify/image", () => {
       formWith(jpeg, "confidentiel-source.jpg", "image/jpeg"),
     );
     expect(JSON.stringify(body)).not.toContain("confidentiel-source");
-    expect(Object.keys(body).sort()).toEqual(["file", "ok"]);
+    expect(Object.keys(body).sort()).toEqual([
+      "file",
+      "metadata",
+      "ok",
+      "warnings",
+    ]);
   });
 
   it("rejects a request without the image field", async () => {

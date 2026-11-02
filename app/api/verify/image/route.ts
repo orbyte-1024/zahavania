@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { readImageMetadata } from "@/lib/exif";
 import { acceptUploadedImage } from "@/lib/image-intake";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 
@@ -18,9 +19,17 @@ export async function POST(req: NextRequest) {
         { status: result.status },
       );
     }
+
+    const { metadata, warnings } = await readImageMetadata(
+      result.bytes,
+      result.format,
+    );
+
     return NextResponse.json({
       ok: true,
       file: { format: result.format, size: result.size },
+      metadata,
+      warnings,
     });
   } catch (e) {
     console.error(

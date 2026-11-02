@@ -13,7 +13,7 @@ const MAX_BODY_BYTES = MAX_IMAGE_BYTES + 64 * 1024;
 export type ImageFormat = "image/jpeg" | "image/png" | "image/webp";
 
 export type IntakeResult =
-  | { ok: true; format: ImageFormat; size: number }
+  | { ok: true; format: ImageFormat; size: number; bytes: Uint8Array }
   | { ok: false; status: 400 | 413 | 415; erreur: string };
 
 const TOO_LARGE: IntakeResult = {
@@ -180,7 +180,9 @@ async function inspect(file: File): Promise<IntakeResult> {
     return { ok: false, status: 400, erreur: "Image illisible ou corrompue" };
   }
 
-  return { ok: true, format, size: bytes.byteLength };
+  // Handed back so later steps can read the file from memory: it is never
+  // written to disk, cached or serialised.
+  return { ok: true, format, size: bytes.byteLength, bytes };
 }
 
 /**
