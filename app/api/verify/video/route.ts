@@ -1,9 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { clientIp, isRateLimited } from "@/lib/ratelimit";
-import { reverseSearchLinks } from "@/lib/reverse-search";
+import type { VideoFormat } from "@/lib/media-intake";
 import { acceptUploadedVideo, extractVideoFrames } from "@/lib/media-intake";
-import { analyzeImage } from "@/lib/vision-analyzer";
+import { reverseSearchLinks } from "@/lib/reverse-search";
+import { clientIp, isRateLimited } from "@/lib/ratelimit";
 import { buildVerification } from "@/lib/verification-summary";
+import { analyzeImage } from "@/lib/vision-analyzer";
 
 export async function POST(req: NextRequest) {
   const reverseSearch = reverseSearchLinks();
@@ -28,7 +29,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const frames = extractVideoFrames(result.bytes, result.format);
+    if (result.mediaType !== "video") {
+      return NextResponse.json(
+        { ok: false, erreur: "Format vidéo non pris en charge", reverseSearch },
+        { status: 415 },
+      );
+    }
+
+    const videoFormat = result.format as VideoFormat;
+    const frames = extractVideoFrames(result.bytes, videoFormat);
     const analyses = await Promise.all(
       frames.map((frame) => analyzeImage(frame, "image/png")),
     );

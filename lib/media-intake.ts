@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { ImageFormat } from "./image-intake";
+import { MAX_IMAGE_BYTES, type ImageFormat } from "./image-intake";
 
 export type VideoFormat = "video/mp4" | "video/webm" | "video/quicktime";
 export type MediaFormat = ImageFormat | VideoFormat;
@@ -169,37 +169,6 @@ async function readForm(req: Request): Promise<FormData> {
 
 function asFile(entry: FormDataEntryValue | undefined): File | null {
   return typeof entry === "object" && entry !== null ? entry : null;
-}
-
-function inspectMedia(file: File, mediaType: MediaType): MediaIntakeResult {
-  if (file.size === 0) {
-    return { ok: false, status: 400, erreur: "Fichier vide" };
-  }
-
-  const max = mediaType === "image" ? MAX_IMAGE_BYTES : MAX_VIDEO_BYTES;
-  if (file.size > max) return TOO_LARGE;
-
-  const bytes = new Uint8Array(file.arrayBuffer ? file.arrayBuffer() : file);
-  const format = detectMediaFormat(bytes);
-
-  if (!format) {
-    return { ok: false, status: 415, erreur: "Format non pris en charge" };
-  }
-
-  if (mediaType === "image") {
-    const imageFormat = format as ImageFormat;
-    if (!isIntactImage(bytes, imageFormat) || !hasCompleteImageStructure(bytes, imageFormat)) {
-      return { ok: false, status: 400, erreur: "Image illisible ou corrompue" };
-    }
-    return { ok: true, mediaType: "image", format: imageFormat, size: bytes.byteLength, bytes };
-  }
-
-  const videoFormat = format as VideoFormat;
-  if (!isIntactVideo(bytes, videoFormat)) {
-    return { ok: false, status: 400, erreur: "Vidéo illisible ou corrompue" };
-  }
-
-  return { ok: true, mediaType: "video", format: videoFormat, size: bytes.byteLength, bytes };
 }
 
 export async function acceptUploadedMedia(req: Request, fieldName: MediaType): Promise<MediaIntakeResult> {

@@ -63,7 +63,9 @@ describe("POST /api/verify/video", () => {
   it("accepts a valid MP4 and extracts frames", async () => {
     const bytes = generateVideoBytes();
     const form = new FormData();
-    form.append("video", new File([bytes], "sample.mp4", { type: "video/mp4" }));
+    const payload = new Uint8Array(bytes.byteLength);
+    payload.set(bytes);
+    form.append("video", new File([payload.buffer], "sample.mp4", { type: "video/mp4" }));
 
     const { status, body } = await postFormVideo(form);
 
