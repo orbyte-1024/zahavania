@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { reponse } = await askJson({
+    const { data: { reponse } } = await askJson({
       system: SYSTEM,
       user: USER,
       schema: PingSchema,
