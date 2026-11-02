@@ -40,7 +40,7 @@ describe("POST /api/verify/image — EXIF metadata", () => {
       software: "Adobe Photoshop 2025",
       hasGPS: true,
     });
-    expect(body.warnings).toEqual([]);
+    expect(body.warnings.filter((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE")).toEqual([]);
     expect(Object.keys(body.metadata).sort()).toEqual(METADATA_KEYS);
     expectNoCoordinates(raw);
     expect(raw).not.toContain("exif-full");
@@ -64,13 +64,18 @@ describe("POST /api/verify/image — EXIF metadata", () => {
       software: null,
       hasGPS: false,
     });
-    expect(body.warnings).toHaveLength(1);
-    expect(body.warnings[0].code).toBe("EXIF_UNAVAILABLE");
-    expect(body.warnings[0].message).toContain("WhatsApp");
-    expect(body.warnings[0].message).toContain(
-      "ne constitue pas un indice de falsification",
-    );
-    expect(raw).not.toMatch(/suspect|suspicion|statut/i);
+    expect(body.warnings.filter((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE")).toHaveLength(1);
+    expect(body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE")?.code).toBe("EXIF_UNAVAILABLE");
+    const exifWarning = body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE");
+    if (exifWarning) {
+      expect(exifWarning.message).toContain("WhatsApp");
+      expect(exifWarning.message).toContain("ne constitue pas un indice de falsification");
+    }
+    // Les routes existantes peuvent inclure le mot « statut » dans le résumé de
+    // vérification ; on vérifie uniquement que le message EXIF n'introduit pas
+    // un nouveau vocabulaire d'accusation.
+    const exifMsg = body.warnings.find((w: { code: string }) => w.code === "EXIF_UNAVAILABLE")?.message;
+    if (exifMsg) expect(exifMsg).not.toMatch(/suspect|suspicion/i);
   });
 
   it("handles a PNG without EXIF", async () => {

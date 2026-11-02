@@ -54,6 +54,7 @@ describe("POST /api/verify/image", () => {
       "metadata",
       "ok",
       "reverseSearch",
+      "verification",
       "warnings",
     ]);
   });

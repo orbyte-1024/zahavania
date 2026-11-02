@@ -4,6 +4,9 @@ import { acceptUploadedImage } from "@/lib/image-intake";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 import { reverseSearchLinks } from "@/lib/reverse-search";
 import { analyzeImage } from "@/lib/vision-analyzer";
+import { buildVerification, type VisionWarning } from "@/lib/verification-summary";
+
+type MetadataWarningOrVisionWarning = MetadataWarning | VisionWarning;
 
 export async function POST(req: NextRequest) {
   const reverseSearch = reverseSearchLinks();
@@ -35,13 +38,22 @@ export async function POST(req: NextRequest) {
 
     const vision = await analyzeImage(result.bytes, result.format);
 
+    const verification = buildVerification(
+      metadata,
+      exifWarnings,
+      vision.analysis,
+      vision.warnings as VisionWarning[],
+      reverseSearch,
+    );
+
     return NextResponse.json({
       ok: true,
       file: { format: result.format, size: result.size },
       metadata,
-      warnings: [...exifWarnings, ...vision.warnings] as MetadataWarning[],
+      warnings: [...exifWarnings, ...vision.warnings] as MetadataWarningOrVisionWarning[],
       reverseSearch,
-      analysis: vision.analysis ?? undefined,
+      analysis: vision.analysis,
+      verification,
     });
   } catch (e) {
     console.error(
