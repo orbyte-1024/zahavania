@@ -9,7 +9,9 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 | Variable | Purpose |
 |---|---|
 | `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, key and model. Server-only, never prefixed `NEXT_PUBLIC_`. |
-| `USE_MOCK` | `true` returns deterministic demo data with `mock: true` and never calls the model. |
+| `USE_MOCK` | `false` by default. `true` returns deterministic demo data with `mock: true` and never calls the model, in development only: it is ignored when `NODE_ENV=production`. |
+| `AI_FALLBACK_MODEL` | Optional second model. When the main model hits a rate limit, a provider error or invalid output, the request is retried once with it. |
+| `URL_FETCH_TIMEOUT_MS` | Time allowed to fetch a page for link verification (default 12000, between 3000 and 20000). |
 | `AI_MAX_TOKENS`, `AI_WEB_MAX_RESULTS`, `AI_DAILY_LIMIT_PER_USER` | Cost caps: output tokens, web results per verification, calls per user per day and per route. |
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project. The anon key is public by design. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only. Used only by local demo mode to read the seeded directory. |
@@ -116,3 +118,12 @@ Expected behaviour:
 The route logs only the user ID, duration, status, candidate count, suggestion count and token usage. It never logs the topic, the context, bios, emails or phone numbers.
 
 The ranking prompt wraps the topic, context and bios in `<topic>`, `<context>` and `<candidates>` tags and instructs the model to ignore instructions found inside them. The server-side guard is the final defence: a returned `ref` is only accepted if it was actually sent to the model, so an invented expert cannot reach the response.
+
+## Translation
+
+`POST /api/translate` with `{ "sourceLang", "targetLang", "text" }` (mg, fr or en, up to 5,000 characters, languages must differ). It uses the same session check, rate limits and generic errors as the other routes, and returns `needsReview: true` when the target is Malagasy.
+
+## Key figures
+
+`data/stats.json` holds the latest World Bank indicators for Madagascar, each with its year, source link and update date. Refresh it with `npm run stats:update`. Entries without a source are dropped when the file is loaded, and figures older than three years are flagged in the interface.
+
