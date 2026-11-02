@@ -39,7 +39,6 @@ export const claimStatusSchema = z.enum([
 export const claimSchema = z.object({
   text: z.string().min(1),
   status: claimStatusSchema,
-  confidenceIndex: z.number().min(0).max(100),
   rationale: z.string(),
   sources: z.array(sourceSchema).default([]),
   contradictions: z.array(z.string()).default([]),
@@ -56,6 +55,8 @@ export const verifyOutputSchema = z.object({
 export type Language = z.infer<typeof languageSchema>;
 export type VerifyInput = z.infer<typeof verifyInputSchema>;
 export type Source = z.infer<typeof sourceSchema>;
+export type SourceKind = Source["kind"];
+export type ClaimStatus = z.infer<typeof claimStatusSchema>;
 export type Claim = z.infer<typeof claimSchema>;
 export type VerifyOutput = z.infer<typeof verifyOutputSchema>;
 

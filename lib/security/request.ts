@@ -22,14 +22,6 @@ export function errorResponse(
   return jsonResponse({ ok: false, error: { code, message } }, status, headers);
 }
 
-export function getClientIp(req: NextRequest): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip")?.trim() ||
-    "unknown"
-  );
-}
-
 export function startTimer(): () => number {
   const startedAt = performance.now();
   return () => Math.round(performance.now() - startedAt);
