@@ -53,7 +53,9 @@ type OpenRouterParams = ChatCompletionCreateParamsNonStreaming & {
   plugins?: Array<{ id: "web"; max_results: number }>;
 };
 
-export const isMockMode = (): boolean => process.env.USE_MOCK === "true";
+export const isMockMode = (): boolean => process.env.USE_MOCK === "true" && process.env.NODE_ENV !== "production";
+
+const FALLBACK_CODES: ReadonlySet<AiErrorCode> = new Set(["rate_limited", "provider_error", "invalid_output"]);
 
 let client: OpenAI | null = null;
 
@@ -135,10 +137,7 @@ async function requestOnce<T>(options: AskJsonOptions<T>, modelId: string) {
   }
 }
 
-export async function askJson<T>(options: AskJsonOptions<T>): Promise<AskJsonResult<T>> {
-  const modelId = options.model || process.env.AI_MODEL;
-  if (!modelId) throw new AiError("config_missing", "AI_MODEL is not set");
-
+async function runModel<T>(options: AskJsonOptions<T>, modelId: string): Promise<AskJsonResult<T>> {
   const maxAttempts = 1 + (options.outputRetries ?? DEFAULT_OUTPUT_RETRIES);
   const totalUsage: AiUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
   let lastError = new AiError("invalid_output", "no attempt made");
@@ -162,4 +161,19 @@ export async function askJson<T>(options: AskJsonOptions<T>): Promise<AskJsonRes
   }
 
   throw lastError;
+}
+
+export async function askJson<T>(options: AskJsonOptions<T>): Promise<AskJsonResult<T>> {
+  const modelId = options.model || process.env.AI_MODEL;
+  if (!modelId) throw new AiError("config_missing", "AI_MODEL is not set");
+
+  try {
+    return await runModel(options, modelId);
+  } catch (error) {
+    const failure = toAiError(error);
+    const fallback = process.env.AI_FALLBACK_MODEL;
+    if (options.model || !fallback || fallback === modelId || !FALLBACK_CODES.has(failure.code)) throw failure;
+    const result = await runModel({ ...options, outputRetries: 0 }, fallback);
+    return { ...result, attempts: result.attempts + 1 + (options.outputRetries ?? DEFAULT_OUTPUT_RETRIES) };
+  }
 }
