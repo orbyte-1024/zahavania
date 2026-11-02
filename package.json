@@ -18,6 +18,9 @@
     "server-only": "^0.0.1",
     "zod": "^4.6.7"
   },
+  "overrides": {
+    "minimatch": "^11.0.4"
+  },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
