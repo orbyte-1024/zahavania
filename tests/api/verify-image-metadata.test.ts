@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fixture, formWith, postForm } from "../helpers/upload";
+import { formWith, fixture, postForm } from "../helpers/upload";
 
 const METADATA_KEYS = [
   "available",
@@ -45,16 +45,13 @@ describe("POST /api/verify/image — EXIF metadata", () => {
     expectNoCoordinates(raw);
     expect(raw).not.toContain("exif-full");
   });
-
   it("keeps EXIF dates as stored, with no timezone conversion", async () => {
     const { body } = await upload("exif-full.jpg");
     expect(body.metadata.dateTaken).toBe("2026:10:25 14:32:00");
     expect(body.metadata.creationDate).toBe("2026:10:26 09:15:00");
   });
-
   it("reports absence of metadata without blaming the image", async () => {
-    const { status, body, raw } = await upload("valid.jpg");
-
+    const { status, body } = await upload("valid.jpg");
     expect(status).toBe(200);
     expect(body.metadata).toEqual({
       available: false,
@@ -65,7 +62,7 @@ describe("POST /api/verify/image — EXIF metadata", () => {
       hasGPS: false,
     });
     expect(body.warnings.filter((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE")).toHaveLength(1);
-    expect(body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE")?.code).toBe("EXIF_UNAVAILABLE");
+    expect(body.warnings[0].code).toBe("EXIF_UNAVAILABLE");
     const exifWarning = body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE");
     if (exifWarning) {
       expect(exifWarning.message).toContain("WhatsApp");
@@ -127,8 +124,7 @@ describe("POST /api/verify/image — EXIF metadata", () => {
   });
 
   it("signals GPS presence without ever returning coordinates", async () => {
-    const { status, body, raw } = await upload("exif-gps-only.jpg");
-
+    const { status, body } = await upload("exif-gps-only.jpg");
     expect(status).toBe(200);
     expect(body.metadata).toEqual({
       available: true,
@@ -139,7 +135,7 @@ describe("POST /api/verify/image — EXIF metadata", () => {
       hasGPS: true,
     });
     expect(body.metadata.latitude).toBeUndefined();
-    expectNoCoordinates(raw);
+    expectNoCoordinates(JSON.stringify(body));
   });
 
   it("sets hasGPS to false for an image without coordinates", async () => {
@@ -150,12 +146,13 @@ describe("POST /api/verify/image — EXIF metadata", () => {
   it("degrades on a broken metadata block, without leaking or logging details", async () => {
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    const { status, body, raw } = await upload("exif-broken.jpg");
+    const { status, body } = await upload("exif-broken.jpg");
 
     expect(status).toBe(200);
     expect(body.metadata.available).toBe(false);
     expect(body.metadata.hasGPS).toBe(false);
-    expect(body.warnings[0].code).toBe("EXIF_UNREADABLE");
+    const unreadableWarning = body.warnings.find((w: { code: string }) => w.code !== "ANALYSE_IA_NON_DISPONIBLE");    expect(unreadableWarning?.code).toBe("EXIF_UNREADABLE");
+    const raw = JSON.stringify(body);
     expect(raw).not.toMatch(/IFD0|byteLength|offset/i);
     expectNoCoordinates(raw);
     expect(errorSpy).not.toHaveBeenCalled();

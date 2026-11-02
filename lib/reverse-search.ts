@@ -30,10 +30,9 @@ const DESTINATIONS = {
  * "it was found there".
  */
 export function reverseSearchLinks(): ReverseSearch {
-  // Fresh objects per call: a caller must not be able to alter the shared
-  // destinations for the requests that follow.
   return {
     googleLens: { ...DESTINATIONS.googleLens },
     tineye: { ...DESTINATIONS.tineye },
   };
 }
+

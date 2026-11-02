@@ -6,7 +6,6 @@ import { postForm, formWith, fixture } from "../helpers/upload";
 // Scénarios unitaires du moteur de synthèse (hors provider réel)
 // ---------------------------------------------------------------------------
 
-const _unused = () => {}
 
 describe("lib/verification-summary — synthèse déterministe", () => {
   const emptyMetadata = {

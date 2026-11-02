@@ -1,9 +1,5 @@
 import type { ImageMetadata, MetadataWarning } from "./exif";
-import type {
-  VisionResult,
-  VisionObservation,
-  VisionAnalysisResult,
-} from "./vision-analyzer";
+import type { VisionResult } from "./vision-analyzer";
 import type { ReverseSearch } from "./reverse-search";
 
 // ===========================================================================
@@ -106,14 +102,6 @@ function observationsFromVision(
  * Utilisé pour exprimer la confiance globale d'un ensemble d'observations
  * provenant de la même source (ex. toutes issues de l'analyse IA).
  */
-function combinedConfidence(
-  items: Array<{ confidence: "low" | "medium" | "high" }>,
-): "low" | "medium" | "high" {
-  if (items.some((i) => i.confidence === "high")) return "high";
-  if (items.some((i) => i.confidence === "medium")) return "medium";
-  return "low";
-}
-
 // ---------------------------------------------------------------------------
 // Construction du rapport de vérification.
 // ---------------------------------------------------------------------------
