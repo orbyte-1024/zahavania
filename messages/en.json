@@ -19,6 +19,17 @@
     "stats": { "name": "Figures and agenda", "short": "Figures", "desc": "A few key indicators, each with its source, reference period and update date.", "need": "NEED 7", "state": "IN PREPARATION" },
     "angles": { "name": "Story angles", "short": "Angles", "desc": "Three to five angles built only on confirmed claims, with questions and profiles to interview.", "need": "NEED 8", "state": "LIVE" }
   },
+  "imageReport": {
+    "loading": "Loading...",
+    "error": "Verification error.",
+    "empty": "No image submitted.",
+    "banner": "The absence of anomalies does not prove the image is authentic. This report shows only technical indicators.",
+    "elaTitle": "Error Level Analysis (ELA)",
+    "elaAlt": "Amplified ELA map",
+    "elaMetric": "Difference:",
+    "elaNotApplicable": "ELA analysis not applicable (JPEG only).",
+    "demoBadge": "Demonstration — visual analysis is simulated. The result is indicative, not proof. Check TinEye / Google Lens for manual search."
+  },
   "landing": {
     "kicker": "CHECKEKO — FACT-CHECKING FOR MADAGASCAR'S NEWSROOMS",
     "line1": "A claim is spreading,",

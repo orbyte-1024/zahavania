@@ -19,6 +19,17 @@
     "stats": { "name": "Chiffres et agenda", "short": "Chiffres", "desc": "Quelques indicateurs clés, chacun avec sa source, sa période et sa date de mise à jour.", "need": "BESOIN 7", "state": "EN PRÉPARATION" },
     "angles": { "name": "Angles de reportage", "short": "Angles", "desc": "Trois à cinq angles construits sur les seules affirmations confirmées, avec questions et profils à interroger.", "need": "BESOIN 8", "state": "EN SERVICE" }
   },
+  "imageReport": {
+    "loading": "Chargement...",
+    "error": "Erreur lors de la vérification.",
+    "empty": "Aucune image soumise.",
+    "banner": "L'absence d'anomalie ne prouve pas l'authenticité de l'image. Ce rapport présente uniquement des indices techniques.",
+    "elaTitle": "Analyse de niveau d'erreur (ELA)",
+    "elaAlt": "Carte ELA amplifiée",
+    "elaMetric": "Différence :",
+    "elaNotApplicable": "Analyse ELA non applicable (JPEG uniquement).",
+    "demoBadge": "Démonstration — l'analyse visuelle est simulée. Le résultat est indicatif, pas une preuve. Consultez TinEye / Google Lens pour une recherche manuelle."
+  },
   "landing": {
     "kicker": "CHECKEKO — VÉRIFICATION POUR LES RÉDACTIONS DE MADAGASCAR",
     "line1": "Une information circule,",
