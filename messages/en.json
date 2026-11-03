@@ -221,7 +221,8 @@
       "video_decode_failed": "This browser cannot read this video (often .mov or HEVC). Export it as MP4 (H.264) and try again.",
       "video_too_long": "The video is too long (4 hours maximum).",
       "frames_missing": "No key frame was received.",
-      "frames_too_large": "The key frames are too large."
+      "frames_too_large": "The key frames are too large.",
+      "translation_unreliable": "The translation could not be checked (wrong language or text left unchanged). Try again or shorten the text."
     }
   },
   "status": {

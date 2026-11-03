@@ -221,7 +221,8 @@
       "video_decode_failed": "Ce navigateur ne sait pas lire cette vidéo (souvent .mov ou HEVC). Exportez-la en MP4 (H.264) et réessayez.",
       "video_too_long": "La vidéo est trop longue (4 heures au maximum).",
       "frames_missing": "Aucune image clé n'a été reçue.",
-      "frames_too_large": "Les images clés sont trop volumineuses."
+      "frames_too_large": "Les images clés sont trop volumineuses.",
+      "translation_unreliable": "La traduction n'a pas pu être validée (mauvaise langue ou texte inchangé). Réessayez ou raccourcissez le texte."
     }
   },
   "status": {
