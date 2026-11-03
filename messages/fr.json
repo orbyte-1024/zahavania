@@ -4,11 +4,14 @@
     "description": "Vérifiez une information, trouvez ses sources et les bons experts, en malagasy, en français et en anglais."
   },
   "nav": {
-    "tools": "OUTILS",
-    "method": "MÉTHODE",
-    "open": "OUVRIR",
+    "tools": "Outils",
+    "method": "Méthode",
+    "open": "Ouvrir l'outil",
     "language": "Langue",
-    "skip": "Aller au contenu"
+    "skip": "Aller au contenu",
+    "rule": "La règle",
+    "menu": "Menu",
+    "close": "Fermer"
   },
   "modules": {
     "verify": {
@@ -16,49 +19,56 @@
       "short": "Vérifier",
       "desc": "Un texte ou un lien. Les affirmations sont isolées, confrontées aux sources trouvées par la recherche web, et notées par le code.",
       "need": "BESOIN 1",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Vérifier une info"
     },
     "image": {
       "name": "Authentifier une image",
       "short": "Image",
       "desc": "Métadonnées EXIF, analyse visuelle présentée comme des indices, liens de recherche inversée. Jamais « vrai » ni « faux ».",
       "need": "BESOIN 2",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Analyser une image"
     },
     "monitor": {
       "name": "Veille nationale",
       "short": "Veille",
       "desc": "Les flux RSS des médias malgaches, filtrés par source, langue et sujet. Titre, lien et extrait seulement.",
       "need": "BESOIN 3",
-      "state": "EN PRÉPARATION"
+      "state": "EN PRÉPARATION",
+      "rail": "Veille des médias"
     },
     "translate": {
       "name": "Traduire",
       "short": "Traduire",
       "desc": "Malagasy, français, anglais. Le malagasy généré est toujours marqué « à relire ».",
       "need": "BESOIN 4",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Traduire"
     },
     "experts": {
       "name": "Trouver un expert",
       "short": "Experts",
       "desc": "Un sujet, une région, une langue. Les experts viennent uniquement de l'annuaire consenti, jamais du modèle.",
       "need": "BESOIN 6",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Trouver un expert"
     },
     "stats": {
       "name": "Chiffres et agenda",
       "short": "Chiffres",
       "desc": "Quelques indicateurs clés, chacun avec sa source, sa période et sa date de mise à jour.",
       "need": "BESOIN 7",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Chiffres clés"
     },
     "angles": {
       "name": "Angles de reportage",
       "short": "Angles",
       "desc": "Trois à cinq angles construits sur les seules affirmations confirmées, avec questions et profils à interroger.",
       "need": "BESOIN 8",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Angles de reportage"
     }
   },
   "imageReport": {
@@ -79,16 +89,16 @@
     "line2b": "vérifie.",
     "positioning": "Sources, experts, contexte. En trois langues.",
     "floaters": [
-      "RUBAN POLICIER · NEW YORK",
-      "ANTI-CORRUPTION · KHARKIV",
-      "ANTI-CORRUPTION · MANILLE",
-      "DÉGÂTS DU CYCLONE · MADAGASCAR",
-      "ÉLECTION · TCHÉQUIE",
-      "FEU DE FORÊT · FUMÉE",
-      "DÉFORESTATION · MADAGASCAR",
-      "LIBERTÉ DE LA PRESSE · LE CAIRE",
-      "POLLUTION DE L'EAU · USA",
-      "INONDATIONS · MADAGASCAR"
+      "LECTURE DES JOURNAUX · ANTANANARIVO",
+      "CYCLONE GIOVANNA · AMBOHIMANGA",
+      "MARCHÉ D'ANALAKELY · ANTANANARIVO",
+      "FORÊT COUPÉE · MADAGASCAR",
+      "TAXI-BROUSSE NORD-SUD",
+      "INONDATIONS · IMAGE SATELLITE",
+      "SCÈNE DE RUE · FIANARANTSOA",
+      "RUE D'ANTANANARIVO",
+      "TRI DE LA VANILLE · SAMBAVA",
+      "PIROGUE DE PÊCHE · MADAGASCAR"
     ],
     "manifesto": {
       "before": "Checkeko ne dit jamais vrai ou faux. Il montre les sources, mesure leur solidité et signale ce qui manque. Au bout du compte, c'est",
@@ -156,17 +166,7 @@
         "Pas de texte dans nos journaux."
       ],
       "finale": "Juste des",
-      "pill": "preuves.",
-      "trail": [
-        "CONFIRMÉ",
-        "SOURCE OFFICIELLE",
-        "À VÉRIFIER",
-        "MÉDIA INDÉPENDANT",
-        "INSUFFISANT",
-        "CONTREDIT",
-        "DATÉ DE 2019",
-        "LIEN ↗"
-      ]
+      "pill": "preuves."
     },
     "footer": {
       "kicker": "UNE INFORMATION À VÉRIFIER ?",
@@ -421,6 +421,18 @@
     "export": "Exporter en texte",
     "delete": "Supprimer",
     "confirmDelete": "Confirmer la suppression",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "rail": "Mes dossiers"
+  },
+  "credits": {
+    "kicker": "PHOTOS",
+    "title": "Crédits photos",
+    "lead": "Toutes les photos viennent de Wikimedia Commons, sous licence libre. Elles ont été réduites et leurs métadonnées retirées. Aucune n'a été générée par IA.",
+    "photoBy": "{label} — photo de {author}, {license}, ouvrir la source",
+    "link": "Crédits photos",
+    "author": "Auteur",
+    "license": "Licence",
+    "source": "Voir sur Wikimedia Commons ↗",
+    "back": "← Retour à l'accueil"
   }
 }

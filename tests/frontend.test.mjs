@@ -77,3 +77,20 @@ test("every module has messages and a route", () => {
   }
   assert.ok([...LIVE_MODULES].every((id) => MODULE_IDS.includes(id)));
 });
+
+test("every landing photo exists, has a free license and a credited source", async () => {
+  const { existsSync } = await import("node:fs");
+  const credits = JSON.parse(readFileSync(new URL("../data/image-credits.json", import.meta.url), "utf8"));
+  assert.ok(credits.images.length >= 10);
+  for (const image of credits.images) {
+    assert.ok(existsSync(new URL(`../public${image.file}`, import.meta.url)), `missing ${image.file}`);
+    assert.match(image.license, /^(CC BY(-SA)? [0-9.]+|CC0|Public domain)$/);
+    assert.match(image.sourceUrl, /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+    assert.ok(image.author.length > 0);
+    assert.ok(image.width > 0 && image.height > 0);
+  }
+  const floaters = credits.images.filter((image) => image.file.includes("/f"));
+  for (const locale of ["fr", "mg", "en"]) {
+    assert.equal(load(locale).landing.floaters.length, floaters.length, `${locale} captions`);
+  }
+});

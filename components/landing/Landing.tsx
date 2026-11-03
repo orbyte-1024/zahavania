@@ -1,10 +1,9 @@
 "use client";
 
 import { gsap } from "gsap";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { LanguageSwitch } from "@/components/LanguageSwitch";
+import { useEffect, useRef, useState } from "react";
+import { Dock } from "@/components/landing/Dock";
 import { EngineProvider, useEngine } from "@/components/landing/engine";
 import { Footer } from "@/components/landing/Footer";
 import { Hero } from "@/components/landing/Hero";
@@ -20,7 +19,6 @@ const WORDMARK = "Checkeko";
 const HANDOFF_MS = 900;
 
 function Chrome() {
-  const t = useTranslations("nav");
   const { engine, animated } = useEngine();
   const loaderRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLElement>(null);
@@ -78,13 +76,6 @@ function Chrome() {
     };
   }, [animated, engine]);
 
-  const jump = (event: MouseEvent<HTMLAnchorElement>, id: string, landing = 0) => {
-    const target = document.getElementById(id);
-    if (!target) return;
-    event.preventDefault();
-    engine.scrollTo(target, animated ? landing * window.innerHeight : 0);
-  };
-
   return (
     <>
       {!loaderGone && (
@@ -100,23 +91,7 @@ function Chrome() {
         </div>
       )}
 
-      <header className="dock">
-        <a ref={dockWordRef} className="dock-wordmark" href="#top" onClick={(e) => jump(e, "top")}>
-          {WORDMARK}
-        </a>
-        <nav className="dock-nav" aria-label="Checkeko">
-          <a className="dock-link mono" href="#tools" onClick={(e) => jump(e, "tools")}>
-            {t("tools")}
-          </a>
-          <a className="dock-link mono" href="#method" onClick={(e) => jump(e, "method")}>
-            {t("method")}
-          </a>
-        </nav>
-        <LanguageSwitch className="dock-lang" />
-        <Link className="dock-cta mono" href="/app">
-          {t("open")}
-        </Link>
-      </header>
+      <Dock wordmarkRef={dockWordRef} wordmark={WORDMARK} />
     </>
   );
 }

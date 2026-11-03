@@ -4,11 +4,14 @@
     "description": "Hamarino ny vaovao, tadiavo ny loharanony sy ny manam-pahaizana mety, amin'ny teny malagasy, frantsay ary anglisy."
   },
   "nav": {
-    "tools": "FITAOVANA",
-    "method": "FOMBA",
-    "open": "SOKAFY",
+    "tools": "Fitaovana",
+    "method": "Fomba",
+    "open": "Sokafy ny fitaovana",
     "language": "Fiteny",
-    "skip": "Mankany amin'ny votoaty"
+    "skip": "Mankany amin'ny votoaty",
+    "rule": "Ny fitsipika",
+    "menu": "Menio",
+    "close": "Hidio"
   },
   "modules": {
     "verify": {
@@ -16,49 +19,56 @@
       "short": "Hamarino",
       "desc": "Lahatsoratra na rohy. Sarahina ireo filazana, ampitahaina amin'ny loharano hitan'ny fikarohana an-tranonkala, ary isain'ny kaody.",
       "need": "FILANA 1",
-      "state": "MANDEHA"
+      "state": "MANDEHA",
+      "rail": "Hamarino vaovao"
     },
     "image": {
       "name": "Hamarino sary",
       "short": "Sary",
       "desc": "Metadata EXIF, fandinihana ny sary atolotra ho famantarana, rohy fikarohana mivadika. Tsy milaza mihitsy hoe « marina » na « diso ».",
       "need": "FILANA 2",
-      "state": "MANDEHA"
+      "state": "MANDEHA",
+      "rail": "Hamarino sary"
     },
     "monitor": {
       "name": "Fanaraha-maso nasionaly",
       "short": "Fanaraha-maso",
       "desc": "Ny RSS an'ny haino aman-jery malagasy, sivanina araka ny loharano, ny fiteny ary ny lohahevitra. Lohateny, rohy ary sombiny ihany.",
       "need": "FILANA 3",
-      "state": "AN-DALAM-PANOMANANA"
+      "state": "AN-DALAM-PANOMANANA",
+      "rail": "Fanaraha-maso"
     },
     "translate": {
       "name": "Handika teny",
       "short": "Handika",
       "desc": "Malagasy, frantsay, anglisy. Ny teny malagasy novokarina dia voamarika foana hoe « hojerena indray ».",
       "need": "FILANA 4",
-      "state": "MANDEHA"
+      "state": "MANDEHA",
+      "rail": "Handika teny"
     },
     "experts": {
       "name": "Hitady manam-pahaizana",
       "short": "Manam-pahaizana",
       "desc": "Lohahevitra, faritra, fiteny. Avy amin'ny lisitra nekena ihany ny manam-pahaizana, tsy avy amin'ny modely mihitsy.",
       "need": "FILANA 6",
-      "state": "MANDEHA"
+      "state": "MANDEHA",
+      "rail": "Manam-pahaizana"
     },
     "stats": {
       "name": "Isa sy fandaharana",
       "short": "Isa",
       "desc": "Tondro vitsivitsy, samy manana ny loharanony, ny fe-potoana ary ny daty nanavaozana azy.",
       "need": "FILANA 7",
-      "state": "MANDEHA"
+      "state": "MANDEHA",
+      "rail": "Isa fototra"
     },
     "angles": {
       "name": "Lafiny tatitra",
       "short": "Lafiny",
       "desc": "Lafiny telo ka hatramin'ny dimy miorina amin'ny filazana voamarina ihany, miaraka amin'ny fanontaniana sy ireo olona hanontaniana.",
       "need": "FILANA 8",
-      "state": "MANDEHA"
+      "state": "MANDEHA",
+      "rail": "Lafiny tatitra"
     }
   },
   "imageReport": {
@@ -79,16 +89,16 @@
     "line2b": "izany.",
     "positioning": "Loharano, manam-pahaizana, toe-javatra.",
     "floaters": [
-      "TADY FAMEPERAN'NY POLISY · NEW YORK",
-      "ADY AMIN'NY KOLIKOLY · KHARKIV",
-      "ADY AMIN'NY KOLIKOLY · MANILA",
-      "SIMBA NATERAKY NY RIVO-DOZA · MADAGASIKARA",
-      "FIFIDIANANA · REP. TSEKY",
-      "AFO AN'ALA · SETROKA",
-      "FANDRAVANA ALA · MADAGASIKARA",
-      "FAHAFAHAN'NY MPANAO GAZETY · KAIRO",
-      "FANDOTOANA RANO · ETAZONIA",
-      "TONDRA-DRANO · MADAGASIKARA"
+      "MAMAKY GAZETY · ANTANANARIVO",
+      "RIVO-DOZA GIOVANNA · AMBOHIMANGA",
+      "TSENAN'I ANALAKELY · ANTANANARIVO",
+      "ALA VOAKAPA · MADAGASIKARA",
+      "TAXI-BROUSSE AVARATRA-ATSIMO",
+      "TONDRA-DRANO · SARY AVY AMIN'NY ZANABOLANA",
+      "ARABE ETO FIANARANTSOA",
+      "ARABE ETO ANTANANARIVO",
+      "FANAVAHANA LAVANILY · SAMBAVA",
+      "LAKANA MPANJONO · MADAGASIKARA"
     ],
     "manifesto": {
       "before": "Tsy milaza mihitsy i Checkeko hoe marina na diso. Asehony ny loharano, refesiny ny maha-matoky azy, ary lazainy izay tsy ampy. Amin'ny farany,",
@@ -156,17 +166,7 @@
         "Tsy misy lahatsoratra ao amin'ny tahirinay."
       ],
       "finale": "Porofo",
-      "pill": "fotsiny.",
-      "trail": [
-        "VOAMARINA",
-        "LOHARANO OFISIALY",
-        "HOJERENA",
-        "HAINO AMAN-JERY TSY MIANKINA",
-        "TSY AMPY",
-        "NOLAVINA",
-        "TAMIN'NY 2019",
-        "ROHY ↗"
-      ]
+      "pill": "fotsiny."
     },
     "footer": {
       "kicker": "MISY VAOVAO HOHAMARININA ?",
@@ -421,6 +421,18 @@
     "export": "Avoaka ho lahatsoratra",
     "delete": "Fafao",
     "confirmDelete": "Hamafiso ny famafana",
-    "cancel": "Aoka ihany"
+    "cancel": "Aoka ihany",
+    "rail": "Antontan-taratasiko"
+  },
+  "credits": {
+    "kicker": "SARY",
+    "title": "Tompon'ny sary",
+    "lead": "Avy amin'ny Wikimedia Commons avokoa ny sary rehetra, misy fahazoan-dalana malalaka. Nohakelezina izy ireo ary nesorina ny metadata. Tsy nisy noforonin'ny IA.",
+    "photoBy": "{label} — sary nalain'i {author}, {license}, sokafy ny loharano",
+    "link": "Tompon'ny sary",
+    "author": "Mpaka sary",
+    "license": "Fahazoan-dalana",
+    "source": "Jereo ao amin'ny Wikimedia Commons ↗",
+    "back": "← Hiverina amin'ny fandraisana"
   }
 }

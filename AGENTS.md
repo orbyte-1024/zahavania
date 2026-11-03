@@ -61,6 +61,7 @@ npm run stats:update   # rafraîchit data/stats.json depuis l'API de la Banque m
 ```
 app/
   page.tsx                      # landing immersive
+  credits/page.tsx              # crédits photos
   app/{verify,image,monitor,translate,experts,stats,angles,files}/page.tsx
   api/verify/{text,image,video}/route.ts
   api/sources/suggest/route.ts  # experts
@@ -77,7 +78,7 @@ lib/ratelimit.ts, lib/cache.ts, lib/demo/replay.ts
 lib/api/{contract,fetcher}.ts   # types partagés avec le frontend
 lib/experts/, lib/db/experts.ts # annuaire
 lib/dossiers.ts, lib/stats.ts
-data/stats.json
+data/stats.json, data/image-credits.json
 supabase/{migrations,seed.sql}
 messages/{mg,fr,en}.json
 ```
@@ -133,7 +134,9 @@ Direction "Site Immersif" (voir le skill du même nom) : sombre "latérite", typ
 - Tokens dans `app/globals.css` : `--bone`, `--surface`, `--ink`, `--ash`, `--accent` (#996E52, seul accent),
   `--accent-deep` (petits boutons), statuts `--st-*`. Polices : Bricolage Grotesque + DM Mono.
 - Filets fins plutôt que cartes ombrées. Pas de dégradé décoratif, pas de glassmorphism, pas d'emoji.
-- Aucune image générée par IA. Les visuels viennent de la 3D, de la typographie et des pictogrammes SVG.
+- Aucune image générée par IA. Les visuels viennent de la 3D, de la typographie, des pictogrammes SVG et de
+  photos réelles de Madagascar sous licence libre (Wikimedia Commons), réduites, sans métadonnées, stockées dans
+  `public/images/landing/` et créditées dans `data/image-credits.json` et sur la page `/credits`.
 - Mobile first. Cibles tactiles ≥ 44 px. `prefers-reduced-motion` respecté partout.
 - Le statut n'est jamais indiqué par la couleur seule : toujours un libellé + un symbole.
 

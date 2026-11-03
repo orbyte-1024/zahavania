@@ -6,28 +6,30 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CloudState } from "@/components/landing/DispatchCloud";
 import { useEngine, useScene, type SceneFactory } from "@/components/landing/engine";
+import { FLOATER_IMAGES } from "@/lib/landing-images";
 import { createGrow } from "@/lib/motion/grow";
 import { easeInOut, easeOut, mix, pinnedProgress, seg } from "@/lib/motion/scroll";
 
 const DispatchCloud = dynamic(() => import("@/components/landing/DispatchCloud"), { ssr: false });
 
 const FLOATERS = [
-  { x: "-4%", y: "13%", w: 196, d: 0.55, image: "/landing/crime-scene.jpg", source: "https://commons.wikimedia.org/wiki/File:NYPD_Crime_Scene_Tape_004.jpg", credit: "Kidfly182 · CC BY 4.0" },
-  { x: "21%", y: "3%", w: 150, d: 0.9, image: "/landing/corruption-kharkiv.jpg", source: "https://commons.wikimedia.org/wiki/File:Anticorruption_protests_in_Kharkiv_2025-07-23_-_26.jpg", credit: "Serhii Bobok · CC BY 4.0" },
-  { x: "40%", y: "-6%", w: 224, d: 0.4, image: "/landing/corruption-manila.jpg", source: "https://commons.wikimedia.org/wiki/File:September_21_Baha_sa_Luneta_anti-corruption_protest_at_Mendiola.jpg", credit: "Kej Andrés · CC BY-SA 4.0" },
-  { x: "63%", y: "7%", w: 140, d: 0.75, image: "/landing/cyclone-madagascar.jpg", source: "https://commons.wikimedia.org/wiki/File:Madagascar_Rova_ambohimanga_courtyard_cyclone_Giovanna_damage.JPG", credit: "Lemurbaby · CC BY-SA 3.0" },
-  { x: "84%", y: "2%", w: 206, d: 1, image: "/landing/ballot-box.jpg", source: "https://commons.wikimedia.org/wiki/File:Ballot_box_of_czech_legislative_election_2010_in_T%C5%99eb%C3%AD%C4%8D,_T%C5%99eb%C3%AD%C4%8D_District.jpg", credit: "Jiří Sedláček · CC BY-SA 3.0" },
-  { x: "-2%", y: "46%", w: 132, d: 0.5, image: "/landing/forest-fire.jpg", source: "https://commons.wikimedia.org/wiki/File:Black_forest_fire_smoke_rising_to_sky.jpg", credit: "Karen Murphy / USFWS · Public domain" },
-  { x: "92%", y: "38%", w: 176, d: 0.7, image: "/landing/deforestation-madagascar.jpg", source: "https://commons.wikimedia.org/wiki/File:Cut_Forest,_Madagascar_(21794304082).jpg", credit: "Rod Waddington · CC BY-SA 2.0" },
-  { x: "12%", y: "72%", w: 236, d: 0.35, image: "/landing/press-freedom.jpg", source: "https://commons.wikimedia.org/wiki/File:Photographers_protest_police_harassment,_Cairo_2007_-_001.jpg", credit: "Hossam el-Hamalawy · CC BY-SA 2.0" },
-  { x: "44%", y: "82%", w: 146, d: 0.85, image: "/landing/water-pollution.jpg", source: "https://commons.wikimedia.org/wiki/File:Columbia_River_in_East_Wenatchee-_foamy_pollution.jpg", credit: "Thayne Tuason · CC BY 4.0" },
-  { x: "72%", y: "66%", w: 192, d: 0.6, image: "/landing/flood-madagascar.jpg", source: "https://commons.wikimedia.org/wiki/File:Flooding_in_Madagascar_(MODIS).jpg", credit: "NASA GSFC · Public domain" },
+  { x: "-4%", y: "13%", w: 196, d: 0.55 },
+  { x: "21%", y: "3%", w: 150, d: 0.9 },
+  { x: "37%", y: "9%", w: 210, d: 0.4 },
+  { x: "63%", y: "7%", w: 140, d: 0.75 },
+  { x: "84%", y: "2%", w: 206, d: 1 },
+  { x: "-2%", y: "46%", w: 132, d: 0.5 },
+  { x: "92%", y: "38%", w: 176, d: 0.7 },
+  { x: "12%", y: "72%", w: 236, d: 0.35 },
+  { x: "44%", y: "82%", w: 146, d: 0.85 },
+  { x: "72%", y: "66%", w: 192, d: 0.6 },
 ] as const;
 
 export function Hero() {
   const t = useTranslations("landing");
   const { animated } = useEngine();
   const labels = t.raw("floaters") as string[];
+  const tc = useTranslations("credits");
   const positioning = t("positioning").split(" ");
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -107,31 +109,32 @@ export function Hero() {
     <section ref={sectionRef} className="scene s-hero" id="top" style={{ "--pin": 5 } as React.CSSProperties}>
       <div className="pin">
         <div className="floaters">
-          {FLOATERS.map((f, i) => (
-            <figure
-              key={i}
-              className="fl"
-              data-floater
-              data-d={f.d}
-              style={{ "--x": f.x, "--y": f.y, "--w": `${f.w}px`, "--fi": i } as React.CSSProperties}
-            >
-              <a
-                className="fl-image"
-                href={f.source}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Photo source: ${labels[i]} — ${f.credit}`}
+          {FLOATERS.map((f, i) => {
+            const image = FLOATER_IMAGES[i];
+            if (!image) return null;
+            return (
+              <figure
+                key={image.file}
+                className="fl"
+                data-floater
+                data-d={f.d}
+                style={{ "--x": f.x, "--y": f.y, "--w": `${f.w}px`, "--fi": i } as React.CSSProperties}
               >
-                <Image src={f.image} alt="" fill sizes="(max-width: 480px) 144px, 240px" />
-              </a>
-              <figcaption className="fl-caption">
-                <span className="fl-label mono">{labels[i]}</span>
-                <span className="fl-credit mono">
-                  {f.credit}
-                </span>
-              </figcaption>
-            </figure>
-          ))}
+                <a
+                  className="fl-image"
+                  href={image.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={tc("photoBy", { label: labels[i], author: image.author, license: image.license })}
+                >
+                  <Image src={image.file} alt="" fill sizes="(max-width: 900px) 140px, 240px" priority={i < 4} />
+                </a>
+                <figcaption className="fl-caption">
+                  <span className="fl-label mono">{labels[i]}</span>
+                </figcaption>
+              </figure>
+            );
+          })}
         </div>
 
         <div className="hero-copy">

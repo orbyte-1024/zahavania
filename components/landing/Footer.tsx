@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 
 export function Footer() {
   const t = useTranslations("landing.footer");
+  const tc = useTranslations("credits");
   const nameRef = useRef<HTMLHeadingElement>(null);
   const name = "Checkeko";
 
@@ -42,7 +43,12 @@ export function Footer() {
         ))}
       </h2>
       <div className="footer-bottom">
-        <p className="mono ash">{t("left")}</p>
+        <p className="mono ash">
+          {t("left")} ·{" "}
+          <Link className="footer-credits" href="/credits">
+            {tc("link")}
+          </Link>
+        </p>
         <p className="mono">{t("middle")}</p>
         <p className="mono ash">{t("right")}</p>
       </div>

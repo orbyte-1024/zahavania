@@ -1,19 +1,20 @@
 "use client";
 
 import { gsap } from "gsap";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef } from "react";
 import { HandOval } from "@/components/HandOval";
 import { useEngine, useScene, type SceneFactory } from "@/components/landing/engine";
+import { TRAIL_IMAGES } from "@/lib/landing-images";
 import { createDraw } from "@/lib/motion/draw";
 import { pinnedProgress, seg } from "@/lib/motion/scroll";
 
-const POOL = 18;
+const TRAIL_WIDTHS = [150, 190, 120, 200, 96, 170, 64, 140, 200, 110, 72, 160, 130, 180];
 
 export function Objections() {
   const t = useTranslations("landing.objections");
   const items = t.raw("items") as string[];
-  const trail = t.raw("trail") as string[];
   const { animated } = useEngine();
   const sectionRef = useRef<HTMLElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
@@ -99,9 +100,9 @@ export function Objections() {
           </span>
         </p>
         <div ref={trailRef} className="trail" aria-hidden="true">
-          {Array.from({ length: POOL }, (_, i) => (
-            <span key={i} className="trail-slip mono" data-tone={i % 3}>
-              {trail[i % trail.length]}
+          {TRAIL_IMAGES.map((image, i) => (
+            <span key={image.file} className="trail-photo" style={{ "--tw": `${TRAIL_WIDTHS[i % TRAIL_WIDTHS.length]}px` } as React.CSSProperties}>
+              <Image src={image.file} width={image.width} height={image.height} sizes="200px" alt="" loading="lazy" />
             </span>
           ))}
         </div>

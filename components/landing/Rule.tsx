@@ -51,7 +51,7 @@ export function Rule() {
   useScene(sectionRef, factory);
 
   return (
-    <section ref={sectionRef} className="scene s-rule" style={{ "--pin": 3 } as React.CSSProperties}>
+    <section ref={sectionRef} className="scene s-rule" id="rule" style={{ "--pin": 3 } as React.CSSProperties}>
       <div className="pin">
         <div className="q-stack">
           <span className="q-glyph" data-glyph aria-hidden="true">

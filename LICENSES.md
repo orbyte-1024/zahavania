@@ -25,3 +25,7 @@
 | next-intl | 4.14.9 | MIT |
 | vitest | 5.1.0 | MIT |
 | vite | 8.3.5 | MIT |
+
+## Photos
+
+Les photos de la landing viennent de Wikimedia Commons (CC BY, CC BY-SA, CC0 ou domaine public). L'auteur, la licence et la source de chacune sont listés dans `data/image-credits.json` et affichés sur la page `/credits`.
