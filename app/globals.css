@@ -27,9 +27,10 @@
   --st-needs-rgb: 232, 197, 124;
   --st-insufficient: #c2b4a4;
 
-  --scene-paper: #e9dfd0;
-  --scene-dim: #4a3527;
-  --scene-accent: #c58d66;
+  --scene-paper: #f3ebdf;
+  --scene-dim: #ddd0be;
+  --scene-accent: #e3ad86;
+  --scene-fog: #c9bba8;
 
   --sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -71,7 +72,8 @@
 
   --scene-paper: #fffdf8;
   --scene-dim: #e2d8c6;
-  --scene-accent: #7f4d2e;
+  --scene-accent: #dc9a69;
+  --scene-fog: #f6f1e7;
 
   color-scheme: light;
 }

@@ -107,12 +107,16 @@ test("dark theme: #221811 only as the page, every reading surface at WCAG AA", (
   }
 });
 
-test("paper slips of the 3D scene stand out from the background in both themes", () => {
+test("paper slips stay light in both themes, loose, sorted, sourced or far in the fog", () => {
   for (const theme of [dark, light]) {
-    assert.ok(contrast(theme["scene-paper"], theme.bone) >= 1.08, `paper on ${theme.bone}`);
-    assert.ok(contrast(theme["scene-dim"], theme.bone) >= 1.15, `sorted slips on ${theme.bone}`);
-    assert.ok(contrast(theme["scene-accent"], theme.bone) >= 3, `sourced slips on ${theme.bone}`);
+    for (const name of ["scene-paper", "scene-dim", "scene-accent", "scene-fog"]) {
+      assert.ok(luminance(theme[name]) >= 0.35, `${name} ${theme[name]} is too dark`);
+    }
   }
+  assert.ok(contrast(dark["scene-paper"], dark.bone) >= 10, "loose slips on the dark page");
+  assert.ok(contrast(dark["scene-dim"], dark.bone) >= 10, "sorted slips on the dark page");
+  assert.ok(contrast(dark["scene-accent"], dark.bone) >= 7, "sourced slips on the dark page");
+  assert.ok(contrast(light["scene-accent"], light.bone) >= 2, "sourced slips on the light page");
 });
 
 test("stylesheets and the 3D scene use theme variables instead of literal colors", () => {

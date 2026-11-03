@@ -17,7 +17,7 @@ const GAP_X = 0.84;
 const GAP_Y = 1.06;
 const SOURCED_RATIO = 0.075;
 
-type Palette = { background: string; paper: THREE.Color; dim: THREE.Color; accent: THREE.Color };
+type Palette = { background: string; fog: string; paper: THREE.Color; dim: THREE.Color; accent: THREE.Color };
 
 function cssColor(styles: CSSStyleDeclaration, name: string, fallback: string): string {
   return styles.getPropertyValue(name).trim() || fallback;
@@ -27,9 +27,10 @@ function readPalette(): Palette {
   const styles = getComputedStyle(document.documentElement);
   return {
     background: cssColor(styles, "--bone", "#221811"),
-    paper: new THREE.Color(cssColor(styles, "--scene-paper", "#e9dfd0")),
-    dim: new THREE.Color(cssColor(styles, "--scene-dim", "#4a3527")),
-    accent: new THREE.Color(cssColor(styles, "--scene-accent", "#c58d66")),
+    fog: cssColor(styles, "--scene-fog", "#c9bba8"),
+    paper: new THREE.Color(cssColor(styles, "--scene-paper", "#f3ebdf")),
+    dim: new THREE.Color(cssColor(styles, "--scene-dim", "#ddd0be")),
+    accent: new THREE.Color(cssColor(styles, "--scene-accent", "#e3ad86")),
   };
 }
 
@@ -192,7 +193,7 @@ export default function DispatchCloud({ state, active }: { state: RefObject<Clou
       aria-hidden="true"
     >
       <color key={`bg-${palette.background}`} attach="background" args={[palette.background]} />
-      <fog key={`fog-${palette.background}`} attach="fog" args={[palette.background, 14, 30]} />
+      <fog key={`fog-${palette.fog}`} attach="fog" args={[palette.fog, 14, 30]} />
       <Slips state={state} palette={palette} />
     </Canvas>
   );
