@@ -1,150 +1,392 @@
-# Zahavan'ia
+# Zahavan'ia — A journalistic investigation assistant for Madagascar
 
-**Journalistic investigation assistant for Madagascar.**
+    **"You look — the AI looks with you."**
 
-Zahavan'Ia helps journalists transition from receiving raw information to producing verified content. It enables them to check text or links, analyze images or videos, find sourced statistics, identify consenting experts, and identify unique angles for news coverage. The interface is available in Malagasy, French, and English. This is a hackathon project built with Next.js 16.
+
+
+*Zahavan'ia* is the translation, in the southern dialect of Madagascar, of the Malagasy
+expression meaning "you look" — the gesture of paying attention to something, of looking
+together. Within the project's nomenclature, this name carries its full meaning:
+*Zahavan'ia: "You look — the AI looks with you."*
+The journalist stays in control; the AI helps them see further, faster, and above all
+with evidence to back it up.
+
+Zahavan'ia helps journalists go from a raw piece of news they received
+(often via WhatsApp or Facebook) to *verified, documented, and usable* content.
+This is not a chatbot: it is a pipeline of
+*Monitor → Verify (text/link, image) → Contextualize (figures) → Contact an expert → Find an angle*.
+
+---
+
+## Honesty principles (non-negotiable)
+
+- *Never a "true/false" verdict.* Only the statuses confirmed, contradicted,
+  insufficient, needs_verification.
+- *A 0–100 confidence index*, computed by the code (lib/score.ts), never "decided" by
+  the model, fully explained, and presented as indicative — not as a probability.
+- *Traceability:* every conclusion links back to clickable sources (title, domain, date, URL).
+  No usable source = insufficient status.
+- *The AI invents nothing:* no source, no URL, no quote, no figure, no person's name.
+- *The journalist decides:* every report offers Validate / Enrich / Reject.
+- *Images are clues, never proof.* An image with "no anomaly" is not "authentic".
+- *Data is always dated and sourced* (source, reference period, date last updated).
+
+---
 
 ## Features
 
-- **Verify text or links**: Claims are isolated and cross-checked against web searches. Every conclusion links back to clickable sources.
-- **Analyze an image or a video**: Extracts EXIF metadata, visual clues, and anomalies, and provides reverse image search links. Videos are reduced to 6 keyframes extracted directly within the browser.
-- **Translate**: Translates between Malagasy, French, and English, with automatic output quality checks and a "needs review" flag triggered for Malagasy.
-- **Find an expert**: Search a directory of consenting profiles, filtered by field of expertise, region, and language.
-- **Consult statistics**: Access World Bank statistics on Madagascar, complete with the relevant year, source, and last update date.
-- **Suggest reporting angles**: Generates news coverage angles based exclusively on confirmed claims.
-- **Save a case**: Saves folders locally in the journalist's browser. The monitoring feature (`/app/monitor`) is planned but currently disabled.
+| Screen | What it does |
+| --- | --- |
+| *Verify* | Breaks a text or link down into individual claims and cross-checks them through web search; per-claim report with status, explainable confidence, and clickable sources. |
+| *Image / Video* | EXIF metadata, visual clues, reverse-image search links; for video, *6 key frames extracted in the browser* (no server-side ffmpeg). |
+| *Monitor* | Groups articles together and raises alerts (P2). |
+| *Translate* | Malagasy ⇄ French ⇄ English, with automatic checks (output language, sentence splitting). |
+| *Experts* | Directory of *consenting* people, filterable by field, region, and language (fictional data in demo mode). |
+| *Stats* | Dated, sourced World Bank indicators (data/stats.json). |
+| *Angles* | Story-angle suggestions based *only* on confirmed claims. |
+| *My Dossiers* | Local saving of reports (localStorage) — nothing leaves the device. |
 
-## Principles
+---
 
-- **No "true / false" verdicts**: Statuses are strictly limited to `confirmed`, `contradicted`, `insufficient`, or `needs_verification`.
-- **Confidence score**: A score (0–100) is computed programmatically with an explainable breakdown. It measures the quality of the evidence found, not the ultimate truth of the fact.
-- **Insufficient status**: Any claim without a usable, verifiable source is classified as `insufficient`.
-- **No AI hallucinations**: The AI does not invent sources, quotes, or experts. URLs not returned by the web search are discarded, and experts are drawn exclusively from the directory.
-- **No absolute authenticity**: An image with no detected anomalies is not certified as "authentic"; the analysis remains an indicator.
-- **The journalist decides**: Every report can be validated, completed, or rejected by the user.
+## Tech stack
 
-## Stack
+- *Framework*: [Next.js 16](https://nextjs.org) (App Router, cacheComponents) — single repo, with the app/api/* routes acting as the backend.
+- *Frontend*: React 19, strict TypeScript, *Tailwind CSS v4*
+- *i18n*: next-intl, language selected via the NEXT_LOCALE cookie (mg | fr | en, default mg)
+- *AI*: the openai SDK pointed at [OpenRouter](https://openrouter.ai), web search via the web plugin, zod validation on output
+- *Data*: [Supabase](https://supabase.com) (anonymous auth + experts directory with RLS), data/stats.json, localStorage
+- *Media*: sharp, exifr, image-size; 3D and animations: three + @react-three/fiber, gsap, lenis, motion
+- *Tests*: vitest (tests/api/*.test.ts) + node --test (tests/*.test.mjs)
+- *Security*: server-side keys only, SSRF protection for submitted URLs (lib/security/safe-fetch.ts), IP + user + day rate limiting, strict zod validation on input/output
+- *CI*: GitHub Actions
+- *Deployment*: Vercel or Docker
 
-Next.js 16 (App Router), React 19, strict TypeScript, Tailwind CSS v4, `next-intl`, Supabase (anonymous auth, expert directory, shared rate-limiters), `openai` SDK pointing to OpenRouter, `zod`, `sharp` / `exifr`, `three`, `gsap`, `motion`. Tested with Vitest and `node --test`.
+---
 
-## Getting Started
+## Local installation
 
-Prerequisites: Node.js 24 and npm.
+### Prerequisites
 
-```bash
-cp .env.example .env.local # at a minimum, fill in the OpenRouter and Supabase keys
-npm install
+- *Node.js 24+* (current LTS) and npm
+- or *Docker* with Docker Compose v2
+- An [OpenRouter](https://openrouter.ai) key for AI calls (optional in demo mode)
+
+### Method 1 — standard Next.js installation
+
+# 1. Clone the repository
+git clone <repository-url> zahavania
+cd zahavania
+
+# 2. Install dependencies
+npm ci
+
+# 3. Configure your environment
+cp .env.example .env.local
+# then edit .env.local (see "Environment variables" below)
+
+# 4. Run in development
 npm run dev
-```
+# → http://localhost:3000
 
-The application will be available at <http://localhost:3000>.
+In development, you can set 
+USE_MOCK=true in .env.local to run *without an API key*
+(demo outputs are flagged with a "Demonstration" badge).
+This mode is *ignored in production*: npm run build && npm start requires real API calls.
 
-### Local Database (Optional)
+Build and run in real conditions:
 
-```bash
-npx supabase start
-npx supabase db reset # applies migrations and the demonstration seed data
-```
+npm run build
+npm start
 
-The 16 profiles included in the seed data are **fictional** and explicitly marked as such.
+### Method 2 — Docker
 
-### Without an AI Key
+# 1. Configure your environment (secrets are read at runtime, never at build time)
+cp .env.example .env.local
 
-Setting `USE_MOCK=true` returns deterministic responses marked with `mock: true` for development purposes only. This mode is ignored in production.
+# 2. Build and start (application + PostgreSQL 17)
+docker compose up --build
 
-## Configuration
+# → http://localhost:3000
 
-All variables are documented in `.env.example`. The primary ones are:
+The 
+Dockerfile is multi-stage: npm ci → npm run build → minimal runtime image
+(Node 24 Alpine, standalone output, non-root user, port 3000).
+The db service (PostgreSQL) is *not published* on the host by default: the app reaches it
+at db:5432 on the Compose network. To access it with an external client, uncomment the
+ports block in docker-compose.yml.
 
-| Variable | Role |
+Useful commands:
+
+docker compose logs -f app   # application logs
+docker compose down           # stop
+docker compose down -v        # stop + delete the PostgreSQL data
+
+### Environment variables
+
+Secrets live in 
+.env.local (git-ignored); .env.example contains no real values.
+The most important ones:
+
+| Variable | Purpose |
 | --- | --- |
-| `LLM_API_KEY` | One API key, or several separated by commas (OpenRouter, Groq, Ollama Cloud, ...), tried in order; see `README_AI.md` |
-| `LLM_BASE_URL`, `AI_MODEL` | OpenRouter endpoint (optional) and default model |
-| `AI_MODEL_VERIFY`, `_TRANSLATE`, `_VISION`, `_EXPERTS`, `_ANGLES` | Per-task models (optional, falls back to `AI_MODEL`) |
-| `AI_FALLBACK_MODELS` | Comma-separated fallback models, tried in order when a model fails (see `README_AI.md`) |
-| `AI_FALLBACK_MODEL` | Single fallback model, added at the end of the list |
-| `AI_DAILY_LIMIT_PER_USER` | Daily quota per user and per route |
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project credentials (public key by design) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-only: local seeding, shared rate-limiters |
-| `RATE_LIMIT_STORE=supabase` | Share rate limits between instances instead of using memory |
-| `DEMO_MODE` | Bypasses authentication in development mode only |
-| `USE_MOCK` | Serves mock demonstration data in development mode only |
+| LLM_BASE_URL | OpenRouter endpoint (https://openrouter.ai/api/v1) |
+| LLM_API_KEY | API key — *server-side only, never exposed to the client* |
+| AI_MODEL, AI_MODEL_VERIFY, AI_MODEL_TRANSLATE, AI_MODEL_VISION, AI_MODEL_EXPERTS, AI_MODEL_ANGLES, AI_MODEL_MONITOR | Per-task models (falls back to AI_MODEL) |
+| AI_FALLBACK_MODEL | Fallback model after a failure |
+| USE_MOCK | true = demo outputs (development only, ignored in production) |
+| AI_DAILY_LIMIT_PER_USER, AI_CACHE_TTL_SECONDS | Daily quota and per-user cache |
+| URL_FETCH_TIMEOUT_MS | Maximum delay for fetching a submitted URL |
+| NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase directory (anon key is public by design) |
+| SUPABASE_SERVICE_ROLE_KEY | Service role key — *server-side only* |
+| RATE_LIMIT_STORE | supabase (shared) or in-memory (default) |
 
-No key should be prefixed with `NEXT_PUBLIC_` except for the Supabase anonymous key.
+---
 
-## Scripts
+## Tests and quality
 
-| Command | Effect |
-| --- | --- |
-| `npm run dev` | Development server |
-| `npm run build` / `npm start` | Production build and production server |
-| `npm run lint` | ESLint |
-| `npm test` | Runs Vitest tests followed by `node --test` |
-| `npm run stats:update` | Refreshes `data/stats.json` from the World Bank API |
-| `npm run check:real` | Verifies AI routes on a live server (bypassing mocks) |
+npm run lint    # ESLint
+npm test        # Vitest (tests/api) then node --test (unit tests)
+npm run check:real   # real-mode check (if .env.local is present)
 
-## Architecture
+The GitHub Actions CI runs lint, tests, and build on every push/PR.
 
-```text
-app/
-  page.tsx             # landing page
-  app/                 # application core screens
-  api/                 # backend routes (verify, sources, editorial, translate)
-components/landing/     # 3D scenes and animations
-components/workspace/   # main workspace interfaces
-lib/ai/                # unified AI client, prompts, schemas, and models
-lib/security/          # auth, rate-limiting, and safe-fetch utilities
-lib/score.ts           # confidence score calculation logic
-i18n/, messages/       # mg / fr / en translation files
-data/                  # statistics, agenda, photo credits
-supabase/              # database migrations and seed data
-tests/, docs/          # test suites and documentation
-```
+Update the statistics (World Bank API):
 
-## API
+npm run stats:update
 
-All routes use the `POST` method, require an active Supabase session (anonymous sessions are accepted), and enforce rate limits, daily quotas, and Zod validation. Errors return generic messages. The complete contract is detailed in [`docs/api.md`](docs/api.md).
-
-| Route | Role |
-| --- | --- |
-| `/api/verify/text` | Verify a block of text or a URL |
-| `/api/verify/image` | Analyze an image and its metadata |
-| `/api/verify/video` | Analyze keyframes extracted from a video |
-| `/api/sources/suggest` | Suggest expert profiles from the directory |
-| `/api/editorial/angles` | Propose reporting angles from confirmed facts |
-| `/api/translate` | Translate text (5,000 characters maximum) |
-
-## Security and Privacy
-
-- Keys are strictly server-side; no keys are ever exposed to the client, logs, or error messages.
-- Provided URLs pass through `lib/security/safe-fetch.ts` (restricts to HTTP/HTTPS, public IPs, standard ports, re-verified redirects, and bounded size and timeouts).
-- No submitted content is logged. Folders and cases remain in the journalist's browser `localStorage`.
-- Rate limits are enforced per IP and per user, shared via Supabase if `RATE_LIMIT_STORE=supabase`.
-- User content is strictly treated as data, never as instructions; hallucinated or untrusted sources are stripped programmatically.
-
-## Tests and CI
-
-`npm test` executes API tests (Vitest) followed by core logic tests (`node --test`). The GitHub Actions CI workflow validates typechecking, linting, tests, and the production build using `USE_MOCK=true`.
+---
 
 ## Deployment
 
-- **Vercel**: Detailed guide available in [`docs/deploy-vercel.md`](docs/deploy-vercel.md). AI routes are configured with a `maxDuration` of up to 300 seconds.
-- **Docker**: `docker compose up --build` builds the standalone image and exposes the application on port 3000.
+- 
+*Vercel*: guide in [`docs/deploy-vercel.md`](docs/deploy-vercel.md)
+- *Docker*: see method 2 above (self-contained image, ready for any orchestrator)
 
-## Known Limitations
+---
 
-- Malagasy language proficiency varies across models; any translation to or from Malagasy is automatically flagged as "needs review".
-- OpenRouter web search features are billed separately; without active credits, verifications default to `insufficient`.
-- The response cache and rate-limit stores run in-memory unless a Supabase backend is configured.
-- Offline mode is currently restricted to a static `/offline` page; application data is not cached for offline access.
+## Project structure
 
-## Documentation
+app/
+  page.tsx                      # immersive landing page (scrubbed 3D scenes)
+  app/{verify,image,monitor,translate,experts,stats,angles,files}/page.tsx
+  api/verify/{text,image,video}/route.ts   # AI routes = backend
+  api/sources/suggest/route.ts
+  api/editorial/angles/route.ts
+  api/translate/route.ts
+components/landing/             # animated scenes, DispatchCloud (3D)
+components/workspace/           # application screens
+lib/ai/                         # the ONLY entry point to the model + prompts + schemas
+lib/security/                   # auth, rate limiting, safe-fetch (SSRF), request handling
+lib/score.ts                    # confidence index computed by the code
+data/stats.json                 # dated World Bank indicators
+messages/{mg,fr,en}.json        # translations (always in all 3 languages)
+tests/                          # vitest + node --test
 
-| File | Content |
+---
+
+## Resources
+
+- [`AGENTS.md`](AGENTS.md) — the project's product and technical rules
+- [`LICENSES.md`](LICENSES.md) — dependency licenses (required by the regulations)
+- [`docs/api.md`](docs/api.md) — API route reference
+- [`docs/demo.md`](docs/demo.md) — demo scenario
+- [`docs/malagasy-tests.md`](docs/malagasy-tests.md) — Malagasy-language tests
+- [`README_AI.md`](README_AI.md) — detailed AI configuration
+# Zahavan'ia — A journalistic investigation assistant for Madagascar
+
+    **"You look — the AI looks with you."**
+
+
+
+*Zahavan'ia* is the translation, in the southern dialect of Madagascar, of the Malagasy
+expression meaning "you look" — the gesture of paying attention to something, of looking
+together. Within the project's nomenclature, this name carries its full meaning:
+*Zahavan'ia: "You look — the AI looks with you."*
+The journalist stays in control; the AI helps them see further, faster, and above all
+with evidence to back it up.
+
+Zahavan'ia helps journalists go from a raw piece of news they received
+(often via WhatsApp or Facebook) to *verified, documented, and usable* content.
+This is not a chatbot: it is a pipeline of
+*Monitor → Verify (text/link, image) → Contextualize (figures) → Contact an expert → Find an angle*.
+
+---
+
+## Honesty principles (non-negotiable)
+
+- *Never a "true/false" verdict.* Only the statuses confirmed, contradicted,
+  insufficient, needs_verification.
+- *A 0–100 confidence index*, computed by the code (lib/score.ts), never "decided" by
+  the model, fully explained, and presented as indicative — not as a probability.
+- *Traceability:* every conclusion links back to clickable sources (title, domain, date, URL).
+  No usable source = insufficient status.
+- *The AI invents nothing:* no source, no URL, no quote, no figure, no person's name.
+- *The journalist decides:* every report offers Validate / Enrich / Reject.
+- *Images are clues, never proof.* An image with "no anomaly" is not "authentic".
+- *Data is always dated and sourced* (source, reference period, date last updated).
+
+---
+
+## Features
+
+| Screen | What it does |
 | --- | --- |
-| [`AGENTS.md`](AGENTS.md) | Product, technical, and security guidelines |
-| [`docs/api.md`](docs/api.md) | API route specifications and contracts |
-| [`README_AI.md`](README_AI.md) | AI configuration, models, caching, and demo setups |
-| [`docs/demo.md`](docs/demo.md) | Standard 3-minute demonstration script |
-| [`docs/deploy-vercel.md`](docs/deploy-vercel.md) | Step-by-step Vercel deployment guide |
-| [`docs/reverse-search.md`](docs/reverse-search.md) | Reverse image search implementation details |
+| *Verify* | Breaks a text or link down into individual claims and cross-checks them through web search; per-claim report with status, explainable confidence, and clickable sources. |
+| *Image / Video* | EXIF metadata, visual clues, reverse-image search links; for video, *6 key frames extracted in the browser* (no server-side ffmpeg). |
+| *Monitor* | Groups articles together and raises alerts (P2). |
+| *Translate* | Malagasy ⇄ French ⇄ English, with automatic checks (output language, sentence splitting). |
+| *Experts* | Directory of *consenting* people, filterable by field, region, and language (fictional data in demo mode). |
+| *Stats* | Dated, sourced World Bank indicators (data/stats.json). |
+| *Angles* | Story-angle suggestions based *only* on confirmed claims. |
+| *My Dossiers* | Local saving of reports (localStorage) — nothing leaves the device. |
+
+---
+
+## Tech stack
+
+- *Framework*: [Next.js 16](https://nextjs.org) (App Router, cacheComponents) — single repo, with the app/api/* routes acting as the backend.
+- *Frontend*: React 19, strict TypeScript, *Tailwind CSS v4*
+- *i18n*: next-intl, language selected via the NEXT_LOCALE cookie (mg | fr | en, default mg)
+- *AI*: the openai SDK pointed at [OpenRouter](https://openrouter.ai), web search via the web plugin, zod validation on output
+- *Data*: [Supabase](https://supabase.com) (anonymous auth + experts directory with RLS), data/stats.json, localStorage
+- *Media*: sharp, exifr, image-size; 3D and animations: three + @react-three/fiber, gsap, lenis, motion
+- *Tests*: vitest (tests/api/*.test.ts) + node --test (tests/*.test.mjs)
+- *Security*: server-side keys only, SSRF protection for submitted URLs (lib/security/safe-fetch.ts), IP + user + day rate limiting, strict zod validation on input/output
+- *CI*: GitHub Actions
+- *Deployment*: Vercel or Docker
+
+---
+
+## Local installation
+
+### Prerequisites
+
+- *Node.js 24+* (current LTS) and npm
+- or *Docker* with Docker Compose v2
+- An [OpenRouter](https://openrouter.ai) key for AI calls (optional in demo mode)
+
+### Method 1 — standard Next.js installation
+
+# 1. Clone the repository
+git clone <repository-url> zahavania
+cd zahavania
+
+# 2. Install dependencies
+npm ci
+
+# 3. Configure your environment
+cp .env.example .env.local
+# then edit .env.local (see "Environment variables" below)
+
+# 4. Run in development
+npm run dev
+# → http://localhost:3000
+
+In development, you can set 
+USE_MOCK=true in .env.local to run *without an API key*
+(demo outputs are flagged with a "Demonstration" badge).
+This mode is *ignored in production*: npm run build && npm start requires real API calls.
+
+Build and run in real conditions:
+
+npm run build
+npm start
+
+### Method 2 — Docker
+
+# 1. Configure your environment (secrets are read at runtime, never at build time)
+cp .env.example .env.local
+
+# 2. Build and start (application + PostgreSQL 17)
+docker compose up --build
+
+# → http://localhost:3000
+
+The 
+Dockerfile is multi-stage: npm ci → npm run build → minimal runtime image
+(Node 24 Alpine, standalone output, non-root user, port 3000).
+The db service (PostgreSQL) is *not published* on the host by default: the app reaches it
+at db:5432 on the Compose network. To access it with an external client, uncomment the
+ports block in docker-compose.yml.
+
+Useful commands:
+
+docker compose logs -f app   # application logs
+docker compose down           # stop
+docker compose down -v        # stop + delete the PostgreSQL data
+
+### Environment variables
+
+Secrets live in 
+.env.local (git-ignored); .env.example contains no real values.
+The most important ones:
+
+| Variable | Purpose |
+| --- | --- |
+| LLM_BASE_URL | OpenRouter endpoint (https://openrouter.ai/api/v1) |
+| LLM_API_KEY | API key — *server-side only, never exposed to the client* |
+| AI_MODEL, AI_MODEL_VERIFY, AI_MODEL_TRANSLATE, AI_MODEL_VISION, AI_MODEL_EXPERTS, AI_MODEL_ANGLES, AI_MODEL_MONITOR | Per-task models (falls back to AI_MODEL) |
+| AI_FALLBACK_MODEL | Fallback model after a failure |
+| USE_MOCK | true = demo outputs (development only, ignored in production) |
+| AI_DAILY_LIMIT_PER_USER, AI_CACHE_TTL_SECONDS | Daily quota and per-user cache |
+| URL_FETCH_TIMEOUT_MS | Maximum delay for fetching a submitted URL |
+| NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase directory (anon key is public by design) |
+| SUPABASE_SERVICE_ROLE_KEY | Service role key — *server-side only* |
+| RATE_LIMIT_STORE | supabase (shared) or in-memory (default) |
+
+---
+
+## Tests and quality
+
+npm run lint    # ESLint
+npm test        # Vitest (tests/api) then node --test (unit tests)
+npm run check:real   # real-mode check (if .env.local is present)
+
+The GitHub Actions CI runs lint, tests, and build on every push/PR.
+
+Update the statistics (World Bank API):
+
+npm run stats:update
+
+---
+
+## Deployment
+
+- 
+*Vercel*: guide in [`docs/deploy-vercel.md`](docs/deploy-vercel.md)
+- *Docker*: see method 2 above (self-contained image, ready for any orchestrator)
+
+---
+
+## Project structure
+
+app/
+  page.tsx                      # immersive landing page (scrubbed 3D scenes)
+  app/{verify,image,monitor,translate,experts,stats,angles,files}/page.tsx
+  api/verify/{text,image,video}/route.ts   # AI routes = backend
+  api/sources/suggest/route.ts
+  api/editorial/angles/route.ts
+  api/translate/route.ts
+components/landing/             # animated scenes, DispatchCloud (3D)
+components/workspace/           # application screens
+lib/ai/                         # the ONLY entry point to the model + prompts + schemas
+lib/security/                   # auth, rate limiting, safe-fetch (SSRF), request handling
+lib/score.ts                    # confidence index computed by the code
+data/stats.json                 # dated World Bank indicators
+messages/{mg,fr,en}.json        # translations (always in all 3 languages)
+tests/                          # vitest + node --test
+
+---
+
+## Resources
+
+- [`AGENTS.md`](AGENTS.md) — the project's product and technical rules
+- [`LICENSES.md`](LICENSES.md) — dependency licenses (required by the regulations)
+- [`docs/api.md`](docs/api.md) — API route reference
+- [`docs/demo.md`](docs/demo.md) — demo scenario
+- [`docs/malagasy-tests.md`](docs/malagasy-tests.md) — Malagasy-language tests
+- (README_AI.md) — detailed AI configuration
+
+---
+
+*Zahavan'ia* — hackathon, Madagascar. You look — the AI looks with you.
