@@ -4,11 +4,14 @@
     "description": "Vérifiez une information, trouvez ses sources et les bons experts, en malagasy, en français et en anglais."
   },
   "nav": {
-    "tools": "OUTILS",
-    "method": "MÉTHODE",
-    "open": "OUVRIR",
+    "tools": "Outils",
+    "method": "Méthode",
+    "open": "Ouvrir l'outil",
     "language": "Langue",
-    "skip": "Aller au contenu"
+    "skip": "Aller au contenu",
+    "rule": "La règle",
+    "menu": "Menu",
+    "close": "Fermer"
   },
   "modules": {
     "verify": {
@@ -79,16 +82,16 @@
     "line2b": "vérifie.",
     "positioning": "Sources, experts, contexte. En trois langues.",
     "floaters": [
-      "RUBAN POLICIER · NEW YORK",
-      "ANTI-CORRUPTION · KHARKIV",
-      "ANTI-CORRUPTION · MANILLE",
-      "DÉGÂTS DU CYCLONE · MADAGASCAR",
-      "ÉLECTION · TCHÉQUIE",
-      "FEU DE FORÊT · FUMÉE",
-      "DÉFORESTATION · MADAGASCAR",
-      "LIBERTÉ DE LA PRESSE · LE CAIRE",
-      "POLLUTION DE L'EAU · USA",
-      "INONDATIONS · MADAGASCAR"
+      "LECTURE DES JOURNAUX · ANTANANARIVO",
+      "CYCLONE GIOVANNA · AMBOHIMANGA",
+      "MARCHÉ D'ANALAKELY · ANTANANARIVO",
+      "FORÊT COUPÉE · MADAGASCAR",
+      "TAXI-BROUSSE NORD-SUD",
+      "INONDATIONS · IMAGE SATELLITE",
+      "SCÈNE DE RUE · FIANARANTSOA",
+      "RUE D'ANTANANARIVO",
+      "TRI DE LA VANILLE · SAMBAVA",
+      "PIROGUE DE PÊCHE · MADAGASCAR"
     ],
     "manifesto": {
       "before": "Checkeko ne dit jamais vrai ou faux. Il montre les sources, mesure leur solidité et signale ce qui manque. Au bout du compte, c'est",
@@ -156,17 +159,7 @@
         "Pas de texte dans nos journaux."
       ],
       "finale": "Juste des",
-      "pill": "preuves.",
-      "trail": [
-        "CONFIRMÉ",
-        "SOURCE OFFICIELLE",
-        "À VÉRIFIER",
-        "MÉDIA INDÉPENDANT",
-        "INSUFFISANT",
-        "CONTREDIT",
-        "DATÉ DE 2019",
-        "LIEN ↗"
-      ]
+      "pill": "preuves."
     },
     "footer": {
       "kicker": "UNE INFORMATION À VÉRIFIER ?",
@@ -422,5 +415,16 @@
     "delete": "Supprimer",
     "confirmDelete": "Confirmer la suppression",
     "cancel": "Annuler"
+  },
+  "credits": {
+    "kicker": "PHOTOS",
+    "title": "Crédits photos",
+    "lead": "Toutes les photos viennent de Wikimedia Commons, sous licence libre. Elles ont été réduites et leurs métadonnées retirées. Aucune n'a été générée par IA.",
+    "photoBy": "{label} — photo de {author}, {license}, ouvrir la source",
+    "link": "Crédits photos",
+    "author": "Auteur",
+    "license": "Licence",
+    "source": "Voir sur Wikimedia Commons ↗",
+    "back": "← Retour à l'accueil"
   }
 }
