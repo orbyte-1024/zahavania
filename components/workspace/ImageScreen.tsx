@@ -17,6 +17,8 @@ type Report = { kind: "image"; data: VerifyImageSuccess } | { kind: "video"; dat
 type Progress = { stage: "preparing" } | { stage: "extracting"; done: number; total: number } | { stage: "analysing"; frames: number | null };
 
 const IMAGE_ACCEPT = ["image/jpeg", "image/png", "image/webp"];
+// Below this length the summary is short enough to be shown in full.
+const SUMMARY_CLAMP_CHARS = 140;
 const VIDEO_ACCEPT = ["video/mp4", "video/webm", "video/quicktime"];
 const ACCEPT = [...IMAGE_ACCEPT, ...VIDEO_ACCEPT];
 
@@ -49,6 +51,7 @@ export function ImageScreen() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [phase, setPhase] = useState<Phase<Report>>({ kind: "idle" });
   const [progress, setProgress] = useState<Progress>({ stage: "preparing" });
   const locale = useLocale();
@@ -83,6 +86,7 @@ export function ImageScreen() {
   };
 
   const submitVideo = async (video: File) => {
+    setSummaryOpen(false);
     setProgress({ stage: "extracting", done: 0, total: 0 });
     const form = new FormData();
     try {
@@ -109,6 +113,7 @@ export function ImageScreen() {
       await submitVideo(file);
       return;
     }
+    setSummaryOpen(false);
     setProgress({ stage: "preparing" });
     const form = new FormData();
     try {
@@ -200,91 +205,80 @@ export function ImageScreen() {
             <motion.div className="verdict" variants={rise} data-verdict={report.verification.status}>
               <span className="mono ash">{t("summary")}</span>
               <p className="verdict-status">{t(`verdict.${report.verification.status}`)}</p>
-              <p className="result-summary-text">{report.verification.summary}</p>
+              <p className={`result-summary-text${summaryOpen ? " is-open" : ""}`}>{report.verification.summary}</p>
+              {report.verification.summary.length > SUMMARY_CLAMP_CHARS && (
+                <button type="button" className="link-button mono summary-toggle" aria-expanded={summaryOpen} onClick={() => setSummaryOpen((open) => !open)}>
+                  {summaryOpen ? t("summaryLess") : t("summaryMore")}
+                </button>
+              )}
             </motion.div>
 
-            <EvidenceList title={t("supporting")} items={report.verification.supportingEvidence} />
-            <EvidenceList title={t("contradictory")} items={report.verification.contradictoryEvidence} />
-
-            {result?.kind === "video" && <VideoFindings report={result.data} />}
-
-            {result?.kind === "image" && (
-              <motion.div className="claim-block" variants={rise}>
-                <p className="mono ash">
-                  {t("metadata")} · {t(`metadataSource.${result.data.metadataSource}`)}
-                </p>
-                {result.data.metadata.available ? (
-                  <dl className="meta-table">
-                    {(
-                      [
-                        ["dateTaken", result.data.metadata.dateTaken],
-                        ["created", result.data.metadata.creationDate],
-                        ["camera", result.data.metadata.camera],
-                        ["software", result.data.metadata.software],
-                      ] as const
-                    ).map(([key, value]) =>
-                      value ? (
-                        <div key={key}>
-                          <dt className="mono ash">{t(key)}</dt>
-                          <dd>{value}</dd>
+            <div className="result-main">
+              {result?.kind === "image" && (
+                <motion.div className="claim-block" variants={rise}>
+                  <p className="mono ash">
+                    {t("metadata")} · {t(`metadataSource.${result.data.metadataSource}`)}
+                  </p>
+                  {result.data.metadata.available ? (
+                    <dl className="meta-table">
+                      {(
+                        [
+                          ["dateTaken", result.data.metadata.dateTaken],
+                          ["created", result.data.metadata.creationDate],
+                          ["camera", result.data.metadata.camera],
+                          ["software", result.data.metadata.software],
+                        ] as const
+                      ).map(([key, value]) =>
+                        value ? (
+                          <div key={key}>
+                            <dt className="mono ash">{t(key)}</dt>
+                            <dd>{value}</dd>
+                          </div>
+                        ) : null,
+                      )}
+                      {result.data.metadata.hasGPS && (
+                        <div>
+                          <dt className="mono ash">GPS</dt>
+                          <dd>{t("gps")}</dd>
                         </div>
-                      ) : null,
-                    )}
-                    {result.data.metadata.hasGPS && (
-                      <div>
-                        <dt className="mono ash">GPS</dt>
-                        <dd>{t("gps")}</dd>
-                      </div>
-                    )}
-                  </dl>
-                ) : (
-                  <p className="ash">{t("noExif")}</p>
-                )}
-              </motion.div>
-            )}
+                      )}
+                    </dl>
+                  ) : (
+                    <p className="ash">{t("noExif")}</p>
+                  )}
+                </motion.div>
+              )}
 
-            <motion.div className="claim-block" variants={rise}>
-              <p className="mono ash">{t("reverse")}</p>
-              <div className="handoff">
-                {[report.reverseSearch.googleLens, report.reverseSearch.tineye].map((service) => (
-                  <a key={service.url} className="ghost-button" href={service.url} target="_blank" rel="noopener noreferrer">
-                    {service.name} ↗
-                  </a>
-                ))}
-              </div>
-              <p className="mono ash">{t("reverseNote")}</p>
-            </motion.div>
-
-            {report.verification.limitations.length > 0 && (
-              <motion.div className="limitations" variants={rise}>
-                <ul className="bullets">
-                  {report.verification.limitations.map((l) => (
-                    <li key={l}>{l}</li>
+              <motion.div className="claim-block" variants={rise}>
+                <p className="mono ash">{t("reverse")}</p>
+                <div className="handoff">
+                  {[report.reverseSearch.googleLens, report.reverseSearch.tineye].map((service) => (
+                    <a key={service.url} className="ghost-button" href={service.url} target="_blank" rel="noopener noreferrer">
+                      {service.name} ↗
+                    </a>
                   ))}
-                </ul>
+                </div>
+                <p className="mono ash">{t("reverseNote")}</p>
               </motion.div>
-            )}
-            <motion.div className="journalist-block" variants={rise} style={{ marginTop: "1.25rem", padding: "1rem", border: "1px solid var(--rule)", borderRadius: "6px", background: "var(--surface)" }}>
-              <h3 className="mono" style={{ fontSize: "0.75rem", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: "0.75rem" }}>Pour le journaliste : que faire maintenant ?</h3>
-              <p style={{ fontSize: "0.95rem", lineHeight: 1.55, marginBottom: "0.75rem" }}>
-                <strong>Indice de confiance : indicatif 0–100</strong> — jamais une probabilité. Basé sur : statut ({report.verification.status}), indépendance et fraîcheur des sources, contradictions repérées, éléments manquants.
-              </p>
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
-                {["Valider", "Compléter", "Rejeter"].map((action) => (
-                  <span key={action} style={{ padding: "0.35rem 0.7rem", border: "1px solid var(--ink)", borderRadius: "4px", fontSize: "0.85rem", fontWeight: 600 }} aria-label={action}>{action}</span>
-                ))}
-              </div>
-              <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginBottom: "0.5rem" }}>
-                Limites affichées ci-dessus : une image sans anomalie n’est pas “authentique”. Les sources sont cliquables (titre, domaine, date, URL). Vérifiez avant publication.
-              </p>
-              <p style={{ fontSize: "0.85rem", fontStyle: "italic" }}>
-                Option — proposition d’angle / expert : consultez le profil suggéré dans le rapport ou contactez un expert du domaine (annuaire consentant, données fictives en démo).
-              </p>
-            </motion.div>
 
-            <motion.div variants={rise}>
-              <Badge>{result?.kind === "image" ? result.data.file.format.toUpperCase() : `${result?.data.frames.length ?? 0} × JPEG`}</Badge>
-            </motion.div>
+              {result?.kind === "video" && <VideoFindings report={result.data} />}
+
+              <EvidenceList title={t("supporting")} items={report.verification.supportingEvidence} />
+              <EvidenceList title={t("contradictory")} items={report.verification.contradictoryEvidence} />
+
+              {report.verification.limitations.length > 0 && (
+                <motion.div className="limitations" variants={rise}>
+                  <ul className="bullets">
+                    {report.verification.limitations.map((l) => (
+                      <li key={l}>{l}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+              <motion.div variants={rise}>
+                <Badge>{result?.kind === "image" ? result.data.file.format.toUpperCase() : `${result?.data.frames.length ?? 0} × JPEG`}</Badge>
+              </motion.div>
+            </div>
           </motion.section>
         )}
       </AnimatePresence>

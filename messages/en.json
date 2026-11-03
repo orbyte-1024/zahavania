@@ -330,6 +330,8 @@
     "submit": "Analyse",
     "change": "Change file",
     "summary": "Summary",
+    "summaryMore": "Read more",
+    "summaryLess": "Read less",
     "supporting": "Consistent hints",
     "contradictory": "Conflicting hints",
     "metadata": "Metadata",

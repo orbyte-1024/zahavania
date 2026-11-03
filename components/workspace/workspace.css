@@ -92,8 +92,11 @@
   padding: clamp(28px, 6vh, 72px) var(--gutter) 120px;
 }
 
+/* Wide enough to fill the reading column on a laptop; centered instead of
+   left-aligned so wide screens get equal margins rather than a gap on the right. */
 .screen-inner {
-  max-width: 1000px;
+  max-width: 1180px;
+  margin-inline: auto;
 }
 
 .screen-grid {
@@ -463,10 +466,15 @@
   padding: 18px 20px;
 }
 
-/* Without an explicit column, the grid would flow the remaining blocks into the
-   second column; they must all stay in the reading column. */
-.result-split > :not(.verdict) {
+/* The reading column is its own grid so that a tall verdict card cannot stretch
+   the first block of the report, which used to leave a large empty area. */
+.result-main {
   grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  gap: 24px;
+  align-content: start;
+  min-width: 0;
 }
 
 /* The summary is a conclusion, not the body of the report: it is set smaller
@@ -478,6 +486,20 @@
 .result-split .result-summary-text {
   font-size: 15px;
   line-height: 1.6;
+}
+
+/* Long summaries are collapsed: a journalist scans first and expands on demand. */
+.result-split .result-summary-text:not(.is-open) {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.verdict .summary-toggle {
+  justify-self: start;
+  min-height: 44px;
+  font-size: 12px;
 }
 
 .handoff {
@@ -1244,8 +1266,9 @@
   }
 
   .result-split > .verdict,
-  .result-split > :not(.verdict) {
+  .result-split > .result-main {
     grid-column: 1;
+    grid-row: auto;
   }
 
   .overview li:nth-child(n) {
