@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
     const merged = combinedAnalysis(aggregated);
     const warnings: VisionWarning[] = merged === null ? (results[0]?.warnings ?? []) : [];
     const reverseSearch = reverseSearchLinks();
-    const verification = buildVerification(null, [], merged, warnings, reverseSearch);
+    const verification = buildVerification(null, [], merged, warnings, reverseSearch, null, lang);
 
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, frames: aggregated.frames.length, failed: aggregated.failedCount });
     return jsonResponse({

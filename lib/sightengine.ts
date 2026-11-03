@@ -52,7 +52,7 @@ async function requestScore(image: Uint8Array, credentials: Credentials, timeout
     return null;
   }
   if (!res.ok) {
-    logFailure("http", res.status);
+    logFailure(res.status === 401 ? "credentials" : "http", res.status);
     return null;
   }
   const body: unknown = await res.json().catch(() => null);
