@@ -2,6 +2,9 @@ import type {
   EditorialAnglesErrorCode,
   EditorialAnglesRequest,
   EditorialAnglesSuccess,
+  MonitorErrorCode,
+  MonitorRequest,
+  MonitorSuccess,
   SuggestExpertsErrorCode,
   SuggestExpertsRequest,
   SuggestExpertsSuccess,
@@ -22,6 +25,7 @@ export type ApiRoutes = {
   };
   "/api/translate": { request: TranslateRequest; success: TranslateSuccess; errorCode: TranslateErrorCode };
   "/api/editorial/angles": { request: EditorialAnglesRequest; success: EditorialAnglesSuccess; errorCode: EditorialAnglesErrorCode };
+  "/api/monitor": { request: MonitorRequest; success: MonitorSuccess; errorCode: MonitorErrorCode };
 };
 
 export type ApiPath = keyof ApiRoutes;
