@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { askJson, useMock as isMockMode } from "@/lib/llm";
+import { AiError, askJson, isMockMode } from "@/lib/ai/client";
 import { PING_SYSTEM, PING_USER } from "@/lib/ai/prompts/ping";
 import { clientIp, isRateLimited } from "@/lib/ratelimit";
 
@@ -23,7 +23,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { reponse } = await askJson({
+    const {
+      data: { reponse },
+    } = await askJson({
+      task: "verify",
       system: PING_SYSTEM,
       user: PING_USER,
       schema: PingSchema,
@@ -31,8 +34,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: true, mock: false, reponse });
   } catch (e) {
     console.error(
-      "ping-ai:",
-      e instanceof Error ? e.message : "erreur inconnue",
+      JSON.stringify({
+        route: "GET /api/ping-ai",
+        code: e instanceof AiError ? e.code : "internal_error",
+        providerStatus: e instanceof AiError ? e.providerStatus : null,
+      }),
     );
     return NextResponse.json(
       { ok: false, erreur: "Appel IA échoué" },
