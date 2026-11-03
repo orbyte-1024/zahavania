@@ -11,6 +11,8 @@ import { authenticate } from "@/lib/security/auth";
 import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 import { SafeFetchError } from "@/lib/security/safe-fetch";
 
+export const maxDuration = 180;
+
 const MAX_BODY_BYTES = 32 * 1024;
 const MINUTE_MS = 60_000;
 const DAY_MS = 24 * 60 * MINUTE_MS;
