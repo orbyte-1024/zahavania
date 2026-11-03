@@ -21,8 +21,8 @@
     "sound": {
       "on": "Feo",
       "off": "Mangina",
-      "toOn": "Alefaso ny mozika sy ny feo",
-      "toOff": "Vonoy ny mozika sy ny feo"
+      "toOn": "Alefaso ny feon'ny taratasy",
+      "toOff": "Vonoy ny feon'ny taratasy"
     }
   },
   "modules": {
@@ -104,9 +104,6 @@
       "title": "Fitaovana fito, tranom-gazety iray",
       "sub": "Samy manana ny efijeriny ny fanambarana tsirairay nambaran'ny mpanao gazety. Mandeha ireo dimy voalohany.",
       "meta": "FANDINIHANA 1 KA HATRAMIN'NY 8 — AFA-TSY NY TSY MISY INTERNET"
-    },
-    "tools": {
-      "discover": "Mahita"
     },
     "tools": {
       "discover": "Mahita"

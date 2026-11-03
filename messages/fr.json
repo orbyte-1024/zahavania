@@ -21,8 +21,8 @@
     "sound": {
       "on": "Son",
       "off": "Muet",
-      "toOn": "Activer la musique et les bruitages",
-      "toOff": "Couper la musique et les bruitages"
+      "toOn": "Activer les bruits de papier",
+      "toOff": "Couper les bruits de papier"
     }
   },
   "modules": {
@@ -104,9 +104,6 @@
       "title": "Sept outils, une seule rédaction",
       "sub": "Chaque affirmation exprimée par les journalistes a son écran. Les cinq premiers sont en service.",
       "meta": "ÉCRANS 1 À 8 — HORS MODE HORS LIGNE"
-    },
-    "tools": {
-      "discover": "Découvrir"
     },
     "tools": {
       "discover": "Découvrir"
