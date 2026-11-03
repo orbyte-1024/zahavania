@@ -46,9 +46,9 @@ Un parcours qui marche de bout en bout vaut mieux que 8 écrans simulés.
 - Détection d'image générée par IA : API Sightengine (modèle `genai`, `lib/sightengine.ts`), appelée par `fetch` sans SDK ; l'image envoyée est réduite et sans métadonnées. Indice 0–100 indicatif (`lib/ai-detection.ts`), jamais une preuve.
 - Images : `sharp` (orientation, réduction, sans métadonnées), `exifr` (EXIF, aussi lu dans le navigateur), `image-size`. Vidéo : 6 images clés extraites **dans le navigateur** (pas de ffmpeg côté serveur).
 - Animations : `three` + `@react-three/fiber` (scène 3D de la landing), `gsap` + `lenis` (scènes scrubées), `motion` (transitions de l'application).
-- Son de la landing : synthétisé avec la Web Audio API (`lib/browser/sound.ts`), sans fichier audio ni dépendance. Musique
-  joyeuse et bruits de papier liés au défilement du héros ; bouton Son/Muet toujours visible, coupé par défaut si
-  `prefers-reduced-motion`, aucun son avant un geste de l'utilisateur.
+- Son de la landing : bruits de papier liés au défilement du héros, synthétisés avec la Web Audio API
+  (`lib/browser/sound.ts`), sans fichier audio ni dépendance. Pas de musique de fond. Bouton Son/Muet toujours visible,
+  coupé par défaut si `prefers-reduced-motion`, aucun son avant un geste de l'utilisateur.
 - Tests : `vitest` (`tests/api/*.test.ts`) et `node --test` (`tests/*.test.mjs`). CI : `.github/workflows/ci.yml`.
 
 ## 4. Commandes
