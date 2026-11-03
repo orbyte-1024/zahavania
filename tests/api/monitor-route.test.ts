@@ -76,6 +76,23 @@ describe("POST /api/monitor — national monitoring backend", () => {
     expect(body.alerts.some((alert: { kind: string }) => alert.kind === "contradictory_versions")).toBe(true);
   });
 
+  it("filters by source", async () => {
+    const { status, body } = await post({ lang: "fr", sourceId: "demo-a" });
+    expect(status).toBe(200);
+    expect(body.articles.length).toBeGreaterThan(0);
+    expect(body.articles.every((article: { sourceId: string }) => article.sourceId === "demo-a")).toBe(true);
+    expect(body.filters.sourceId).toBe("demo-a");
+  });
+
+  it("filters articles by language without changing the summary language", async () => {
+    const { status, body } = await post({ lang: "mg", articleLang: "fr" });
+    expect(status).toBe(200);
+    expect(body.articles).toHaveLength(9);
+    expect(body.articles.every((article: { lang: string }) => article.lang === "fr")).toBe(true);
+    expect(body.filters.lang).toBe("mg");
+    expect(body.filters.articleLang).toBe("fr");
+  });
+
   it("rejects invalid filters and bodies with the standard envelope", async () => {
     expect((await post({ lang: "fr", district: "inconnu" })).body.error).toMatchObject({
       code: "invalid_input",

@@ -7,9 +7,13 @@ export type Phase<T> =
   | { kind: "done"; data: T }
   | { kind: "error"; code: string; retryAfter: number | null };
 
-export async function callApi<P extends ApiPath>(path: P, body: ApiRoutes[P]["request"]): Promise<ApiResult<P>> {
+export async function callApi<P extends ApiPath>(
+  path: P,
+  body: ApiRoutes[P]["request"],
+  signal?: AbortSignal,
+): Promise<ApiResult<P>> {
   const accessToken = await getAccessToken();
-  return postApi(path, body, { accessToken });
+  return postApi(path, body, { accessToken, signal });
 }
 
 export type FormResult<T> = { ok: true; data: T } | { ok: false; code: string; retryAfter: number | null };

@@ -135,6 +135,8 @@ export type MonitorAlert = {
 
 export type MonitorFilters = {
   lang: Language;
+  articleLang: Language | null;
+  sourceId: string | null;
   region: Region | null;
   district: string | null;
   theme: MonitorTheme | null;

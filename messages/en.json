@@ -41,7 +41,7 @@
       "short": "Monitoring",
       "desc": "RSS feeds from Malagasy media, filtered by source, language and topic. Title, link and excerpt only.",
       "need": "NEED 3",
-      "state": "IN PREPARATION",
+      "state": "LIVE",
       "rail": "Media monitoring"
     },
     "translate": {
@@ -103,7 +103,7 @@
     "toolsHead": {
       "kicker": "THE TOOLS",
       "title": "Seven tools, one newsroom",
-      "sub": "Every need journalists described has its own screen. The first five are live.",
+      "sub": "Every need journalists described has its own screen. All seven tools are live.",
       "meta": "NEEDS 1 TO 8 — OFFLINE MODE EXCLUDED"
     },
     "tools": {
@@ -180,7 +180,7 @@
     "menu": "Menu",
     "close": "Close",
     "overviewTitle": "What do you want to check?",
-    "overviewLead": "Pick a tool. Screens \"in preparation\" show what is coming, without invented data."
+    "overviewLead": "Choose a tool to explore the available sources, figures and checks."
   },
   "common": {
     "demo": "DEMONSTRATION",
@@ -208,6 +208,8 @@
       "url_unreachable": "The page could not be fetched as text.",
       "url_no_content": "No readable text was found on this page.",
       "directory_unavailable": "The expert directory is temporarily unavailable.",
+      "feeds_unavailable": "No news feed could be reached. Please try again later.",
+      "monitor_unavailable": "Monitoring is temporarily unavailable. Please try again.",
       "network_error": "The server cannot be reached. Check the connection.",
       "unexpected_response": "Unexpected response from the server.",
       "request_failed": "The request failed.",
@@ -429,14 +431,118 @@
   },
   "monitor": {
     "title": "National monitoring",
-    "lead": "This screen will show RSS feeds from Malagasy media. It is in preparation: nothing is shown until the feeds have been audited.",
-    "rulesTitle": "What monitoring will show",
-    "rules": [
-      "The title, the link and a short excerpt, never the full article.",
-      "The source, the language and the publication date.",
-      "A button to suggest angles from a topic."
-    ],
-    "next": "Next step: list the media that publish a usable RSS feed, with the audit date."
+    "lead": "Follow headlines and short excerpts from public RSS feeds, with their sources, dates and collection limits. Monitoring does not verify claims.",
+    "audited": "SOURCES AUDITED {date}",
+    "fields": {
+      "language": "Article language",
+      "source": "Publisher",
+      "region": "Region",
+      "district": "District",
+      "theme": "Topic",
+      "period": "Time window",
+      "maxArticles": "Maximum articles",
+      "query": "Search words"
+    },
+    "languages": { "mg": "Malagasy", "fr": "French", "en": "English" },
+    "scope": { "national": "national", "international": "international" },
+    "allLanguages": "All languages",
+    "allSources": "All publishers",
+    "allRegions": "All regions",
+    "allDistricts": "All districts",
+    "allThemes": "All topics",
+    "periods": { "24": "Last 24 hours", "72": "Last 3 days", "168": "Last 7 days" },
+    "themes": {
+      "politics": "Politics",
+      "economy": "Economy",
+      "agriculture": "Agriculture",
+      "health": "Health",
+      "education": "Education",
+      "environment": "Environment",
+      "security_justice": "Security and justice",
+      "infrastructure": "Infrastructure",
+      "energy_mining": "Energy and mining",
+      "society": "Society",
+      "sport": "Sport",
+      "general": "General"
+    },
+    "filterNote": "Grouping and location are automatic and may be incomplete.",
+    "refresh": "Refresh monitoring",
+    "loading": "Collecting public feeds and preparing the monitoring view…",
+    "sourcesError": "The source list could not be loaded. Check your connection and reload the page.",
+    "retryNote": "The collection is retried with the same filters.",
+    "sourceTitle": "PUBLIC SOURCES FOLLOWED",
+    "sourcesCount": "{count, plural, one {# source} other {# sources}}",
+    "auditDate": "Audit: {date}",
+    "coverageTitle": "COVERAGE FOR THIS COLLECTION",
+    "generated": "Generated {date}",
+    "analysis": {
+      "ok": "INDICATIVE SUMMARY",
+      "mock": "DEMONSTRATION",
+      "skipped": "SUMMARY NOT RUN",
+      "unavailable": "SUMMARY UNAVAILABLE"
+    },
+    "sourcesReached": "feeds reached",
+    "articlesFetched": "articles received",
+    "articlesMatched": "articles matching filters",
+    "eventsCount": "grouped topics",
+    "coverageNote": "Time window: {from} to {to}.",
+    "failedFeeds": "{count} feeds did not respond",
+    "alertsTitle": "Signals to examine",
+    "alertsNote": "Editorial indicators, not fact checks.",
+    "alertsEmpty": "No automatic signals for this selection. This does not mean there are no important topics.",
+    "severity": { "info": "INFO", "attention": "REVIEW", "urgent": "ATTENTION" },
+    "alertKinds": {
+      "new_event": "Recent topic followed by several publishers",
+      "rising_event": "Topic with increased editorial activity",
+      "contradictory_versions": "Different accounts across sources"
+    },
+    "alertReasons": {
+      "new_event": "Several recent articles and publishers",
+      "recent_articles": "Several recent articles",
+      "multiple_sources": "Several publishers",
+      "acceleration": "Publishing pace has increased",
+      "contradictory_versions": "Differences flagged in headlines or excerpts"
+    },
+    "eventsTitle": "Grouped topics",
+    "eventMethodNote": "Indicative keyword grouping; one event may appear in multiple groups.",
+    "eventsEmpty": "No topics were grouped with these filters.",
+    "eventCounts": "{articles} articles · {sources} publishers",
+    "lastSeen": "Latest article: {date}",
+    "momentum": { "steady": "STEADY ACTIVITY", "rising": "INCREASED ACTIVITY", "surge": "HIGH ACTIVITY" },
+    "versions": {
+      "divergent": "Differences flagged",
+      "no_divergence_found": "Analysis found no differences",
+      "single_source": "Single source",
+      "not_analysed": "Analysis unavailable"
+    },
+    "summaryNote": "Automated summary of headlines and excerpts; check the linked articles.",
+    "sharedFacts": "Common elements identified",
+    "divergences": "Differences to check",
+    "divergenceStatus": {
+      "contradicted": "Contradictory details flagged",
+      "needs_verification": "Needs verification",
+      "insufficient": "Insufficient information"
+    },
+    "openSource": "Open article",
+    "eventArticles": "See related articles ({count})",
+    "articlesTitle": "Articles received ({count})",
+    "articlesEmpty": "No articles match these filters in the selected time window.",
+    "truncated": "LIST LIMITED",
+    "limitationsTitle": "LIMITS AND CHECKS TO MAKE",
+    "genericLimitation": "A collection limitation applies.",
+    "limitations": {
+      "headlines_and_excerpts_only": "The collection keeps headlines and short excerpts, not full articles.",
+      "lexical_event_grouping": "Topics are grouped by keywords; matches may be wrong.",
+      "location_inferred_from_text": "Region or district is inferred from text and may be missing or incorrect.",
+      "feed_failures": "One or more feeds did not respond during this collection.",
+      "no_matching_articles": "No articles match the selected filters and time window.",
+      "articles_truncated": "The list is limited to the requested maximum.",
+      "mock_demo_data": "Fictional demonstration data; no live feeds or model were used.",
+      "ai_summary_from_headlines": "Automated analysis uses only the received headlines and short excerpts.",
+      "ai_analysis_unavailable": "Automated analysis is unavailable; no summary is provided.",
+      "ai_analysis_skipped": "No automated analysis was run for these topics.",
+      "ai_references_filtered": "Some references suggested by the analysis were removed because they did not match collected articles."
+    }
   },
   "stats": {
     "title": "Key figures",

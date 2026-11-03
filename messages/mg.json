@@ -41,7 +41,7 @@
       "short": "Fanaraha-maso",
       "desc": "Ny RSS an'ny haino aman-jery malagasy, sivanina araka ny loharano, ny fiteny ary ny lohahevitra. Lohateny, rohy ary sombiny ihany.",
       "need": "FILANA 3",
-      "state": "AN-DALAM-PANOMANANA",
+      "state": "MANDEHA",
       "rail": "Fanaraha-maso"
     },
     "translate": {
@@ -103,7 +103,7 @@
     "toolsHead": {
       "kicker": "NY FITAOVANA",
       "title": "Fitaovana fito, tranom-gazety iray",
-      "sub": "Samy manana ny efijeriny ny filana tsirairay nambaran'ny mpanao gazety. Mandeha ireo dimy voalohany.",
+      "sub": "Samy manana ny efijeriny ny filana tsirairay nambaran'ny mpanao gazety. Mandeha avokoa ireo fitaovana fito.",
       "meta": "FILANA 1 KA HATRAMIN'NY 8 — AFA-TSY NY TSY MISY INTERNET"
     },
     "tools": {
@@ -180,7 +180,7 @@
     "menu": "Menio",
     "close": "Hidio",
     "overviewTitle": "Inona no tianao hamarinina ?",
-    "overviewLead": "Misafidiana fitaovana. Ny efijery « an-dalam-panomanana » dia mampiseho izay ho avy, tsy misy angona noforonina."
+    "overviewLead": "Misafidiana fitaovana hijerena ireo loharano, tarehimarika ary fanamarinana misy."
   },
   "common": {
     "demo": "FANEHOANA",
@@ -208,6 +208,8 @@
       "url_unreachable": "Tsy azo nalaina ho lahatsoratra ny pejy.",
       "url_no_content": "Tsy nisy lahatsoratra azo vakiana hita tao amin'ity pejy ity.",
       "directory_unavailable": "Tsy misy vetivety ny lisitry ny manam-pahaizana.",
+      "feeds_unavailable": "Tsy nisy loharanom-baovao azo. Andramo indray afaka kelikely.",
+      "monitor_unavailable": "Tsy misy vetivety ny fanaraha-maso. Andramo indray.",
       "network_error": "Tsy tratra ny mpizara. Hamarino ny fifandraisana.",
       "unexpected_response": "Valiny tsy nampoizina avy amin'ny mpizara.",
       "request_failed": "Tsy nahomby ny fangatahana.",
@@ -429,14 +431,118 @@
   },
   "monitor": {
     "title": "Fanaraha-maso nasionaly",
-    "lead": "Hampiseho ny RSS an'ny haino aman-jery malagasy ity efijery ity. Mbola an-dalam-panomanana izy : tsy misy aseho raha tsy voadinika ireo RSS.",
-    "rulesTitle": "Izay hasehon'ny fanaraha-maso",
-    "rules": [
-      "Ny lohateny, ny rohy ary sombiny fohy, tsy ny lahatsoratra manontolo mihitsy.",
-      "Ny loharano, ny fiteny ary ny daty namoahana.",
-      "Bokotra hanolorana lafiny avy amin'ny lohahevitra iray."
-    ],
-    "next": "Dingana manaraka : lisitry ny haino aman-jery mamoaka RSS azo ampiasaina, miaraka amin'ny daty nandinihana."
+    "lead": "Araho ny lohateny sy sombiny fohy avy amin'ny RSS ampahibemaso, miaraka amin'ny loharano sy daty. Tsy manamarina filazana ity fanaraha-maso ity.",
+    "audited": "LOHARANO NOHADINIHINA TAMIN'NY {date}",
+    "fields": {
+      "language": "Fitenin'ny lahatsoratra",
+      "source": "Haino aman-jery",
+      "region": "Faritra",
+      "district": "Distrika",
+      "theme": "Lohahevitra",
+      "period": "Fe-potoana",
+      "maxArticles": "Isan'ny lahatsoratra ambony indrindra",
+      "query": "Teny hotadiavina"
+    },
+    "languages": { "mg": "Malagasy", "fr": "Frantsay", "en": "Anglisy" },
+    "scope": { "national": "eto an-toerana", "international": "iraisam-pirenena" },
+    "allLanguages": "Fiteny rehetra",
+    "allSources": "Haino aman-jery rehetra",
+    "allRegions": "Faritra rehetra",
+    "allDistricts": "Distrika rehetra",
+    "allThemes": "Lohahevitra rehetra",
+    "periods": { "24": "24 ora farany", "72": "3 andro farany", "168": "7 andro farany" },
+    "themes": {
+      "politics": "Politika",
+      "economy": "Toekarena",
+      "agriculture": "Fambolena",
+      "health": "Fahasalamana",
+      "education": "Fanabeazana",
+      "environment": "Tontolo iainana",
+      "security_justice": "Fiarovana sy fitsarana",
+      "infrastructure": "Fotodrafitrasa",
+      "energy_mining": "Angovo sy harena ankibon'ny tany",
+      "society": "Fiarahamonina",
+      "sport": "Fanatanjahantena",
+      "general": "Ankapobeny"
+    },
+    "filterNote": "Mety tsy feno ny fanasokajiana sy ny toerana vinavinaina ho azy.",
+    "refresh": "Havaozy ny vaovao",
+    "loading": "Angonina ny RSS ampahibemaso…",
+    "sourcesError": "Tsy azo nalaina ny lisitry ny loharano. Hamarino ny fifandraisana ary avereno ny pejy.",
+    "retryNote": "Averina amin'ireo sivana ireo ihany ny fanangonana.",
+    "sourceTitle": "LOHARANO ARAHINA",
+    "sourcesCount": "Loharano {count}",
+    "auditDate": "Nohadihadiana: {date}",
+    "coverageTitle": "FETRAN'ITY FANANGONANA ITY",
+    "generated": "Noforonina tamin'ny {date}",
+    "analysis": {
+      "ok": "FAMINTINANA TOMBANA",
+      "mock": "FAMPISEHOANA",
+      "skipped": "TSY NATAO NY FAMINTINANA",
+      "unavailable": "TSY MISY NY FAMINTINANA"
+    },
+    "sourcesReached": "RSS voaray",
+    "articlesFetched": "lahatsoratra voaray",
+    "articlesMatched": "lahatsoratra mifanaraka amin'ny sivana",
+    "eventsCount": "lohahevitra natambatra",
+    "coverageNote": "Fe-potoana : {from} ka hatramin'ny {to}.",
+    "failedFeeds": "RSS {count} no tsy namaly",
+    "alertsTitle": "Famantarana hojerena",
+    "alertsNote": "Tondro momba ny asa fanaovan-gazety, fa tsy fanamarinana.",
+    "alertsEmpty": "Tsy nisy famantarana mandeha ho azy tamin'ity safidy ity. Tsy midika izany fa tsy misy lohahevitra lehibe.",
+    "severity": { "info": "FAMPITANDREMANA", "attention": "HOJERENA", "urgent": "MITANDREMA" },
+    "alertKinds": {
+      "new_event": "Lohahevitra vaovao arahina haino aman-jery maromaro",
+      "rising_event": "Mitombo ny lahatsoratra momba ity lohahevitra ity",
+      "contradictory_versions": "Tsy mitovy ny filazan'ny loharano"
+    },
+    "alertReasons": {
+      "new_event": "Lahatsoratra sy haino aman-jery maromaro vao haingana",
+      "recent_articles": "Lahatsoratra maromaro vao haingana",
+      "multiple_sources": "Haino aman-jery maromaro",
+      "acceleration": "Nitombo ny hafainganam-pamoahana",
+      "contradictory_versions": "Misy tsy fitoviana amin'ny lohateny na sombiny"
+    },
+    "eventsTitle": "Lohahevitra natambatra",
+    "eventMethodNote": "Fanasokajiana tombana araka ny teny; mety ho tafiditra amin'ny vondrona maromaro ny zava-nitranga iray.",
+    "eventsEmpty": "Tsy nisy lohahevitra natambatra tamin'ireo sivana ireo.",
+    "eventCounts": "Lahatsoratra {articles} · haino aman-jery {sources}",
+    "lastSeen": "Lahatsoratra farany: {date}",
+    "momentum": { "steady": "MITOVY NY HETSIKA", "rising": "MITOMBO NY HETSIKA", "surge": "MAMPISEHO HETSIKA BE" },
+    "versions": {
+      "divergent": "Misy tsy fitoviana hita",
+      "no_divergence_found": "Tsy nahita tsy fitoviana ny fanadihadiana",
+      "single_source": "Loharano iray ihany",
+      "not_analysed": "Tsy misy ny fanadihadiana"
+    },
+    "summaryNote": "Famintinana mandeha ho azy avy amin'ny lohateny sy sombiny; jereo ireo lahatsoratra mifandray.",
+    "sharedFacts": "Hevitra itovizana hita",
+    "divergences": "Tsy fitoviana hojerena",
+    "divergenceStatus": {
+      "contradicted": "Misy lafiny mifanohitra voalaza",
+      "needs_verification": "Mila fanamarinana",
+      "insufficient": "Tsy ampy ny vaovao"
+    },
+    "openSource": "Sokafy ny lahatsoratra",
+    "eventArticles": "Jereo ny lahatsoratra mifandray ({count})",
+    "articlesTitle": "Lahatsoratra voaray ({count})",
+    "articlesEmpty": "Tsy nisy lahatsoratra nifanaraka tamin'ireo sivana sy fe-potoana ireo.",
+    "truncated": "VOAFETRA NY LISITRA",
+    "limitationsTitle": "FETRA SY FANAMARINANA ILAINA",
+    "genericLimitation": "Misy fetran'ny fanangonana.",
+    "limitations": {
+      "headlines_and_excerpts_only": "Lohateny sy sombiny fohy ihany no tehirizina, fa tsy lahatsoratra manontolo.",
+      "lexical_event_grouping": "Teny fanalahidy no anangonana lohahevitra; mety ho diso ny fitoviana.",
+      "location_inferred_from_text": "Avy amin'ny soratra no vinavinaina ny faritra na distrika, ka mety tsy hisy na tsy marina.",
+      "feed_failures": "Tsy namaly ny RSS iray na maromaro nandritra ity fanangonana ity.",
+      "no_matching_articles": "Tsy nisy lahatsoratra nifanaraka tamin'ny sivana sy fe-potoana.",
+      "articles_truncated": "Voafetra amin'ny isa nangatahana ny lisitra.",
+      "mock_demo_data": "Angona noforonina ho fampisehoana; tsy nampiasaina ny RSS mivantana na ny modely.",
+      "ai_summary_from_headlines": "Ny fanadihadiana mandeha ho azy dia mampiasa lohateny sy sombiny fohy voaray ihany.",
+      "ai_analysis_unavailable": "Tsy misy ny fanadihadiana mandeha ho azy; tsy omena ny famintinana.",
+      "ai_analysis_skipped": "Tsy natao ny fanadihadiana mandeha ho azy momba ireo lohahevitra ireo.",
+      "ai_references_filtered": "Nesorina ny loharano natolotry ny fanadihadiana raha tsy hita tao amin'ny lahatsoratra voaray."
+    }
   },
   "stats": {
     "title": "Isa fototra",

@@ -1,5 +1,5 @@
-import { PlannedScreen } from "@/components/workspace/PlannedScreen";
+import { MonitorScreen } from "@/components/workspace/MonitorScreen";
 
 export default function MonitorPage() {
-  return <PlannedScreen id="monitor" />;
+  return <MonitorScreen />;
 }

@@ -12,6 +12,8 @@ export const MONITOR_MAX_ARTICLES = 120;
 export const monitorInputSchema = z
   .object({
     lang: languageSchema.default("mg"),
+    articleLang: languageSchema.optional(),
+    sourceId: z.string().trim().min(1).max(80).optional(),
     region: z.enum(REGIONS).optional(),
     district: z.string().trim().min(1).max(80).optional(),
     theme: z.enum(MONITOR_THEMES).optional(),

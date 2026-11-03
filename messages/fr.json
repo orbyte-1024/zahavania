@@ -41,7 +41,7 @@
       "short": "Veille",
       "desc": "Les flux RSS des médias malgaches, filtrés par source, langue et sujet. Titre, lien et extrait seulement.",
       "need": "BESOIN 3",
-      "state": "EN PRÉPARATION",
+      "state": "EN SERVICE",
       "rail": "Veille des médias"
     },
     "translate": {
@@ -103,7 +103,7 @@
     "toolsHead": {
       "kicker": "LES OUTILS",
       "title": "Sept outils, une seule rédaction",
-      "sub": "Chaque besoin exprimé par les journalistes a son écran. Les cinq premiers sont en service.",
+      "sub": "Chaque besoin exprimé par les journalistes a son écran. Les sept outils sont en service.",
       "meta": "BESOINS 1 À 8 — HORS MODE HORS LIGNE"
     },
     "tools": {
@@ -180,7 +180,7 @@
     "menu": "Menu",
     "close": "Fermer",
     "overviewTitle": "Que voulez-vous vérifier ?",
-    "overviewLead": "Choisissez un outil. Les écrans « en préparation » montrent ce qui arrive, sans données inventées."
+    "overviewLead": "Choisissez un outil et explorez les sources, les chiffres et les vérifications disponibles."
   },
   "common": {
     "demo": "DÉMONSTRATION",
@@ -208,6 +208,8 @@
       "url_unreachable": "La page n'a pas pu être récupérée comme du texte.",
       "url_no_content": "Aucun texte lisible n'a été trouvé sur cette page.",
       "directory_unavailable": "L'annuaire des experts est momentanément indisponible.",
+      "feeds_unavailable": "Aucun flux d'actualité n'a pu être joint. Réessayez plus tard.",
+      "monitor_unavailable": "La veille est momentanément indisponible. Réessayez.",
       "network_error": "Le serveur est injoignable. Vérifiez la connexion.",
       "unexpected_response": "Réponse inattendue du serveur.",
       "request_failed": "La demande a échoué.",
@@ -429,14 +431,118 @@
   },
   "monitor": {
     "title": "Veille nationale",
-    "lead": "Cet écran affichera les flux RSS des médias malgaches. Il est en préparation : rien n'est affiché tant que les flux n'ont pas été audités.",
-    "rulesTitle": "Ce que la veille montrera",
-    "rules": [
-      "Le titre, le lien et un court extrait, jamais l'article entier.",
-      "La source, la langue et la date de publication.",
-      "Un bouton pour proposer des angles à partir d'un sujet."
-    ],
-    "next": "Prochaine étape : lister les médias qui publient un flux RSS utilisable, avec la date de l'audit."
+    "lead": "Suivez les titres et courts extraits des flux RSS publics, avec la source, la date et les limites de la collecte. La veille ne vérifie pas les affirmations.",
+    "audited": "SOURCES AUDITÉES LE {date}",
+    "fields": {
+      "language": "Langue des articles",
+      "source": "Média",
+      "region": "Région",
+      "district": "District",
+      "theme": "Sujet",
+      "period": "Période",
+      "maxArticles": "Nombre maximum",
+      "query": "Mots à rechercher"
+    },
+    "languages": { "mg": "Malagasy", "fr": "Français", "en": "Anglais" },
+    "scope": { "national": "national", "international": "international" },
+    "allLanguages": "Toutes les langues",
+    "allSources": "Tous les médias",
+    "allRegions": "Toutes les régions",
+    "allDistricts": "Tous les districts",
+    "allThemes": "Tous les sujets",
+    "periods": { "24": "24 dernières heures", "72": "3 derniers jours", "168": "7 derniers jours" },
+    "themes": {
+      "politics": "Politique",
+      "economy": "Économie",
+      "agriculture": "Agriculture",
+      "health": "Santé",
+      "education": "Éducation",
+      "environment": "Environnement",
+      "security_justice": "Sécurité et justice",
+      "infrastructure": "Infrastructures",
+      "energy_mining": "Énergie et mines",
+      "society": "Société",
+      "sport": "Sport",
+      "general": "Général"
+    },
+    "filterNote": "Le regroupement et la localisation sont automatiques et peuvent être incomplets.",
+    "refresh": "Actualiser la veille",
+    "loading": "Collecte des flux publics et préparation de la veille…",
+    "sourcesError": "La liste des sources n'a pas pu être chargée. Vérifiez la connexion puis rechargez la page.",
+    "retryNote": "La collecte est relancée avec les mêmes filtres.",
+    "sourceTitle": "SOURCES PUBLIQUES SUIVIES",
+    "sourcesCount": "{count, plural, one {# source} other {# sources}}",
+    "auditDate": "Audit : {date}",
+    "coverageTitle": "COUVERTURE DE CETTE COLLECTE",
+    "generated": "Générée le {date}",
+    "analysis": {
+      "ok": "SYNTHÈSE INDICATIVE",
+      "mock": "DÉMONSTRATION",
+      "skipped": "SYNTHÈSE NON LANCÉE",
+      "unavailable": "SYNTHÈSE INDISPONIBLE"
+    },
+    "sourcesReached": "flux joints",
+    "articlesFetched": "articles reçus",
+    "articlesMatched": "articles correspondant aux filtres",
+    "eventsCount": "sujets regroupés",
+    "coverageNote": "Période couverte : du {from} au {to}.",
+    "failedFeeds": "{count} flux n'ont pas répondu",
+    "alertsTitle": "Signaux à examiner",
+    "alertsNote": "Indicateurs éditoriaux, pas des vérifications.",
+    "alertsEmpty": "Aucun signal automatique pour cette sélection. Cela ne signifie pas qu'aucun sujet important n'existe.",
+    "severity": { "info": "INFO", "attention": "À EXAMINER", "urgent": "ATTENTION" },
+    "alertKinds": {
+      "new_event": "Sujet récent suivi par plusieurs médias",
+      "rising_event": "Sujet avec une activité éditoriale en hausse",
+      "contradictory_versions": "Versions divergentes entre sources"
+    },
+    "alertReasons": {
+      "new_event": "Plusieurs articles et médias récents",
+      "recent_articles": "Plusieurs articles récents",
+      "multiple_sources": "Plusieurs médias",
+      "acceleration": "Rythme de publication en hausse",
+      "contradictory_versions": "Écarts relevés dans les titres ou extraits"
+    },
+    "eventsTitle": "Sujets regroupés",
+    "eventMethodNote": "Regroupement lexical indicatif ; un même événement peut apparaître dans plusieurs groupes.",
+    "eventsEmpty": "Aucun sujet n'a été regroupé avec ces filtres.",
+    "eventCounts": "{articles} articles · {sources} médias",
+    "lastSeen": "Dernier article : {date}",
+    "momentum": { "steady": "ACTIVITÉ STABLE", "rising": "ACTIVITÉ EN HAUSSE", "surge": "ACTIVITÉ FORTE" },
+    "versions": {
+      "divergent": "Écarts signalés",
+      "no_divergence_found": "Aucun écart relevé par l'analyse",
+      "single_source": "Une seule source",
+      "not_analysed": "Analyse non disponible"
+    },
+    "summaryNote": "Synthèse automatique des titres et extraits ; à vérifier dans les articles liés.",
+    "sharedFacts": "Éléments communs relevés",
+    "divergences": "Écarts à vérifier",
+    "divergenceStatus": {
+      "contradicted": "Éléments contradictoires signalés",
+      "needs_verification": "Vérification nécessaire",
+      "insufficient": "Éléments insuffisants"
+    },
+    "openSource": "Ouvrir l'article",
+    "eventArticles": "Voir les articles liés ({count})",
+    "articlesTitle": "Articles reçus ({count})",
+    "articlesEmpty": "Aucun article ne correspond à ces filtres sur la période choisie.",
+    "truncated": "LISTE LIMITÉE",
+    "limitationsTitle": "LIMITES ET VÉRIFICATIONS À MENER",
+    "genericLimitation": "Une limite de la collecte est présente.",
+    "limitations": {
+      "headlines_and_excerpts_only": "La collecte conserve les titres et courts extraits, pas les articles complets.",
+      "lexical_event_grouping": "Les sujets sont regroupés par mots-clés ; les rapprochements peuvent être erronés.",
+      "location_inferred_from_text": "La région ou le district est déduit du texte et peut être absent ou incorrect.",
+      "feed_failures": "Un ou plusieurs flux n'ont pas répondu pendant cette collecte.",
+      "no_matching_articles": "Aucun article ne correspond aux filtres et à la période choisis.",
+      "articles_truncated": "La liste est limitée au nombre maximum demandé.",
+      "mock_demo_data": "Données fictives de démonstration ; aucun flux réel ni modèle n'a été utilisé.",
+      "ai_summary_from_headlines": "L'analyse automatique s'appuie uniquement sur les titres et courts extraits reçus.",
+      "ai_analysis_unavailable": "L'analyse automatique est indisponible ; aucun résumé n'est fourni.",
+      "ai_analysis_skipped": "Aucune analyse automatique n'a été lancée pour ces sujets.",
+      "ai_references_filtered": "Certaines références proposées par l'analyse ont été retirées car elles ne correspondaient pas aux articles collectés."
+    }
   },
   "stats": {
     "title": "Chiffres clés",

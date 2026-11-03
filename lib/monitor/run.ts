@@ -44,6 +44,8 @@ function cacheKey(input: MonitorInput, userId: string, now: Date): string {
     userId,
     Math.floor(now.getTime() / CACHE_BUCKET_MS),
     input.lang,
+    input.articleLang ?? null,
+    input.sourceId ?? null,
     input.region ?? null,
     input.district ?? null,
     input.theme ?? null,
@@ -144,6 +146,8 @@ export async function runMonitor(input: MonitorInput, userId: string, now: Date 
     },
     filters: {
       lang: input.lang,
+      articleLang: input.articleLang ?? null,
+      sourceId: input.sourceId ?? null,
       region: input.region ?? null,
       district: input.district ?? null,
       theme: input.theme ?? null,

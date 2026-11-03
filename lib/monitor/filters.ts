@@ -1,10 +1,13 @@
 import type { Region } from "@/lib/constants/regions";
+import type { Language } from "@/lib/ai/schemas";
 import { detectLocation } from "@/lib/monitor/districts";
 import { classifyThemes, foldText } from "@/lib/monitor/taxonomy";
 import type { CollectedArticle } from "@/lib/monitor/collect";
 import type { MonitorArticle, MonitorTheme } from "@/lib/monitor/types";
 
 export type MonitorFilterInput = {
+  articleLang?: Language;
+  sourceId?: string;
   region?: Region;
   district?: string;
   theme?: MonitorTheme;
@@ -52,6 +55,8 @@ function matchesQuery(article: MonitorArticle, query: string): boolean {
 }
 
 export function articleMatches(article: MonitorArticle, filters: MonitorFilterInput): boolean {
+  if (filters.articleLang && article.lang !== filters.articleLang) return false;
+  if (filters.sourceId && article.sourceId !== filters.sourceId) return false;
   if (filters.region && article.region !== filters.region) return false;
   if (filters.district && article.district !== filters.district) return false;
   if (filters.theme && !article.themes.includes(filters.theme)) return false;
