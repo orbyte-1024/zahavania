@@ -1,11 +1,11 @@
-# AGENTS.md — Zahavan'Ia (hackathon)
+# AGENTS.md — Zahavan'ia (hackathon)
 
 > Lis ce fichier en entier avant d'écrire du code. Il prime sur tes habitudes.
 > Pour Claude Code : créer un fichier `CLAUDE.md` contenant uniquement `@AGENTS.md`.
 
 ## 1. Mission
 
-Zahavan'Ia est un **assistant d'investigation journalistique**
+Zahavan'ia est un **assistant d'investigation journalistique**
 pour Madagascar. Question centrale : *comment aider un journaliste à passer d'une
 information reçue à une information vérifiée, documentée et exploitable ?*
 
