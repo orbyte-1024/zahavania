@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { sound } from "@/lib/browser/sound";
 
-const UNLOCK_EVENTS = ["pointerdown", "keydown", "touchend"] as const;
+const UNLOCK_EVENTS = ["click", "keydown", "touchend"] as const;
 
 export function useLandingSound() {
   useEffect(() => {

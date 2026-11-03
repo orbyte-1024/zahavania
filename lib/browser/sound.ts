@@ -23,6 +23,11 @@ function writePreference(enabled: boolean): void {
   }
 }
 
+function hasUserActivation(): boolean {
+  const activation = (navigator as Navigator & { userActivation?: { isActive: boolean } }).userActivation;
+  return activation ? activation.isActive : true;
+}
+
 function prefersCalm(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -61,7 +66,7 @@ class SoundEngine {
   }
 
   unlock(): void {
-    if (!this.enabled) return;
+    if (!this.enabled || !hasUserActivation()) return;
     const context = this.ensureContext();
     if (context && context.state === "suspended") void context.resume();
   }

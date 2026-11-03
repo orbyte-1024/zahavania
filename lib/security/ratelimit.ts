@@ -95,9 +95,13 @@ export function createRateLimiter(options: RateLimiterOptions, store: SharedStor
 }
 
 export function clientIp(req: NextRequest): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip")?.trim() ||
-    "unknown"
-  );
+  const platform = req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim();
+  const proxy = req.headers.get("x-real-ip")?.trim();
+  const forwarded = req.headers
+    .get("x-forwarded-for")
+    ?.split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .at(-1);
+  return platform || proxy || forwarded || "unknown";
 }

@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { NextRequest } from "next/server";
+import { createServiceClient } from "@/lib/supabase/service";
 
 export type AuthResult =
   | { ok: true; userId: string; demo: boolean; supabase: SupabaseClient | null }
@@ -17,18 +18,9 @@ function getBearerToken(req: NextRequest): string | null {
   return match?.[1]?.trim() || null;
 }
 
-function createDemoClient(): SupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceRoleKey) return null;
-  return createClient(url, serviceRoleKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-}
-
 export async function authenticate(req: NextRequest): Promise<AuthResult> {
   if (isDemoMode()) {
-    return { ok: true, userId: "demo-user", demo: true, supabase: createDemoClient() };
+    return { ok: true, userId: "demo-user", demo: true, supabase: createServiceClient() };
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

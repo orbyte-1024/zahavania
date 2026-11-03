@@ -9,6 +9,7 @@ import { readIntEnv } from "@/lib/env";
 import { suggestExperts } from "@/lib/experts/suggest";
 import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
 import { authenticate } from "@/lib/security/auth";
+import { createServiceClient } from "@/lib/supabase/service";
 import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 
 export const maxDuration = 180;
@@ -180,10 +181,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    if (!auth.supabase && !isMockMode()) {
-      throw new ExpertDirectoryError("supabase client unavailable");
+    const directory = isMockMode() ? null : createServiceClient();
+    if (!directory && !isMockMode()) {
+      throw new ExpertDirectoryError("supabase service client unavailable");
     }
-    const result = await suggestExperts(auth.supabase, input.data);
+    const result = await suggestExperts(directory, input.data);
     const payload: SuggestPayload = {
       suggestions: result.suggestions,
       detectedDomains: result.detectedDomains,
