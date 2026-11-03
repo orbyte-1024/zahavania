@@ -106,6 +106,9 @@
       "sub": "Chaque besoin exprimé par les journalistes a son écran. Les cinq premiers sont en service.",
       "meta": "BESOINS 1 À 8 — HORS MODE HORS LIGNE"
     },
+    "tools": {
+      "discover": "Découvrir"
+    },
     "motto": {
       "kicker": "CE QUI GUIDE CHAQUE VÉRIFICATION",
       "words": [
