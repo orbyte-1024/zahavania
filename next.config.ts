@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/verify/text": ["./data/demo/verify-text-*.json"],
     "/api/sources/suggest": ["./data/demo/sources-suggest-*.json"],
+    "/api/editorial/angles": ["./data/demo/editorial-angles-*.json"],
   },
   cacheComponents: true,
   serverExternalPackages: ["exifr"],

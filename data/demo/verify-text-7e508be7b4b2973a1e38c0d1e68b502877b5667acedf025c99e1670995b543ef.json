@@ -1,0 +1,101 @@
+{
+  "route": "verify-text",
+  "recordedAt": "2026-11-03T12:28:32.047Z",
+  "payload": {
+    "result": {
+      "detectedLanguage": "mg",
+      "summary": "Ny CENI dia nilaza fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023, araka ny antontan'isa sy tatitra hita amin'ny loharano ofisialy sy haino aman-jery azo itokisana.",
+      "claims": [
+        {
+          "text": "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023.",
+          "status": "confirmed",
+          "rationale": "Ny tatitra ofisialin'ny CENI (PDF) mampiseho fa i Rajoelina nahazo 58,95% ny vato manan-kery, ary ireo tatitra avy amin'ny Al Jazeera, BBC ary Newsmada dia manamafy fa ny CENI nanao fanambarana momba ny vokatra vonjimaika izay mampiseho fa i Rajoelina no nahazo ny vato betsaka indrindra. Ny didim-pitsarana nataon'ny Fitsarana Ambony tamin'ny 1 Desambra 2023 dia nanamafy koa ny fanekena ara-dalàna ny fandreseny.",
+          "sources": [
+            {
+              "title": "RECAP-NATIONALE-ELECTION-PRESIDENTIELLE-16-11-2023.pdf",
+              "url": "https://www.ceni-madagascar.mg/wp-content/uploads/2023/11/RECAP-NATIONALE-ELECTION-PRESIDENTIELLE-16-11-2023.pdf",
+              "publisher": "CENI Madagascar",
+              "date": null,
+              "kind": "official",
+              "stance": "supports"
+            },
+            {
+              "title": "Madagascar president re-elected as opposition denounces irregularities",
+              "url": "https://www.aljazeera.com/news/2023/11/25/madagascar-president-re-elected-as-opposition-denounces-irregularities",
+              "publisher": "Al Jazeera",
+              "date": "2023-11-25",
+              "kind": "independent",
+              "stance": "supports"
+            },
+            {
+              "title": "Andry Rajoelina re-elected as Madagascar president in contested poll",
+              "url": "https://www.bbc.com/news/world-africa-67517143",
+              "publisher": "BBC News",
+              "date": "2023-11-25",
+              "kind": "independent",
+              "stance": "supports"
+            },
+            {
+              "title": "Voka-pifidianana eo anivon’ny Ceni: mirona any amin’ny «1er tour dia vita» – Newsmada",
+              "url": "https://newsmada.com/2023/11/25/voka-pifidianana-eo-anivonny-ceni-mirona-any-aminny-1er-tour-dia-vita/",
+              "publisher": "Newsmada",
+              "date": "2023-11-25",
+              "kind": "independent",
+              "stance": "supports"
+            },
+            {
+              "title": "Arrêt du 1er décembre 2023 de la Haute Cour constitutionnelle proclamant la réélection du Président Andry Rajoelina",
+              "url": "https://droit-et-politique-en-afrique.info/wp-content/uploads/2023/12/Arret-du-1er-decembre-2023-de-la-Haute-Cour-constitutionnelle-proclamant-la-reelection-du-President-Andry-Rajoelina.pdf",
+              "publisher": "Haute Cour Constitutionnelle (Madagascar)",
+              "date": "2023-12-01",
+              "kind": "official",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [],
+          "recommendedChecks": [
+            "Vérifier ny tatitra farany ofisialin’ny Fitsarana Ambony momba ny fanamafisana farany ny vokatra",
+            "Mijery raha nisy fanavaozana na fanitsiana taty aoriana avy amin’ny CENI na ny ministeran’ny Fitsarana",
+            "Manamarina ny antontan'isa amin’ny tranokalan’ny INSTAT na ny Birao Nasionalin’ny Statistika raha misy"
+          ],
+          "confidenceIndex": 85,
+          "breakdown": [
+            {
+              "code": "official_source",
+              "label": "2 official source domain(s)",
+              "points": 70
+            },
+            {
+              "code": "independent_source",
+              "label": "3 independent source domain(s)",
+              "points": 75
+            },
+            {
+              "code": "aligned_points_cap",
+              "label": "Source points capped at 70",
+              "points": -75
+            },
+            {
+              "code": "independent_domains",
+              "label": "5 distinct domains",
+              "points": 15
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "Ny loharano nomena dia voafetra amin’ny pejy web sy PDF hita tamin’ity fikarohana ity; tsy nisy loharano hafa naneho fanoharana mivantana amin’ny fanambarana ofisialin’ny CENI aorian’ny 25 Novambra 2023"
+      ],
+      "globalIndex": 85,
+      "globalBreakdown": [
+        {
+          "code": "claim_contribution",
+          "label": "Claim 1 (confirmed, index 85) / 1",
+          "points": 85
+        }
+      ]
+    },
+    "analyzedUrl": null,
+    "droppedSources": 0
+  }
+}

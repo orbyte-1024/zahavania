@@ -1,0 +1,99 @@
+{
+  "route": "editorial-angles",
+  "recordedAt": "2026-11-03T12:28:43.138Z",
+  "payload": {
+    "lang": "fr",
+    "angles": [
+      {
+        "title": "Analyse des résultats officiels du CENI et leur diffusion régionale",
+        "premise": "Le CENI a annoncé qu'Andry Rajoelina a remporté l'élection présidentielle 2023. Il est crucial d'examiner comment ces résultats ont été communiqués aux différentes régions et quelles garanties de transparence ont été appliquées.",
+        "interviewQuestions": [
+          "Comment le CENI a-t-il procédé à la transmission des résultats aux autorités régionales ?",
+          "Quelles mesures ont été prises pour garantir l'exactitude des procès‑verbaux de dépouillement ?",
+          "Les acteurs locaux ont-ils relevé des irrégularités lors de la réception des résultats ?",
+          "Comment l'opposition a-t-elle réagi à la proclamation officielle du CENI ?",
+          "Quel rôle les observateurs civils ont-ils joué dans la validation des chiffres annoncés ?"
+        ],
+        "actorTypes": [
+          "porte‑parole du CENI",
+          "directeur de la commission électorale régionale d'Analamanga",
+          "représentant d'une ONG de suivi électoral",
+          "porte‑parole de l'opposition"
+        ],
+        "dataToFind": [
+          "communiqué officiel du CENI annonçant la victoire d'Andry Rajoelina",
+          "procès‑verbaux de dépouillement par circonscription",
+          "statistiques de participation électorale par région",
+          "rapports d'observateurs internationaux sur le scrutin 2023",
+          "archives des médias locaux relatant la proclamation des résultats"
+        ],
+        "format": "investigation",
+        "basedOn": [
+          "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Conséquences de la victoire d'Andry Rajoelina sur les projets de développement dans la région SAVA",
+        "premise": "La confirmation du résultat électoral peut influencer les priorités de financement et les projets d'infrastructure en cours dans la région SAVA, notamment dans le secteur vanille.",
+        "interviewQuestions": [
+          "Le gouvernement prévoit‑il des ajustements budgétaires suite à la proclamation du résultat ?",
+          "Comment la coopération internationale réagit‑elle aux changements éventuels de priorités dans la région SAVA ?",
+          "Les chefs de coopératives vanille constatent‑ils des impacts sur leurs projets ?",
+          "Quelles sont les attentes du maire de Sambava concernant les prochains investissements ?",
+          "Le ministère des Travaux publics a‑t‑il révisé le calendrier des chantiers dans le nord‑est ?"
+        ],
+        "actorTypes": [
+          "ministre des Travaux publics",
+          "maire de Sambava",
+          "responsable de la Banque centrale de Madagascar",
+          "président d'une coopérative vanille du SAVA"
+        ],
+        "dataToFind": [
+          "budget alloué aux projets d'infrastructure dans la région SAVA pour 2023‑2024",
+          "documents de planification des travaux publics dans le nord‑est",
+          "accords de financement avec les partenaires internationaux",
+          "rapports d'avancement des projets de développement régionaux",
+          "statistiques de production vanille avant et après l'élection"
+        ],
+        "format": "brief",
+        "basedOn": [
+          "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Réactions des observateurs nationaux et internationaux à l'annonce du CENI",
+        "premise": "Après la confirmation officielle du résultat, il est essentiel de recueillir les avis des observateurs pour évaluer la crédibilité du processus électoral et les éventuelles contestations.",
+        "interviewQuestions": [
+          "Quel est votre jugement global sur la transparence du dépouillement annoncé par le CENI ?",
+          "Avez‑vous relevé des irrégularités majeures pendant le scrutin ?",
+          "Quelles recommandations formulez‑vous aux autorités malgaches pour les prochaines élections ?",
+          "Des plaintes formelles ont‑elles été déposées par l'opposition ou la société civile ?",
+          "Comment les partenaires internationaux envisagent‑ils de soutenir la consolidation démocratique après ces résultats ?"
+        ],
+        "actorTypes": [
+          "représentant de la mission d'observation de l'Union européenne à Madagascar",
+          "représentant de l'ONU chargé des affaires politiques",
+          "porte‑parole de Transparency International Madagascar",
+          "juriste du tribunal de première instance d'Antananarivo"
+        ],
+        "dataToFind": [
+          "rapports d'observation électorale publiés par l'UE et l'ONU",
+          "déclarations officielles des organisations de la société civile post‑annonce",
+          "dossiers de plainte déposés auprès du tribunal d'Antananarivo",
+          "décisions judiciaires éventuelles concernant le scrutin de 2023",
+          "analyses médiatiques locales sur la réaction du public à la proclamation du résultat"
+        ],
+        "format": "radio_report",
+        "basedOn": [
+          "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023."
+        ],
+        "toVerifyFirst": []
+      }
+    ],
+    "limitations": [
+      "Le sujet fourni était vide, ce qui limite la précision du cadrage des angles."
+    ]
+  }
+}

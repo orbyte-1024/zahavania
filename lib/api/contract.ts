@@ -93,6 +93,7 @@ export type EditorialAnglesSuccess = AnglesOutput & {
   verificationId: string | null;
   usage: AiUsage | null;
   attempts: number;
+  recordedAt: string | null;
 };
 
 export type EditorialAnglesErrorCode = CommonErrorCode;
