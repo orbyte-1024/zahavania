@@ -51,7 +51,10 @@ describe("POST /api/verify/image", () => {
     expect(Object.keys(body).sort()).toEqual([
       "analysis",
       "file",
+      "meta",
       "metadata",
+      "metadataSource",
+      "mock",
       "ok",
       "reverseSearch",
       "verification",

@@ -100,7 +100,6 @@ messages/{mg,fr,en}.json
   `askText` (texte brut), avec une `task` (`verify`, `translate`, `vision`, `experts`, `angles`) qui choisit le
   modèle via `lib/ai/models.ts`. Le champ `user` accepte du texte ou des parties `text` + `image_url`.
   Jamais d'appel direct ailleurs.
-  `lib/llm.ts` est un reliquat utilisé par l'analyse d'image : ne pas l'étendre.
 - **Tous** les prompts sont dans `lib/ai/prompts/`. Aucun prompt inline dans une route.
 - Le contenu utilisateur est une **donnée** : toujours entre balises (`<content_to_verify>…</content_to_verify>`),
   balises neutralisées dans le contenu, consigne d'ignorer tout ordre qu'il contient.

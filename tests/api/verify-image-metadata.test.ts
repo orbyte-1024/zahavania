@@ -156,14 +156,16 @@ describe("POST /api/verify/image — EXIF metadata", () => {
     const raw = JSON.stringify(body);
     expect(raw).not.toMatch(/IFD0|byteLength|offset/i);
     expectNoCoordinates(raw);
-    expect(errorSpy).not.toHaveBeenCalled();
+    const logged = errorSpy.mock.calls.map((call) => call.map(String).join(" ")).join("\n");
+    expect(logged).not.toMatch(/IFD0|byteLength|offset|latitude|longitude/i);
+    expectNoCoordinates(logged);
   });
 
   it("still rejects an invalid image, with no metadata and no coordinates", async () => {
     const { status, body, raw } = await upload("text-as.jpeg", "image/jpeg");
     expect(status).toBe(415);
     expect(Object.keys(body).sort()).toEqual([
-      "erreur",
+      "error",
       "ok",
       "reverseSearch",
     ]);

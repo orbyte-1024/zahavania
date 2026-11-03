@@ -131,7 +131,7 @@ describe("POST /api/verify/image — reverse search links", () => {
     expect(status).toBe(400);
     expect(body.ok).toBe(false);
     expect(body.reverseSearch).toEqual({ googleLens: GOOGLE_LENS, tineye: TINEYE });
-    expect(Object.keys(body).sort()).toEqual(["erreur", "ok", "reverseSearch"]);
+    expect(Object.keys(body).sort()).toEqual(["error", "ok", "reverseSearch"]);
   });
 
   it("still returns the links when the file is too large (413)", async () => {
@@ -149,7 +149,7 @@ describe("POST /api/verify/image — reverse search links", () => {
 
     expect(status).toBe(415);
     expect(body.reverseSearch).toEqual({ googleLens: GOOGLE_LENS, tineye: TINEYE });
-    expect(Object.keys(body).sort()).toEqual(["erreur", "ok", "reverseSearch"]);
+    expect(Object.keys(body).sort()).toEqual(["error", "ok", "reverseSearch"]);
   });
 
   it("still returns the links when a corrupted image is rejected (400)", async () => {

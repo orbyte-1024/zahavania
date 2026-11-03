@@ -1,28 +1,15 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
-import { callLegacy, type Phase } from "@/components/workspace/requests";
+import { callForm, type Phase } from "@/components/workspace/requests";
+import type { ImageEvidence, VerifyImageSuccess } from "@/lib/api/contract";
+import { compressImage, ImageDecodeError, readDeviceExif, SOURCE_MAX_BYTES } from "@/lib/browser/image-prep";
 import { Badge, ErrorNote, ScreenHeader, SubmitButton, rise, stagger } from "@/components/workspace/ui";
 
-type Evidence = { provenance: "metadata" | "visualAnalysis" | "externalSource"; content: string; confidence: "low" | "medium" | "high" };
+type Evidence = ImageEvidence;
 
-type ImageResponse = {
-  ok: true;
-  file: { format: string; size: number };
-  metadata: { available: boolean; dateTaken: string | null; creationDate: string | null; camera: string | null; software: string | null; hasGPS: boolean } | null;
-  reverseSearch: { googleLens: { name: string; url: string }; tineye: { name: string; url: string } };
-  verification: {
-    status: "indices concordants" | "indices contradictoires" | "non concluant";
-    summary: string;
-    supportingEvidence: Evidence[];
-    contradictoryEvidence: Evidence[];
-    limitations: string[];
-  };
-};
-
-const MAX_BYTES = 5 * 1024 * 1024;
 const ACCEPT = ["image/jpeg", "image/png", "image/webp"];
 
 function EvidenceList({ title, items }: { title: string; items: Evidence[] }) {
@@ -49,7 +36,9 @@ export function ImageScreen() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [phase, setPhase] = useState<Phase<ImageResponse>>({ kind: "idle" });
+  const [phase, setPhase] = useState<Phase<VerifyImageSuccess>>({ kind: "idle" });
+  const [preparing, setPreparing] = useState(false);
+  const locale = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -60,8 +49,12 @@ export function ImageScreen() {
 
   const pick = (candidate: File | undefined) => {
     if (!candidate) return;
-    if (!ACCEPT.includes(candidate.type) || candidate.size > MAX_BYTES) {
-      setPhase({ kind: "error", code: "invalid_input", retryAfter: null });
+    if (!ACCEPT.includes(candidate.type)) {
+      setPhase({ kind: "error", code: "unsupported_media", retryAfter: null });
+      return;
+    }
+    if (candidate.size > SOURCE_MAX_BYTES) {
+      setPhase({ kind: "error", code: "image_too_large", retryAfter: null });
       return;
     }
     setFile(candidate);
@@ -79,9 +72,21 @@ export function ImageScreen() {
     event.preventDefault();
     if (!file) return;
     setPhase({ kind: "loading" });
+    setPreparing(true);
     const form = new FormData();
-    form.append("image", file);
-    const res = await callLegacy<ImageResponse>("/api/verify/image", { method: "POST", body: form });
+    try {
+      const exif = await readDeviceExif(file);
+      const compressed = await compressImage(file);
+      form.append("image", compressed, "photo.jpg");
+      form.append("lang", locale);
+      if (exif) form.append("exif", JSON.stringify(exif));
+    } catch (error) {
+      setPreparing(false);
+      setPhase({ kind: "error", code: error instanceof ImageDecodeError ? "image_decode_failed" : "invalid_image", retryAfter: null });
+      return;
+    }
+    setPreparing(false);
+    const res = await callForm<VerifyImageSuccess>("/api/verify/image", form);
     if (res.ok) setPhase({ kind: "done", data: res.data });
     else setPhase({ kind: "error", code: res.code, retryAfter: res.retryAfter });
   };
@@ -111,7 +116,7 @@ export function ImageScreen() {
             <span className="dropzone-text">
               <span className="dropzone-title">{t("drop")}</span>
               <span className="mono ash">
-                {t("or")} <u>{t("browse")}</u> · JPEG · PNG · WEBP · 5 MB
+                {t("or")} <u>{t("browse")}</u> · JPEG · PNG · WEBP
               </span>
             </span>
           )}
@@ -133,6 +138,9 @@ export function ImageScreen() {
       <AnimatePresence mode="wait">
         {phase.kind === "loading" && (
           <motion.div key="loading" className="panel skeletons" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <p className="mono ash" aria-live="polite">
+              {preparing ? t("preparing") : t("analysing")}
+            </p>
             {[0, 1].map((i) => (
               <span key={i} className="skeleton" style={{ animationDelay: `${i * 120}ms` }} />
             ))}
@@ -151,7 +159,9 @@ export function ImageScreen() {
             <EvidenceList title={t("contradictory")} items={report.verification.contradictoryEvidence} />
 
             <motion.div className="claim-block" variants={rise}>
-              <p className="mono ash">{t("metadata")}</p>
+              <p className="mono ash">
+                {t("metadata")} · {t(`metadataSource.${report.metadataSource}`)}
+              </p>
               {report.metadata?.available ? (
                 <dl className="meta-table">
                   {(

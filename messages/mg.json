@@ -212,7 +212,12 @@
       "directory_unavailable": "Tsy misy vetivety ny lisitry ny manam-pahaizana.",
       "network_error": "Tsy tratra ny mpizara. Hamarino ny fifandraisana.",
       "unexpected_response": "Valiny tsy nampoizina avy amin'ny mpizara.",
-      "request_failed": "Tsy nahomby ny fangatahana."
+      "request_failed": "Tsy nahomby ny fangatahana.",
+      "image_decode_failed": "Tsy mahavaky an'ity rakitra ity ity mpitety tranonkala ity. Avoahy ho JPEG ny sary ary andramo indray.",
+      "image_missing": "Tsy nisy sary voaray.",
+      "image_too_large": "Mavesatra loatra ny sary.",
+      "unsupported_media": "Sary JPEG, PNG ary WebP ihany no ekena.",
+      "invalid_image": "Tsy azo vakiana na simba ny sary."
     }
   },
   "status": {
@@ -318,7 +323,7 @@
   },
   "image": {
     "title": "Hamarino sary",
-    "lead": "Apetraho sary JPEG, PNG na WebP (5 Mo farafahabetsany). Tsy tehirizina mihitsy ny toerana GPS.",
+    "lead": "Apetraho sary JPEG, PNG na WebP. Hakelezina amin'ny fitaovanao izy alohan'ny handefasana azy, ary tsy miala amin'ny finday mihitsy ny toerana GPS.",
     "drop": "Apetraho eto ny sary",
     "or": "na",
     "browse": "misafidiana rakitra",
@@ -345,6 +350,13 @@
       "indices concordants": "Famantarana mifanaraka",
       "indices contradictoires": "Famantarana mifanohitra",
       "non concluant": "Tsy misy fehiny"
+    },
+    "preparing": "Manomana ny sary amin'ny fitaovanao…",
+    "analysing": "Eo am-pandinihana…",
+    "metadataSource": {
+      "file": "novakiana tao amin'ny rakitra",
+      "device": "novakiana teo amin'ny fitaovana alohan'ny nanakelezana",
+      "none": "tsy misy"
     }
   },
   "translate": {

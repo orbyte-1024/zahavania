@@ -100,4 +100,53 @@ export type TranslateErrorCode = CommonErrorCode;
 
 export type TranslateResponse = TranslateSuccess | ApiErrorBody<TranslateErrorCode>;
 
+export type ImageMetadataSummary = {
+  available: boolean;
+  dateTaken: string | null;
+  creationDate: string | null;
+  camera: string | null;
+  software: string | null;
+  hasGPS: boolean;
+};
+
+export type VisionObservation = { text: string; confidence: "low" | "medium" | "high" };
+
+export type VisionAnalysis = {
+  description: VisionObservation;
+  visualInconsistencies: VisionObservation[];
+  possibleAIGenerationIndicators: VisionObservation[];
+  locationClues: VisionObservation[];
+  limitations: VisionObservation;
+};
+
+export type ImageEvidence = { provenance: "metadata" | "visualAnalysis" | "externalSource"; content: string; confidence: "low" | "medium" | "high" };
+
+export type VerifyImageSuccess = {
+  ok: true;
+  mock: boolean;
+  file: { format: string; size: number };
+  metadata: ImageMetadataSummary;
+  metadataSource: "file" | "device" | "none";
+  warnings: { code: string; message: string }[];
+  reverseSearch: { googleLens: { name: string; url: string }; tineye: { name: string; url: string } };
+  analysis: VisionAnalysis | null;
+  verification: {
+    status: "indices concordants" | "indices contradictoires" | "non concluant";
+    summary: string;
+    supportingEvidence: ImageEvidence[];
+    contradictoryEvidence: ImageEvidence[];
+    limitations: string[];
+  };
+  meta: { durationMs: number };
+};
+
+export type VerifyImageErrorCode =
+  | CommonErrorCode
+  | "image_missing"
+  | "image_too_large"
+  | "unsupported_media"
+  | "invalid_image";
+
+export type VerifyImageResponse = VerifyImageSuccess | ApiErrorBody<VerifyImageErrorCode>;
+
 export type PingAiResponse = { ok: true; mock: boolean; reponse: string } | LegacyErrorBody;

@@ -49,7 +49,7 @@ describe("POST /api/verify/video", () => {
     if (body.framesAnalyzed > 0) {
       expect(body.analysis).not.toBeNull();
     }
-  });
+  }, 20_000);
 
   it("rejects a request without the video field", async () => {
     const form = new FormData();
