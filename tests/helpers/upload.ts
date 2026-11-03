@@ -35,7 +35,7 @@ function bytesFor(bytes: Uint8Array): Uint8Array<ArrayBuffer> {
   return copy;
 }
 
-/** `ip` pins the caller address, for tests that need to reach the rate limit. */
+/** `ip` pins the caller address, for tests that must reach the rate limit. */
 export function postForm(form: FormData, ip?: string) {
   return send(
     { method: "POST", body: form, headers: baseHeaders(undefined, ip) },

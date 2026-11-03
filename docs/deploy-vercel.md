@@ -30,7 +30,7 @@ Set them in **Project → Settings → Environment Variables** for *Production* 
 | `URL_FETCH_TIMEOUT_MS` | no | timeout when reading a submitted link |
 | `NEXT_PUBLIC_SUPABASE_URL` | no (public by design) | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | no (public by design) | Supabase anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | **yes** | needed by shared rate limits (`RATE_LIMIT_STORE=supabase`) and demo mode; server-only, never `NEXT_PUBLIC_` |
+| `SUPABASE_SERVICE_ROLE_KEY` | **yes** | required by shared rate limits (`RATE_LIMIT_STORE=supabase`) and demo mode; server-only, never `NEXT_PUBLIC_` |
 | `RATE_LIMIT_STORE` | no | `supabase` for limits shared by every instance (after the migration below), empty for in-memory limits |
 | `USE_MOCK` | no | **`false`**. It is ignored in production anyway |
 | `DEMO_MODE` | no | **`false`**. It skips sign-in and is ignored in production anyway |

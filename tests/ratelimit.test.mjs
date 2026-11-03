@@ -58,7 +58,7 @@ test("when the store fails, the limiter falls back to memory and logs no key", a
   }
 });
 
-test("the shared store is opt-in and needs both Supabase settings", () => {
+test("the shared store is opt-in and requires both Supabase settings", () => {
   assert.equal(configuredStore({}), null);
   assert.equal(configuredStore({ RATE_LIMIT_STORE: "supabase", NEXT_PUBLIC_SUPABASE_URL: "https://db.test" }), null);
   assert.equal(configuredStore({ RATE_LIMIT_STORE: "memory", NEXT_PUBLIC_SUPABASE_URL: "https://db.test", SUPABASE_SERVICE_ROLE_KEY: "k" }), null);

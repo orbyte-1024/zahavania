@@ -130,7 +130,7 @@ export function FilesScreen() {
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need={t("kicker")} title={t("title")} lead={t("lead")} />
+      <ScreenHeader kicker={t("kicker")} title={t("title")} lead={t("lead")} />
       {reports.length === 0 ? (
         <motion.div className="panel empty-state" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <p>{t("empty")}</p>

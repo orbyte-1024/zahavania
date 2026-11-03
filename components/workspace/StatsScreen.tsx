@@ -124,7 +124,7 @@ export function StatsScreen() {
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need={`${tm("need")} · ${tm("state")}`} title={t("title")} lead={t("lead")}>
+      <ScreenHeader kicker={`${tm("state")}`} title={t("title")} lead={t("lead")}>
         <p className="mono ash">{t("retrieved", { date: new Date(STATS.retrievedAt).toLocaleDateString(locale) })}</p>
       </ScreenHeader>
 

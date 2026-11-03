@@ -24,7 +24,6 @@
       "name": "Check a claim",
       "short": "Check",
       "desc": "A text or a link. Claims are isolated, matched against sources found by web search, and scored by code.",
-      "need": "NEED 1",
       "state": "LIVE",
       "rail": "Check a claim"
     },
@@ -32,7 +31,6 @@
       "name": "Authenticate an image",
       "short": "Image",
       "desc": "EXIF metadata, visual analysis presented as hints, reverse search links. Never \"real\" or \"fake\".",
-      "need": "NEED 2",
       "state": "LIVE",
       "rail": "Analyse an image"
     },
@@ -40,7 +38,6 @@
       "name": "National monitoring",
       "short": "Monitoring",
       "desc": "RSS feeds from Malagasy media, filtered by source, language and topic. Title, link and excerpt only.",
-      "need": "NEED 3",
       "state": "IN PREPARATION",
       "rail": "Media monitoring"
     },
@@ -48,7 +45,6 @@
       "name": "Translate",
       "short": "Translate",
       "desc": "Malagasy, French, English. Generated Malagasy is always marked \"to be reviewed\".",
-      "need": "NEED 4",
       "state": "LIVE",
       "rail": "Translate"
     },
@@ -56,7 +52,6 @@
       "name": "Find an expert",
       "short": "Experts",
       "desc": "A topic, a region, a language. Experts come only from the consented directory, never from the model.",
-      "need": "NEED 6",
       "state": "LIVE",
       "rail": "Find an expert"
     },
@@ -64,7 +59,6 @@
       "name": "Figures and agenda",
       "short": "Figures",
       "desc": "A few key indicators, each with its source, reference period and update date.",
-      "need": "NEED 7",
       "state": "LIVE",
       "rail": "Key figures"
     },
@@ -72,7 +66,6 @@
       "name": "Story angles",
       "short": "Angles",
       "desc": "Three to five angles built only on confirmed claims, with questions and profiles to interview.",
-      "need": "NEED 8",
       "state": "LIVE",
       "rail": "Story angles"
     }
@@ -103,8 +96,11 @@
     "toolsHead": {
       "kicker": "THE TOOLS",
       "title": "Seven tools, one newsroom",
-      "sub": "Every need journalists described has its own screen. The first five are live.",
-      "meta": "NEEDS 1 TO 8 — OFFLINE MODE EXCLUDED"
+      "sub": "Every claim journalists made has its own screen. The first five are live.",
+      "meta": "SCREENS 1 TO 8 — OFFLINE MODE EXCLUDED"
+    },
+    "tools": {
+      "discover": "DISCOVER"
     },
     "tools": {
       "discover": "DISCOVER"
@@ -488,7 +484,7 @@
   "offline": {
     "kicker": "NO CONNECTION",
     "title": "You are offline",
-    "lead": "Checking a claim needs the network: sources are searched live and nothing is invented without them.",
+    "lead": "Checking a claim requires the network: sources are searched live and nothing is invented without them.",
     "files": "Your saved dossiers stay on this device. They will show again as soon as the connection is back.",
     "retry": "Try again"
   },
