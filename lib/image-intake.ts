@@ -1,4 +1,5 @@
 import { imageSize } from "image-size";
+import { FRAME_COUNT, FRAME_MAX_BYTES, FRAMES_MAX_TOTAL_BYTES } from "@/lib/video-frames";
 
 export const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
@@ -130,14 +131,14 @@ function bodyWithinLimit(
   });
 }
 
-async function readForm(req: Request): Promise<FormData> {
+async function readForm(req: Request, maxBodyBytes = MAX_BODY_BYTES): Promise<FormData> {
   const contentType = req.headers.get("content-type") ?? "";
   if (!contentType.toLowerCase().startsWith("multipart/form-data")) {
     throw new Error("content_type");
   }
 
   const declared = Number(req.headers.get("content-length"));
-  if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) {
+  if (Number.isFinite(declared) && declared > maxBodyBytes) {
     throw new BodyTooLargeError();
   }
   if (!req.body) throw new Error("body_missing");
@@ -147,7 +148,7 @@ async function readForm(req: Request): Promise<FormData> {
   const init: RequestInit & { duplex: "half" } = {
     method: "POST",
     headers: { "content-type": contentType },
-    body: bodyWithinLimit(req.body, MAX_BODY_BYTES),
+    body: bodyWithinLimit(req.body, maxBodyBytes),
     duplex: "half",
   };
 
@@ -205,4 +206,42 @@ export async function acceptUploadedImage(req: Request): Promise<IntakeResult> {
   }
 
   return inspect(file, form);
+}
+
+export type FramesErrorCode = "invalid_body" | "frames_missing" | "frames_too_large" | "unsupported_media" | "invalid_image";
+
+export type FramesIntakeResult =
+  | { ok: true; frames: Uint8Array[]; totalBytes: number; fields: FormData }
+  | { ok: false; status: 400 | 413 | 415; code: FramesErrorCode };
+
+const FRAMES_TOO_LARGE: FramesIntakeResult = { ok: false, status: 413, code: "frames_too_large" };
+
+export async function acceptUploadedFrames(req: Request): Promise<FramesIntakeResult> {
+  let form: FormData;
+  try {
+    form = await readForm(req, FRAMES_MAX_TOTAL_BYTES + 64 * 1024);
+  } catch (error) {
+    return error instanceof BodyTooLargeError ? FRAMES_TOO_LARGE : { ok: false, status: 400, code: "invalid_body" };
+  }
+
+  const entries = form.getAll("frame");
+  if (entries.length === 0) return { ok: false, status: 400, code: "frames_missing" };
+  if (entries.length > FRAME_COUNT) return { ok: false, status: 400, code: "invalid_body" };
+
+  const frames: Uint8Array[] = [];
+  let totalBytes = 0;
+  for (const entry of entries) {
+    const file = asFile(entry);
+    if (!file || file.size === 0) return { ok: false, status: 400, code: "frames_missing" };
+    if (file.size > FRAME_MAX_BYTES) return FRAMES_TOO_LARGE;
+    totalBytes += file.size;
+    if (totalBytes > FRAMES_MAX_TOTAL_BYTES) return FRAMES_TOO_LARGE;
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (detectFormat(bytes) !== "image/jpeg") return { ok: false, status: 415, code: "unsupported_media" };
+    if (!isIntactImage(bytes, "image/jpeg") || !hasCompleteStructure(bytes, "image/jpeg")) {
+      return { ok: false, status: 400, code: "invalid_image" };
+    }
+    frames.push(bytes);
+  }
+  return { ok: true, frames, totalBytes, fields: form };
 }

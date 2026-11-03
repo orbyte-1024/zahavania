@@ -76,7 +76,14 @@ function mockAnalysis(): VisionResult {
   };
 }
 
-export async function analyzeImage(bytes: Uint8Array, format: ImageFormat, lang: Language = "fr"): Promise<VisionAnalysisResult> {
+export type AnalyzeImageOptions = { timeoutMs?: number };
+
+export async function analyzeImage(
+  bytes: Uint8Array,
+  format: ImageFormat,
+  lang: Language = "fr",
+  options: AnalyzeImageOptions = {},
+): Promise<VisionAnalysisResult> {
   const unavailable = (): VisionAnalysisResult => ({
     analysis: null,
     warnings: [{ code: "ANALYSE_IA_NON_DISPONIBLE", message: UNAVAILABLE[lang] }],
@@ -106,7 +113,7 @@ export async function analyzeImage(bytes: Uint8Array, format: ImageFormat, lang:
       ],
       schema: VisionSchema,
       maxTokens: 1_500,
-      timeoutMs: VISION_TIMEOUT_MS,
+      timeoutMs: options.timeoutMs ?? VISION_TIMEOUT_MS,
       outputRetries: 1,
     });
     return { analysis: data, warnings: [] };

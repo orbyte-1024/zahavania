@@ -1,80 +1,147 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { VideoFormat } from "@/lib/media-intake";
-import { acceptUploadedVideo, extractVideoFrames } from "@/lib/media-intake";
+import type { NextRequest } from "next/server";
+import { z } from "zod";
+import { isMockMode } from "@/lib/ai/client";
+import { languageSchema } from "@/lib/ai/schemas";
+import type { VerifyVideoSuccess } from "@/lib/api/contract";
+import { readIntEnv } from "@/lib/env";
+import { acceptUploadedFrames } from "@/lib/image-intake";
+import { clientIp, createRateLimiter } from "@/lib/ratelimit";
 import { reverseSearchLinks } from "@/lib/reverse-search";
-import { clientIp, isRateLimited } from "@/lib/ratelimit";
-import { buildVerification } from "@/lib/verification-summary";
+import { authenticate } from "@/lib/security/auth";
+import { errorResponse, jsonResponse, startTimer } from "@/lib/security/request";
+import { buildVerification, type VisionWarning } from "@/lib/verification-summary";
+import { aggregateFrames, combinedAnalysis, mapWithConcurrency, VIDEO_MAX_DURATION_SECONDS } from "@/lib/video-frames";
 import { analyzeImage } from "@/lib/vision-analyzer";
 
-export async function POST(req: NextRequest) {
-  const reverseSearch = reverseSearchLinks();
+export const maxDuration = 120;
 
-  if (isRateLimited(clientIp(req))) {
-    return NextResponse.json(
-      {
-        ok: false,
-        erreur: "Trop de requêtes, réessayez dans une minute",
-        reverseSearch,
-      },
-      { status: 429, headers: { "Retry-After": "60" } },
-    );
+const MINUTE_MS = 60_000;
+const FRAME_CONCURRENCY = 2;
+const FRAME_TIMEOUT_MS = 30_000;
+
+const ipLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
+const userLimiter = createRateLimiter({ limit: 5, windowMs: MINUTE_MS });
+const dailyLimiter = createRateLimiter({
+  limit: readIntEnv("AI_DAILY_LIMIT_PER_USER", 50, 1, 10_000),
+  windowMs: 24 * 60 * MINUTE_MS,
+});
+
+const fieldsSchema = z
+  .object({
+    lang: languageSchema.default("fr"),
+    duration: z.coerce.number().positive().max(VIDEO_MAX_DURATION_SECONDS),
+    timestamps: z.string().max(500).transform((raw, ctx) => {
+      try {
+        return z.array(z.number().nonnegative()).min(1).parse(JSON.parse(raw));
+      } catch {
+        ctx.addIssue({ code: "custom", message: "invalid timestamps" });
+        return z.NEVER;
+      }
+    }),
+  })
+  .refine((fields) => fields.timestamps.every((t, i, all) => t <= fields.duration && (i === 0 || t > (all[i - 1] ?? -1))), {
+    message: "timestamps out of range",
+  });
+
+type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; frames?: number; failed?: number };
+
+function logRequest(entry: LogEntry) {
+  const line = JSON.stringify({ route: "POST /api/verify/video", ...entry });
+  if (entry.status >= 500) console.error(line);
+  else console.info(line);
+}
+
+const MESSAGES: Record<number, string> = {
+  400: "The video frames could not be read.",
+  413: "The video frames are too large.",
+  415: "Only JPEG frames are accepted.",
+};
+
+export async function POST(req: NextRequest) {
+  const elapsed = startTimer();
+  const ip = clientIp(req);
+
+  const ipCheck = ipLimiter.check(ip);
+  if (!ipCheck.allowed) {
+    logRequest({ userId: null, durationMs: elapsed(), status: 429, code: "ip_rate_limited" });
+    return errorResponse(429, "rate_limited", "Too many requests. Please try again later.", { "Retry-After": String(ipCheck.retryAfterSeconds) });
+  }
+
+  const auth = await authenticate(req);
+  if (!auth.ok) {
+    const status = auth.reason === "config_missing" ? 503 : 401;
+    logRequest({ userId: null, durationMs: elapsed(), status, code: auth.reason });
+    return status === 503
+      ? errorResponse(503, "auth_unavailable", "Authentication is temporarily unavailable.")
+      : errorResponse(401, "unauthorized", "You must be signed in to use this feature.");
+  }
+  const userKey = auth.demo ? `demo:${ip}` : auth.userId;
+
+  const userCheck = userLimiter.check(userKey);
+  if (!userCheck.allowed) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "user_rate_limited" });
+    return errorResponse(429, "rate_limited", "Too many requests. Please try again later.", { "Retry-After": String(userCheck.retryAfterSeconds) });
+  }
+
+  const intake = await acceptUploadedFrames(req);
+  if (!intake.ok) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: intake.status, code: intake.code });
+    return errorResponse(intake.status, intake.code, MESSAGES[intake.status] ?? "Invalid request.");
+  }
+
+  const fields = fieldsSchema.safeParse({
+    lang: intake.fields.get("lang") ?? undefined,
+    duration: intake.fields.get("duration") ?? undefined,
+    timestamps: intake.fields.get("timestamps") ?? undefined,
+  });
+  if (!fields.success || fields.data.timestamps.length !== intake.frames.length) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 400, code: "invalid_input" });
+    return jsonResponse({ ok: false, error: { code: "invalid_input", message: "Invalid request.", fields: ["lang", "duration", "timestamps"] } }, 400);
+  }
+
+  const dailyCheck = dailyLimiter.check(userKey);
+  if (!dailyCheck.allowed) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
+    return errorResponse(429, "daily_quota_exceeded", "Too many requests. Please try again later.", { "Retry-After": String(dailyCheck.retryAfterSeconds) });
   }
 
   try {
-    const result = await acceptUploadedVideo(req);
-    if (!result.ok) {
-      return NextResponse.json(
-        { ok: false, erreur: result.erreur, reverseSearch },
-        { status: result.status },
-      );
-    }
-
-    if (result.mediaType !== "video") {
-      return NextResponse.json(
-        { ok: false, erreur: "Format vidéo non pris en charge", reverseSearch },
-        { status: 415 },
-      );
-    }
-
-    const videoFormat = result.format as VideoFormat;
-    const frames = extractVideoFrames(result.bytes, videoFormat);
-    const analyses = frames.length === 0
-      ? []
-      : await Promise.all(frames.map((frame) => analyzeImage(frame, "image/png")));
-
-    const warnings = analyses.flatMap((entry) => entry.warnings);
-    if (frames.length === 0) {
-      warnings.push({
-        code: "ANALYSE_IA_NON_DISPONIBLE",
-        message: "L’extraction des images-clés de la vidéo est indisponible dans cet environnement. La vérification reste non concluante.",
-      });
-    }
-
-    const validAnalysis = analyses.find((entry) => entry.analysis !== null)?.analysis ?? null;
-
-    const verification = buildVerification(
-      null,
-      [],
-      validAnalysis,
-      warnings,
-      reverseSearch,
+    const { lang, duration, timestamps } = fields.data;
+    const results = await mapWithConcurrency(intake.frames, FRAME_CONCURRENCY, (bytes) =>
+      analyzeImage(bytes, "image/jpeg", lang, { timeoutMs: FRAME_TIMEOUT_MS }),
     );
+    const aggregated = aggregateFrames(results.map((result, i) => ({ timestamp: timestamps[i] ?? 0, analysis: result.analysis })));
+    const merged = combinedAnalysis(aggregated);
+    const warnings: VisionWarning[] = merged === null ? (results[0]?.warnings ?? []) : [];
+    const reverseSearch = reverseSearchLinks();
+    const verification = buildVerification(null, [], merged, warnings, reverseSearch);
 
-    return NextResponse.json({
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, frames: aggregated.frames.length, failed: aggregated.failedCount });
+    return jsonResponse({
       ok: true,
-      file: { format: result.format, size: result.size },
-      metadata: null,
-      mediaType: "video",
-      framesAnalyzed: frames.length,
+      mock: isMockMode(),
+      video: { duration, framesReceived: intake.frames.length, totalBytes: intake.totalBytes },
+      frames: aggregated.frames,
+      analysedCount: aggregated.analysedCount,
+      failedCount: aggregated.failedCount,
+      observations: {
+        visualInconsistencies: aggregated.visualInconsistencies,
+        possibleAIGenerationIndicators: aggregated.possibleAIGenerationIndicators,
+        locationClues: aggregated.locationClues,
+      },
       warnings,
       reverseSearch,
-      analysis: validAnalysis,
-      verification,
-    });
+      verification: {
+        status: verification.status,
+        summary: verification.summary,
+        supportingEvidence: verification.supportingEvidence,
+        contradictoryEvidence: verification.contradictoryEvidence,
+        limitations: verification.limitations,
+      },
+      meta: { durationMs: elapsed() },
+    } satisfies VerifyVideoSuccess);
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, erreur: "Vérification impossible", reverseSearch },
-      { status: 500 },
-    );
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 500, code: error instanceof Error ? error.name : "unknown" });
+    return errorResponse(500, "internal_error", "An unexpected error occurred.");
   }
 }
