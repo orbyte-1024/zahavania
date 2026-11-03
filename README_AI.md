@@ -38,6 +38,21 @@ Each AI feature reads its own model variable and falls back to `AI_MODEL` when i
 
 These IDs were listed in the OpenRouter catalog with image input and JSON mode support; newer Gemini Flash versions also exist there. Set the values in `.env.local` only.
 
+In code, pick the task, never a model id:
+
+```ts
+const { data } = await askJson({ task: "verify", system, user, schema });
+const { text } = await askText({ task: "translate", system, user, accept: (out) => out !== input });
+const vision = await askJson({
+  task: "vision",
+  system,
+  user: [{ type: "text", text: "Describe" }, { type: "image_url", image_url: { url: dataUrl } }],
+  schema,
+});
+```
+
+Both keep the same retry, reasoning budget, timeout and fallback behaviour. `askText` retries once when the answer is empty, truncated or rejected by `accept`. A failed call throws an `AiError` whose `code` and `providerStatus` are safe to log.
+
 Free models are a fallback, not a default. Some free providers may log prompts or use them for training, so never route confidential material to them: a journalist's unpublished document must only reach a paid model whose provider does not train on prompts.
 
 ## Cache and demo fallback

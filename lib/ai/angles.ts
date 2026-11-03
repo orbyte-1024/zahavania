@@ -52,6 +52,7 @@ export async function generateAngles(input: AnglesInput): Promise<AnglesResult> 
   if (isMockMode()) return mockAngles(input);
 
   const { data, usage, attempts } = await askJson({
+    task: "angles",
     system: ANGLES_SYSTEM_PROMPT,
     user: buildAnglesUserMessage(input),
     schema: anglesOutputSchema,

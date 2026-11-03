@@ -131,6 +131,7 @@ async function classifyTopic(input: SuggestInput): Promise<{
   attempts: number;
 }> {
   const { data, usage, attempts } = await askJson({
+    task: "experts",
     system: CLASSIFY_TOPIC_SYSTEM_PROMPT,
     user: buildClassifyTopicUserMessage({ topic: input.topic, context: input.context }),
     schema: topicClassificationSchema,
@@ -161,6 +162,7 @@ async function rankExperts(
   entries: CandidateEntry[],
 ): Promise<{ ranking: ExpertRanking; usage: AiUsage; attempts: number }> {
   const { data, usage, attempts } = await askJson({
+    task: "experts",
     system: RANK_EXPERTS_SYSTEM_PROMPT,
     user: buildRankExpertsUserMessage({
       topic: input.topic,
