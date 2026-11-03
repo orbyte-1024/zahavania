@@ -1,4 +1,4 @@
-export const AI_TASKS = ["verify", "translate", "vision", "experts", "angles"] as const;
+export const AI_TASKS = ["verify", "translate", "vision", "experts", "angles", "monitor"] as const;
 
 export type AiTask = (typeof AI_TASKS)[number];
 
@@ -8,6 +8,7 @@ export const TASK_MODEL_ENV: Readonly<Record<AiTask, string>> = {
   vision: "AI_MODEL_VISION",
   experts: "AI_MODEL_EXPERTS",
   angles: "AI_MODEL_ANGLES",
+  monitor: "AI_MODEL_MONITOR",
 };
 
 type Env = Readonly<Record<string, string | undefined>>;

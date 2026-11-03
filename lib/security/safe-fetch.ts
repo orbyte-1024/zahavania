@@ -37,6 +37,11 @@ export type SafeFetchResult = {
   body: string;
 };
 
+export type SafeFetchOptions = {
+  allowedContentTypes?: readonly string[];
+  accept?: string;
+};
+
 const blockedRanges = new net.BlockList();
 for (const [network, prefix] of [
   ["0.0.0.0", 8],
@@ -107,8 +112,14 @@ const safeLookup: net.LookupFunction = (hostname, options, callback) => {
 
 type RawResponse = { status: number; location: string | null; contentType: string; body: Buffer | null };
 
-function requestOnce(url: URL, signal: AbortSignal): Promise<RawResponse> {
+function requestOnce(
+  url: URL,
+  signal: AbortSignal,
+  options: SafeFetchOptions,
+  defaultAccept: string,
+): Promise<RawResponse> {
   const transport = url.protocol === "https:" ? https : http;
+  const allowedContentTypes = options.allowedContentTypes ?? ALLOWED_CONTENT_TYPES;
 
   return new Promise((resolve, reject) => {
     const req = transport.request(
@@ -120,7 +131,7 @@ function requestOnce(url: URL, signal: AbortSignal): Promise<RawResponse> {
         signal,
         headers: {
           "User-Agent": "ZahavaniaVerifier/1.0 (+fact-checking for journalists)",
-          Accept: "text/html,application/xhtml+xml,text/plain;q=0.9",
+          Accept: options.accept ?? defaultAccept,
         },
       },
       (res) => {
@@ -135,7 +146,7 @@ function requestOnce(url: URL, signal: AbortSignal): Promise<RawResponse> {
           res.resume();
           return reject(new SafeFetchError("bad_status", `status ${status}`));
         }
-        if (!ALLOWED_CONTENT_TYPES.some((type) => contentType.startsWith(type))) {
+        if (!allowedContentTypes.some((type) => contentType.startsWith(type))) {
           res.resume();
           return reject(new SafeFetchError("unsupported_content", contentType || "missing content-type"));
         }
@@ -183,14 +194,15 @@ function toSafeFetchError(error: unknown, signal: AbortSignal): SafeFetchError {
   return new SafeFetchError("network_error", error instanceof Error ? error.message : "unknown error");
 }
 
-export async function safeFetchText(rawUrl: string): Promise<SafeFetchResult> {
+export async function safeFetchText(rawUrl: string, options: SafeFetchOptions = {}): Promise<SafeFetchResult> {
   const signal = AbortSignal.timeout(fetchTimeoutMs());
+  const defaultAccept = "text/html,application/xhtml+xml,text/plain;q=0.9";
   let url = validatePublicUrl(rawUrl);
 
   for (let redirects = 0; ; redirects += 1) {
     let response: RawResponse;
     try {
-      response = await requestOnce(url, signal);
+      response = await requestOnce(url, signal, options, defaultAccept);
     } catch (error) {
       throw toSafeFetchError(error, signal);
     }

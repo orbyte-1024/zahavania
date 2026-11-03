@@ -43,9 +43,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
-    { media: "(prefers-color-scheme: dark)", color: "#39231a" },
+    { media: "(prefers-color-scheme: dark)", color: "#15130f" },
   ],
   colorScheme: "dark light",
+  viewportFit: "cover",
 };
 
 async function IntlProvider({ children }: { children: React.ReactNode }) {
