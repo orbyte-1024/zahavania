@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --ink-rgb: 240, 235, 227;
-  --bone-rgb: 21, 19, 15;
-  --surface-rgb: 34, 30, 25;
-  --bone: #15130f;
-  --surface: #221e19;
-  --surface-2: #2b2620;
-  --ink: #f0ebe3;
-  --ash: #9a9086;
+  --ink-rgb: 239, 233, 220;
+  --bone-rgb: 57, 35, 26;
+  --surface-rgb: 69, 44, 34;
+  --bone: #39231a;
+  --surface: #452c22;
+  --surface-2: #50352a;
+  --ink: #efe9dc;
+  --ash: #c2b4a4;
   --ink-faint: rgba(var(--ink-rgb), 0.16);
   --ink-hair: rgba(var(--ink-rgb), 0.09);
 
-  --accent: #996e52;
-  --accent-rgb: 153, 110, 82;
-  --accent-deep: #8c6449;
-  --accent-soft: #e2c3a8;
-  --accent-ink: #ffffff;
+  --accent: #d29a72;
+  --accent-rgb: 210, 154, 114;
+  --accent-deep: #c08661;
+  --accent-soft: #ecc9ad;
+  --accent-ink: #39231a;
 
-  --st-confirmed: #9bb38a;
-  --st-contradicted: #d98a7a;
-  --st-contradicted-rgb: 217, 138, 122;
-  --st-needs: #d9b36a;
-  --st-needs-rgb: 217, 179, 106;
-  --st-insufficient: #9a9086;
+  --st-confirmed: #b5cfa2;
+  --st-contradicted: #f0a594;
+  --st-contradicted-rgb: 240, 165, 148;
+  --st-needs: #e8c57c;
+  --st-needs-rgb: 232, 197, 124;
+  --st-insufficient: #c2b4a4;
 
-  --scene-paper: #d9d0c3;
-  --scene-dim: #3b342c;
-  --scene-accent: #b8865f;
+  --scene-paper: #d7d1be;
+  --scene-dim: #4d3226;
+  --scene-accent: #d29a72;
 
   --sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -43,31 +43,31 @@
 }
 
 :root[data-theme="light"] {
-  --ink-rgb: 27, 24, 20;
-  --bone-rgb: 245, 240, 230;
-  --surface-rgb: 236, 229, 216;
-  --bone: #f5f0e6;
-  --surface: #ece5d8;
-  --surface-2: #e3dbcc;
-  --ink: #1b1814;
-  --ash: #5c534a;
+  --ink-rgb: 57, 35, 26;
+  --bone-rgb: 246, 241, 231;
+  --surface-rgb: 237, 229, 214;
+  --bone: #f6f1e7;
+  --surface: #ede5d6;
+  --surface-2: #e2d8c6;
+  --ink: #39231a;
+  --ash: #6b5548;
 
-  --accent: #7a4f33;
-  --accent-rgb: 122, 79, 51;
-  --accent-deep: #6a432a;
-  --accent-soft: #6a432a;
+  --accent: #7f4d2e;
+  --accent-rgb: 127, 77, 46;
+  --accent-deep: #6e4127;
+  --accent-soft: #6e4127;
   --accent-ink: #ffffff;
 
   --st-confirmed: #3d6630;
   --st-contradicted: #a23b2a;
   --st-contradicted-rgb: 162, 59, 42;
-  --st-needs: #805a0c;
-  --st-needs-rgb: 128, 90, 12;
-  --st-insufficient: #5c534a;
+  --st-needs: #7d570b;
+  --st-needs-rgb: 125, 87, 11;
+  --st-insufficient: #6b5548;
 
   --scene-paper: #fffdf8;
-  --scene-dim: #dcd3c4;
-  --scene-accent: #8a5a3a;
+  --scene-dim: #e2d8c6;
+  --scene-accent: #7f4d2e;
 
   color-scheme: light;
 }

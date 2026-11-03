@@ -26,10 +26,10 @@ function cssColor(styles: CSSStyleDeclaration, name: string, fallback: string): 
 function readPalette(): Palette {
   const styles = getComputedStyle(document.documentElement);
   return {
-    background: cssColor(styles, "--bone", "#15130f"),
-    paper: new THREE.Color(cssColor(styles, "--scene-paper", "#d9d0c3")),
-    dim: new THREE.Color(cssColor(styles, "--scene-dim", "#3b342c")),
-    accent: new THREE.Color(cssColor(styles, "--scene-accent", "#b8865f")),
+    background: cssColor(styles, "--bone", "#39231a"),
+    paper: new THREE.Color(cssColor(styles, "--scene-paper", "#d7d1be")),
+    dim: new THREE.Color(cssColor(styles, "--scene-dim", "#4d3226")),
+    accent: new THREE.Color(cssColor(styles, "--scene-accent", "#d29a72")),
   };
 }
 
