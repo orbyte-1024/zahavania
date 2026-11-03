@@ -2,7 +2,7 @@ import "server-only";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-export type DemoRoute = "verify-text" | "sources-suggest";
+export type DemoRoute = "verify-text" | "sources-suggest" | "editorial-angles";
 
 export type DemoFallbackMode = "off" | "on_error" | "always";
 

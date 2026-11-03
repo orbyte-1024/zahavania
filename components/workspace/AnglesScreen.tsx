@@ -118,9 +118,10 @@ export function AnglesScreen() {
         {phase.kind === "error" && <ErrorNote key="error" code={phase.code} retryAfter={phase.retryAfter} />}
         {phase.kind === "done" && (
           <motion.section key="done" className="result" variants={stagger} initial="hidden" animate="show">
-            {phase.data.mock && (
+            {(phase.data.mock || phase.data.recordedAt) && (
               <motion.div className="result-badges" variants={rise}>
-                <Badge tone="accent">{tc("demo")}</Badge>
+                {phase.data.mock && <Badge tone="accent">{tc("demo")}</Badge>}
+                {phase.data.recordedAt && <Badge tone="warn">{tc("replayed", { date: new Date(phase.data.recordedAt).toLocaleDateString(locale) })}</Badge>}
               </motion.div>
             )}
             <motion.div className="angles" variants={stagger}>

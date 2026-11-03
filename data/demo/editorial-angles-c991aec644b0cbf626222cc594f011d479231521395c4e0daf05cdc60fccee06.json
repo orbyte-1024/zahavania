@@ -1,0 +1,97 @@
+{
+  "route": "editorial-angles",
+  "recordedAt": "2026-11-03T12:28:57.558Z",
+  "payload": {
+    "lang": "mg",
+    "angles": [
+      {
+        "title": "Fiantraikan'ny fandresen'i Andry Rajoelina amin'ny politika ara-bola ao amin'ny Banky Foiben'i Madagasikara",
+        "premise": "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023, ka manokatra fanontaniana momba ny drafitra ara-bola sy ny politika monetera hoentin'ny fitondrana vaovao.",
+        "interviewQuestions": [
+          "Inona ny fiovana lehibe antenaina amin'ny politika ara-bola aorian'ny fandresen'i Rajoelina?",
+          "Ahoana no hanampian'ny Banky Foiben'i Madagasikara amin'ny fanohanana ny tetikasa fampandrosoana nasionaly?",
+          "Inona ny fepetra raisina hiatrehana ny fiovaovan'ny tahan'ny zana-bola sy ny tahan'ny fanjifana?",
+          "Misy ve drafitra hanamafisana ny rafitra ara-bola ho maharitra sy mangarahara?",
+          "Ahoana ny fiantraikan'ireny politika ireny amin'ny orinasa madinika sy ny tantsaha?"
+        ],
+        "actorTypes": [
+          "mpanolo-tsaina ara-bola ao amin'ny Banky Foiben'i Madagasikara",
+          "mpikambana ao amin'ny Ministeran'ny Fitantanam-bola",
+          "mpikambana ao amin'ny fikambanana mpanara-maso ny toekarena",
+          "mpanolo-tsaina ara-toekarena tsy miankina"
+        ],
+        "dataToFind": [
+          "tatitra ofisialy momba ny drafitra politika ara-bola 2024-2025",
+          "budget nasionaly 2024",
+          "statistika momba ny tahan'ny fanjifana sy ny tahan'ny zana-bola",
+          "fandaharana fanavaozana ara-bola navoakan'ny Banky Foiben'i Madagasikara"
+        ],
+        "format": "investigation",
+        "basedOn": [
+          "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Ny fiantraikan'ny fanambarana CENI amin'ny fitokisana ara-politika ao Antananarivo",
+        "premise": "Ny fanamafisana avy amin'ny CENI fa i Andry Rajoelina no nandresy dia mety hisy fiantraikany lehibe amin'ny fahatsapan'ny mponina sy ny fitokisana amin'ny rafitra demokratika ao Antananarivo.",
+        "interviewQuestions": [
+          "Ahoana ny fahatsapan'ny mponina ao Antananarivo momba ny fahamarinan'ny valim-pifidianana?",
+          "Inona ny fepetra raisin'ny ONG sy ny fikambanana sivily hanamafisana ny fitokisana amin'ny CENI?",
+          "Misy ve fanehoan-kevitra na fihetsiketsehana ara-politika hatramin'ny fanambarana?",
+          "Ahoana ny anjara asan'ny haino aman-jery ao amin'ny fanazavana sy fanabeazana ny vahoaka?",
+          "Inona ny fanamby atrehin'ny mpitondra ao an-tanàna amin'ny fitantanana ny toe-draharaha ara-politika?"
+        ],
+        "actorTypes": [
+          "mpikambana ao amin'ny ONG mpanara-maso ny demokrasia",
+          "mpikambana ao amin'ny fikambanana tanora ao Antananarivo",
+          "mpitondra fivavahana ao an-tanàna",
+          "mpanao gazety ao an-toerana"
+        ],
+        "dataToFind": [
+          "sondages d'opinion public momba ny fitokisana amin'ny CENI (2023-2024)",
+          "tatitra ofisialin'ny CENI momba ny fizotran'ny fanisana sy ny fanamarinana",
+          "fandaharana fivoriana sy fanambarana nataon'ny CENI",
+          "fandraketana fanehoan-kevitra amin'ny tambajotra sosialy"
+        ],
+        "format": "radio_report",
+        "basedOn": [
+          "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Fiantraikan'ny fandresen'i Rajoelina amin'ny fifandraisana iraisam-pirenena sy fanampiana avy any ivelany",
+        "premise": "Rehefa voamarina fa i Andry Rajoelina no nandresy, dia ilaina ny mandinika ny fomba hanovàn'ny fitondrana vaovao ny politikam-pifandraisana sy ny fepetra takian'ny mpanome fanampiana iraisam-pirenena.",
+        "interviewQuestions": [
+          "Inona ny politikan'ny Ministeran'ny Raharaham-bahiny amin'ny fanamafisana ny fifandraisana amin'i Etazonia, UE, sy ny firenena Afrikana?",
+          "Ahoana ny fiantraikan'ny fandresena amin'ny fepetra sy ny fepetra takian'ny mpanome fanampiana (USAID, EU, JICA)?",
+          "Misy ve tetikasa iraisam-pirenena efa natomboka na hotanterahina amin'ny taona ho avy?",
+          "Ahoana ny fomba hanaraha-maso ny fampiasana ny fanampiana avy any ivelany?",
+          "Inona ny fanamby ara-diplomatika atrehin'ny governemanta vaovao?"
+        ],
+        "actorTypes": [
+          "mpitondra ao amin'ny Ministeran'ny Raharaham-bahiny",
+          "représentatif avy amin'ny UE na USAID eto Madagasikara",
+          "mpikambana ao amin'ny ONG iraisam-pirenena eto Madagasikara",
+          "mpanolo-tsaina ara-diplomatika tsy miankina"
+        ],
+        "dataToFind": [
+          "taratasy fifanarahana fanampiana 2023-2024 (USAID, UE, JICA)",
+          "fanambarana ofisialy avy amin'ny firenena mpanome fanampiana momba ny politika ao Madagasikara",
+          "statistika momba ny vola miditra avy any ivelany (2022-2024)",
+          "drafitra stratejika momba ny fifandraisana iraisam-pirenena navoakan'ny Ministeran'ny Raharaham-bahiny"
+        ],
+        "format": "brief",
+        "basedOn": [
+          "Nambaran'ny CENI fa i Andry Rajoelina no nandresy tamin'ny fifidianana filoham-pirenena 2023."
+        ],
+        "toVerifyFirst": []
+      }
+    ],
+    "limitations": [
+      "Tsy misy loharanom-baovao fanampiny momba ny drafitra politika na ny fanehoan-kevitry ny vahoaka aorian'ny fanambarana.",
+      "Mila fanamarinana bebe kokoa momba ny antontan'isa ara-toekarena sy ny fepetra takian'ny mpanome fanampiana iraisam-pirenena."
+    ]
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "route": "verify-text",
+  "recordedAt": "2026-11-03T12:27:58.775Z",
+  "payload": {
+    "result": {
+      "detectedLanguage": "fr",
+      "summary": "Le texte affirme que, selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022.",
+      "claims": [
+        {
+          "text": "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022.",
+          "status": "confirmed",
+          "rationale": "Plusieurs sources fiables, dont le rapport conjoint de l'INSTAT et de la Banque mondiale, indiquent que le taux de pauvreté national en 2022 était de 75,2 %, ce qui correspond à « plus de 75 % ». Aucun document fourni ne contredit cette donnée.",
+          "sources": [
+            {
+              "title": "INSTAT Madagascar - Institut National de la Statistique",
+              "url": "https://instat.mg/p/resultats-de-levaluation-de-la-pauvrete-a-mcar-instat-banque-mondiale",
+              "publisher": "INSTAT Madagascar",
+              "date": "2024-02-22",
+              "kind": "official",
+              "stance": "supports"
+            },
+            {
+              "title": "Madagascar Poverty Assessment: Navigating Two Decades of High Poverty and Charting a Course for Change",
+              "url": "https://www.worldbank.org/en/country/madagascar/publication/madagascar-afe-poverty-assessment-navigating-two-decades-of-high-poverty-and-charting-a-course-for-change",
+              "publisher": "World Bank",
+              "date": null,
+              "kind": "other",
+              "stance": "supports"
+            },
+            {
+              "title": "Combattre la pauvreté par l'éducation : Pourquoi les réformes scolaires sont urgentes à Madagascar",
+              "url": "https://blogs.worldbank.org/fr/nasikiliza/fighting-poverty-education-why-school-reforms-are-urgently-needed-madagascar-afe-0324",
+              "publisher": "World Bank Blog",
+              "date": "2024-02-29",
+              "kind": "other",
+              "stance": "supports"
+            },
+            {
+              "title": "Sous sérhum",
+              "url": "https://www.lexpress.mg/2024/02/sous-serhum.html",
+              "publisher": "L'Express Madagascar",
+              "date": null,
+              "kind": "independent",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [],
+          "recommendedChecks": [
+            "Consulter le rapport original publié par l'INSTAT (et la Banque mondiale) pour vérifier la méthodologie et la définition du seuil de pauvreté utilisé.",
+            "Vérifier si le chiffre de 75,2 % correspond bien à la mesure « sous le seuil de pauvreté » et non à une autre définition (ex. pauvreté multidimensionnelle).",
+            "Comparer avec d'éventuelles publications ultérieures de l'INSTAT pour confirmer que le chiffre n'a pas été révisé."
+          ],
+          "confidenceIndex": 85,
+          "breakdown": [
+            {
+              "code": "official_source",
+              "label": "1 official source domain(s)",
+              "points": 35
+            },
+            {
+              "code": "independent_source",
+              "label": "1 independent source domain(s)",
+              "points": 25
+            },
+            {
+              "code": "other_source",
+              "label": "2 other source domain(s)",
+              "points": 20
+            },
+            {
+              "code": "aligned_points_cap",
+              "label": "Source points capped at 70",
+              "points": -10
+            },
+            {
+              "code": "independent_domains",
+              "label": "4 distinct domains",
+              "points": 15
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "L'analyse se base uniquement sur les résultats de recherche fournis ; d'autres sources officielles ou études récentes pourraient apporter des précisions supplémentaires.",
+        "Certaines sources (World Bank, blog) reposent sur le même rapport conjoint, ce qui limite l'indépendance des preuves.",
+        "Les dates exactes de publication de certains documents ne sont pas précisées dans les extraits, ce qui peut affecter l'évaluation de la fraîcheur de l'information."
+      ],
+      "globalIndex": 85,
+      "globalBreakdown": [
+        {
+          "code": "claim_contribution",
+          "label": "Claim 1 (confirmed, index 85) / 1",
+          "points": 85
+        }
+      ]
+    },
+    "analyzedUrl": null,
+    "droppedSources": 0
+  }
+}

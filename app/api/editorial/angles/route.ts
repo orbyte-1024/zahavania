@@ -1,8 +1,10 @@
 import type { NextRequest } from "next/server";
 import { generateAngles } from "@/lib/ai/angles";
-import { AiError, type AiUsage } from "@/lib/ai/client";
-import { anglesInputSchema } from "@/lib/ai/schemas";
+import { AiError, isMockMode, type AiUsage } from "@/lib/ai/client";
+import { anglesInputSchema, type AnglesInput, type AnglesOutput } from "@/lib/ai/schemas";
 import type { EditorialAnglesSuccess } from "@/lib/api/contract";
+import { hashKey } from "@/lib/cache";
+import { demoFallbackMode, isDemoRecording, readDemoRecording, writeDemoRecording } from "@/lib/demo/replay";
 import { readIntEnv } from "@/lib/env";
 import { authenticate } from "@/lib/security/auth";
 import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
@@ -27,6 +29,22 @@ function logRequest(entry: LogEntry) {
   const line = JSON.stringify({ route: "POST /api/editorial/angles", ...entry });
   if (entry.status >= 500) console.error(line);
   else console.info(line);
+}
+
+function demoKeyFor(input: AnglesInput): string {
+  return hashKey(["editorial-angles", input.subject ?? null, input.claims ?? [], input.lang]);
+}
+
+function replayResponse(input: AnglesInput, output: AnglesOutput, recordedAt: string) {
+  return jsonResponse({
+    ok: true,
+    mock: false,
+    verificationId: input.verificationId ?? null,
+    ...output,
+    usage: null,
+    attempts: 0,
+    recordedAt,
+  } satisfies EditorialAnglesSuccess);
 }
 
 export async function POST(req: NextRequest) {
@@ -68,6 +86,16 @@ export async function POST(req: NextRequest) {
     return jsonResponse({ ok: false, error: { code: "invalid_input", message: "Invalid request.", fields } }, 400);
   }
 
+  const demoKey = demoKeyFor(input.data);
+  const replayMode = isMockMode() ? "off" : demoFallbackMode();
+  if (replayMode === "always") {
+    const recording = await readDemoRecording<AnglesOutput>("editorial-angles", demoKey);
+    if (recording) {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: "replay" });
+      return replayResponse(input.data, recording.payload, recording.recordedAt);
+    }
+  }
+
   const dailyCheck = await dailyLimiter.check(auth.userId);
   if (!dailyCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
@@ -76,6 +104,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const { output, mock, usage, attempts } = await generateAngles(input.data);
+    if (!mock && isDemoRecording()) {
+      await writeDemoRecording("editorial-angles", demoKey, output).catch(() =>
+        logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: "demo_record_failed" }),
+      );
+    }
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, usage, attempts });
     return jsonResponse({
       ok: true,
@@ -84,8 +117,16 @@ export async function POST(req: NextRequest) {
       ...output,
       usage,
       attempts,
+      recordedAt: null,
     } satisfies EditorialAnglesSuccess);
   } catch (error) {
+    if (replayMode !== "off" && error instanceof AiError) {
+      const recording = await readDemoRecording<AnglesOutput>("editorial-angles", demoKey);
+      if (recording) {
+        logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, code: `replay_after_${error.code}` });
+        return replayResponse(input.data, recording.payload, recording.recordedAt);
+      }
+    }
     const code = error instanceof AiError ? error.code : error instanceof Error ? error.name : "internal_error";
     const providerStatus = error instanceof AiError ? error.providerStatus : null;
     if (error instanceof AiError && error.code === "timeout") {

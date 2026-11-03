@@ -1,0 +1,125 @@
+{
+  "route": "editorial-angles",
+  "recordedAt": "2026-11-03T12:28:26.108Z",
+  "payload": {
+    "lang": "mg",
+    "angles": [
+      {
+        "title": "Fiantraikan’ny fahantrana amin’ny fidiran’ny ankizy any sekoly any faritra Atsimo‑Andrefana",
+        "premise": "Araka ny INSTAT, mihoatra ny 75 % ny Malagasy no ambany tsipika fahantrana tamin’ny 2022. Izany dia mety hampihena ny fidiran’ny ankizy any sekoly any faritra ambanivohitra, indrindra any Atsimo‑Andrefana, ka ilaina ny mandinika ny antony sy vahaolana.",
+        "interviewQuestions": [
+          "Ahoana ny fiantraikan’ny fahantrana amin’ny fidiran’ny ankizy any sekoly ao amin’ny faritrao?",
+          "Inona avy ireo sakana ara-bola atrehin’ny ray aman‑dreny amin’ny fanomezana fitaovana sy fitafiana ho an’ny zanany?",
+          "Misy ve fandaharan’asa fanampiana ara-bola na sakafo ho an’ny sekoly ao amin’ny faritra?",
+          "Ahoana ny fomba fandraisan’ny mpampianatra sy ny tompon’andraikitra ao amin’ny fanabeazana ny olana ara‑pôlitika sy ara‑toekarena?",
+          "Inona ny fepetra raisina hanatsarana ny tahan’ny fidiran’ny ankizy any sekoly amin’ny ho avy?"
+        ],
+        "actorTypes": [
+          "mpitantana ny fanabeazana ao amin’ny faritra Atsimo‑Andrefana",
+          "rehetra sekoly ambaratonga voalohany ao amin’ny faritra",
+          "ray aman‑drenin’ny ankizy mpianatra",
+          "mpikambana ao amin’ny fikambanana mpanampy amin’ny fanabeazana"
+        ],
+        "dataToFind": [
+          "tatitra INSTAT momba ny tahan’ny fidiran’ny ankizy any sekoly 2022‑2023",
+          "tatitra fanjakana momba ny teti‑bola fanabeazana ao Atsimo‑Andrefana",
+          "isan’ny sekoly tsy ampy fitaovana sy boky",
+          "fandaharana fanampiana ara‑bola ho an’ny ankizy ambany fahantrana"
+        ],
+        "format": "investigation",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Fiantraikan’ny fahantrana amin’ny fahasalamana any kaominina manodidina an’Antananarivo",
+        "premise": "Ny tahan’ny fahantrana ambony dia mety hitarika fahasahiranana amin’ny fidirana amin’ny fitsaboana, indrindra any amin’ny kaominina manodidina an’Antananarivo. Ilaina ny mijery ny fomba iainan’ny mponina sy ny fepetra ara‑pahasalamana.",
+        "interviewQuestions": [
+          "Inona ny sakana ara‑toekarena lehibe indrindra amin’ny fidirana amin’ny tobim‑pahasalamana ao amin’ny kaomininao?",
+          "Ahoana ny fiantraikan’ny fahantrana amin’ny fahasalamana ara‑pôlitika sy ara‑sosialy?",
+          "Misy ve programa fanampiana ara‑pahasalamana natokana ho an’ny fianakaviana ambany fahantrana?",
+          "Ahoana ny fahafahan’ny hopitaly sy ny tobim‑pitsaboana manampy ireo marary tsy afaka mandoa?",
+          "Inona ny fepetra raisina hanatsarana ny fahasalamam‑bahoaka amin’ny ho avy?"
+        ],
+        "actorTypes": [
+          "mpitsabo ao amin’ny hopitalim‑panjakana ao Antananarivo",
+          "filohan’ny kaominina manodidina an’Antananarivo",
+          "mpikambana ao amin’ny ONG misahana ny fahasalamana",
+          "mpanjifa amin’ny tobim‑pahasalamana ao an-toerana"
+        ],
+        "dataToFind": [
+          "tatitra INSTAT momba ny fahasalamana sy fahantrana 2022",
+          "statistika momba ny fidirana amin’ny tobim‑pahasalamana ao Antananarivo",
+          "teti‑bola fanampiana ara‑pahasalamana natokana ho an’ny mponina ambany fahantrana",
+          "lisitry ny fanafody sy fitaovana tsy ampy ao amin’ny tobim‑pitsaboana"
+        ],
+        "format": "radio_report",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Fandinihana ny fahombiazan’ny programa sosialy nasionaly amin’ny fanesorana ny fahantrana",
+        "premise": "Miaraka amin’ny 75 % ambany tsipika fahantrana, ny governemanta dia nanangana programa sosialy toy ny Programme d’Appui aux Populations. Tokony hojerentsika raha mahatratra ny tanjona izy ireo ary inona ny lesona azo tsoahina.",
+        "interviewQuestions": [
+          "Inona ny fepetra fototra sy tanjona napetraky ny Programme d’Appui aux Populations?",
+          "Ahoana ny fandraisan’ny mponina ambany fahantrana ny fanampiana azo avy amin’ity programa ity?",
+          "Misy ve fanombanana ofisialy momba ny vokatra sy ny fiantraikany?",
+          "Inona ny sakana ara‑administratif na ara‑logistika amin’ny fanatanterahana ny programa?",
+          "Ahoana ny fomba hanatsarana ny fahazoana sy ny fahavitan’ny programa amin’ny ho avy?"
+        ],
+        "actorTypes": [
+          "mpanatanteraka ao amin’ny Ministeran’ny Asa Sosialy",
+          "mpikambana ao amin’ny Caisse Nationale de Sécurité Sociale",
+          "mpandray anjara amin’ny Programme d’Appui aux Populations",
+          "mpanadihady avy amin’ny INSTAT"
+        ],
+        "dataToFind": [
+          "tatitra ofisialy momba ny Programme d’Appui aux Populations",
+          "statistika momba ny fiantraikan’ny programa amin’ny fahantrana",
+          "teti‑bola natokana ho an’ny programa sosialy",
+          "fandaharana fanaraha‑maso sy fanombanana nataon’ny ministera"
+        ],
+        "format": "investigation",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Fifandraisan’ny fahantrana sy ny vokatra fambolena amin’ny faritra SAVA",
+        "premise": "Ny fahantrana be dia be dia mety hisy fiantraikany amin’ny vokatra fambolena, indrindra amin’ny indostria vanilla ao SAVA. Ilaina ny mandinika raha mahavita miatrika ny krizy ara‑toekarena ny tantsaha sy ny rafitra fanohanana.",
+        "interviewQuestions": [
+          "Ahoana ny fiantraikan’ny fahantrana amin’ny famokarana vanilla ao SAVA?",
+          "Inona ny sakana ara‑toekarena sy ara‑teknika atrehin’ny tantsaha?",
+          "Misy ve programa fanampiana ara‑bola na fanofanana natokana ho an’ny tantsaha vanilla?",
+          "Ahoana ny fandraisan’ny Banky Foiben’i Madagasikara amin’ny famatsiam‑bola ho an’ny tantsaha?",
+          "Inona ny fepetra raisina hanamafisana ny rojo famokarana sy hampitombo ny vola miditra?"
+        ],
+        "actorTypes": [
+          "filohan’ny fikambanana mpamboly vanilla ao SAVA",
+          "tantsaha vanilla ao amin’ny faritra",
+          "mpanampy ara‑bola avy amin’ny Banky Foiben’i Madagasikara",
+          "mpitsikera ara‑toekarena amin’ny sekoly ambony"
+        ],
+        "dataToFind": [
+          "tatitra INSTAT momba ny fahantrana sy famokarana vanilla ao SAVA",
+          "statistika momba ny vola miditra amin’ny tantsaha vanilla",
+          "teti‑bola fanampiana ho an’ny tantsaha ao amin’ny faritra",
+          "fandaharana fanofanana ara‑teknika ho an’ny mpamboly vanilla"
+        ],
+        "format": "brief",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      }
+    ],
+    "limitations": [
+      "Tsy misy fanazavana fanampiny momba ny fizarana faritra na sokajy ara‑demografika ao amin’ny tatitra INSTAT, ka ilaina ny mitady antontan‑isa farim‑paritra sy fanadihadiana fanampiny.",
+      "Ny daty farany amin’ny tatitra dia 2022; ilaina ny mahazo antontan‑isa vaovao na fanavaozana ho an’ny taona 2023‑2024 mba hanome sary mazava kokoa."
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "route": "sources-suggest",
+  "recordedAt": "2026-11-03T12:28:09.940Z",
+  "payload": {
+    "suggestions": [],
+    "detectedDomains": [
+      "statistics_demography",
+      "economy_finance"
+    ],
+    "missingProfiles": [],
+    "regionBroadened": false,
+    "notice": {
+      "code": "no_matching_experts",
+      "message": "Tsy misy manam-pahaizana mifanaraka amin'ity lohahevitra ity ao amin'ny tahiry."
+    }
+  }
+}

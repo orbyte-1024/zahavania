@@ -1,0 +1,236 @@
+{
+  "route": "verify-text",
+  "recordedAt": "2026-11-03T12:29:09.176Z",
+  "payload": {
+    "result": {
+      "detectedLanguage": "fr",
+      "summary": "L’article affirme que les prix du riz local (makalioka, diste, manalalondo) et du riz importé ont augmenté en août 2026, et que cette hausse serait due à la mise en place d’une retaxation (droit de douane 20 % et TVA 5 %) appliquée depuis quatre mois. Les sources disponibles confirment partiellement ces affirmations : le même article reproduit les chiffres, un autre article de Newsmada signale une hausse du riz importé mais indique que l’augmentation a précédé la réintroduction du droit de douane, ce qui crée une incertitude sur le lien de causalité.",
+      "claims": [
+        {
+          "text": "Le prix du riz local makalioka et diste est passé de 2 600 à 2 800 ariary le kilo (hausse de 7,69 %).",
+          "status": "insufficient",
+          "rationale": "Aucun source indépendante ne confirme ces chiffres. Le seul texte disponible est l’article même qui les rapporte, ce qui ne constitue pas une vérification externe.",
+          "sources": [
+            {
+              "title": "Inflation: le prix du riz en hausse sur le marché – Newsmada",
+              "url": "https://newsmada.com/2026/08/14/inflation-le-prix-du-riz-en-hausse-sur-le-marche/",
+              "publisher": "Newsmada",
+              "date": "2026-08-14",
+              "kind": "other",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [],
+          "recommendedChecks": [
+            "Consulter les bulletins de l'INSTAT ou du Ministère de l'Agriculture sur les prix du riz local en août 2026."
+          ],
+          "confidenceIndex": 20,
+          "breakdown": [
+            {
+              "code": "other_source",
+              "label": "1 other source domain(s)",
+              "points": 10
+            },
+            {
+              "code": "recent_source",
+              "label": "Source published within 2 years",
+              "points": 10
+            }
+          ]
+        },
+        {
+          "text": "Le prix du riz local manalalondo est passé de 2 700 à 3 000 ariary le kilo (hausse de 11,11 %).",
+          "status": "insufficient",
+          "rationale": "Aucune source externe ne corrobore ce changement de prix. L’information provient uniquement de l’article en question.",
+          "sources": [
+            {
+              "title": "Inflation: le prix du riz en hausse sur le marché – Newsmada",
+              "url": "https://newsmada.com/2026/08/14/inflation-le-prix-du-riz-en-hausse-sur-le-marche/",
+              "publisher": "Newsmada",
+              "date": "2026-08-14",
+              "kind": "other",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [],
+          "recommendedChecks": [
+            "Vérifier les données de prix publiées par le Ministère de l'Agriculture ou les rapports de marché de la Chambre de Commerce."
+          ],
+          "confidenceIndex": 20,
+          "breakdown": [
+            {
+              "code": "other_source",
+              "label": "1 other source domain(s)",
+              "points": 10
+            },
+            {
+              "code": "recent_source",
+              "label": "Source published within 2 years",
+              "points": 10
+            }
+          ]
+        },
+        {
+          "text": "Le sac de 50 kg de riz importé est passé de 120 000 à 130 000 ariary (hausse de 10 000 ariary).",
+          "status": "insufficient",
+          "rationale": "Aucun autre article ou source officielle ne mentionne ce prix du sac de 50 kg. L’information ne repose que sur le texte de l’article.",
+          "sources": [
+            {
+              "title": "Inflation: le prix du riz en hausse sur le marché – Newsmada",
+              "url": "https://newsmada.com/2026/08/14/inflation-le-prix-du-riz-en-hausse-sur-le-marche/",
+              "publisher": "Newsmada",
+              "date": "2026-08-14",
+              "kind": "other",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [],
+          "recommendedChecks": [
+            "Interroger les grossistes ou consulter les rapports du Ministère du Commerce sur les tarifs du riz importé."
+          ],
+          "confidenceIndex": 20,
+          "breakdown": [
+            {
+              "code": "other_source",
+              "label": "1 other source domain(s)",
+              "points": 10
+            },
+            {
+              "code": "recent_source",
+              "label": "Source published within 2 years",
+              "points": 10
+            }
+          ]
+        },
+        {
+          "text": "Le prix du riz importé au détail est passé de 2 500 à 2 700 ariary le kilo.",
+          "status": "needs_verification",
+          "rationale": "Un autre article de Newsmada (28 juillet 2026) indique une hausse du riz de luxe de 2 500 à 2 700 ariary, ce qui corrobore partiellement la donnée, mais il ne précise pas si cela concerne le même segment de marché que l’article d’août.",
+          "sources": [
+            {
+              "title": "Inflation: le prix du riz en hausse sur le marché – Newsmada",
+              "url": "https://newsmada.com/2026/08/14/inflation-le-prix-du-riz-en-hausse-sur-le-marche/",
+              "publisher": "Newsmada",
+              "date": "2026-08-14",
+              "kind": "other",
+              "stance": "supports"
+            },
+            {
+              "title": "Consommation: le prix du riz importé en hausse – Newsmada",
+              "url": "https://newsmada.com/2026/07/28/consommation-le-prix-du-riz-importe-en-hausse/",
+              "publisher": "Newsmada",
+              "date": "2026-07-28",
+              "kind": "other",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [],
+          "recommendedChecks": [
+            "Obtenir les prix de référence publiés par le Ministère du Commerce ou la Banque Centrale de Madagascar."
+          ],
+          "confidenceIndex": 20,
+          "breakdown": [
+            {
+              "code": "other_source",
+              "label": "1 other source domain(s)",
+              "points": 10
+            },
+            {
+              "code": "recent_source",
+              "label": "Source published within 2 years",
+              "points": 10
+            }
+          ]
+        },
+        {
+          "text": "La hausse des prix du riz importé résulte de la retaxation du riz de luxe avec un droit de douane de 20 % et une TVA de 5 %, mesure temporaire de quatre mois visant à protéger la production locale.",
+          "status": "needs_verification",
+          "rationale": "L’article du 28 juillet 2026 mentionne l’existence d’un droit de douane de 20 % et d’une TVA de 5 % sur le riz importé, mais indique que la hausse des prix a eu lieu avant la réintroduction de ces taxes, ce qui contredit l’idée que la retaxation est déjà à l’œuvre. Aucun autre source ne confirme l’impact actuel de la mesure.",
+          "sources": [
+            {
+              "title": "Consommation: le prix du riz importé en hausse – Newsmada",
+              "url": "https://newsmada.com/2026/07/28/consommation-le-prix-du-riz-importe-en-hausse/",
+              "publisher": "Newsmada",
+              "date": "2026-07-28",
+              "kind": "other",
+              "stance": "context"
+            },
+            {
+              "title": "Inflation: le prix du riz en hausse sur le marché – Newsmada",
+              "url": "https://newsmada.com/2026/08/14/inflation-le-prix-du-riz-en-hausse-sur-le-marche/",
+              "publisher": "Newsmada",
+              "date": "2026-08-14",
+              "kind": "other",
+              "stance": "supports"
+            }
+          ],
+          "contradictions": [
+            "L’article du 28 juillet indique que la hausse du prix du riz importé a précédé la réintroduction du droit de douane de 20 % et de la TVA de 5 %, ce qui contredit l’affirmation que la retaxation est déjà à l’œuvre."
+          ],
+          "recommendedChecks": [
+            "Vérifier les décrets ou arrêtés du Ministère de l'Économie et des Finances relatifs à la mise en place du droit de douane et de la TVA sur le riz importé en 2026.",
+            "Consulter les communiqués de la Direction Générale des Douanes pour confirmer les dates d’application de la mesure."
+          ],
+          "confidenceIndex": 20,
+          "breakdown": [
+            {
+              "code": "other_source",
+              "label": "1 other source domain(s)",
+              "points": 10
+            },
+            {
+              "code": "recent_source",
+              "label": "Source published within 2 years",
+              "points": 10
+            },
+            {
+              "code": "context_source",
+              "label": "Background source available",
+              "points": 5
+            },
+            {
+              "code": "reported_contradictions",
+              "label": "1 contradiction(s) noted",
+              "points": -5
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "Toutes les sources disponibles proviennent du même site d’information (Newsmada); aucune source officielle ou indépendante n’a été trouvée pour corroborer les chiffres précis des prix du riz local.",
+        "Les extraits fournis ne donnent pas de dates précises pour les mesures fiscales, ce qui rend difficile de confirmer le lien de causalité entre la retaxation et la hausse des prix.",
+        "L’absence de données provenant d’organismes gouvernementaux (INSTAT, Ministère de l’Agriculture, Douanes) limite la capacité à valider les affirmations."
+      ],
+      "globalIndex": 20,
+      "globalBreakdown": [
+        {
+          "code": "claim_contribution",
+          "label": "Claim 1 (insufficient, index 20) / 5",
+          "points": 4
+        },
+        {
+          "code": "claim_contribution",
+          "label": "Claim 2 (insufficient, index 20) / 5",
+          "points": 4
+        },
+        {
+          "code": "claim_contribution",
+          "label": "Claim 3 (insufficient, index 20) / 5",
+          "points": 4
+        },
+        {
+          "code": "claim_contribution",
+          "label": "Claim 4 (needs_verification, index 20) / 5",
+          "points": 4
+        },
+        {
+          "code": "claim_contribution",
+          "label": "Claim 5 (needs_verification, index 20) / 5",
+          "points": 4
+        }
+      ]
+    },
+    "analyzedUrl": "https://newsmada.com/2026/08/14/inflation-le-prix-du-riz-en-hausse-sur-le-marche/",
+    "droppedSources": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "route": "sources-suggest",
+  "recordedAt": "2026-11-03T12:29:11.388Z",
+  "payload": {
+    "suggestions": [],
+    "detectedDomains": [
+      "agriculture_food",
+      "economy_finance"
+    ],
+    "missingProfiles": [],
+    "regionBroadened": false,
+    "notice": {
+      "code": "no_matching_experts",
+      "message": "Aucun expert de l'annuaire ne correspond à ce sujet avec les filtres demandés."
+    }
+  }
+}

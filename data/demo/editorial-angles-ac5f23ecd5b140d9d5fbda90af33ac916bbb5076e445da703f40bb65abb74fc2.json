@@ -1,0 +1,120 @@
+{
+  "route": "editorial-angles",
+  "recordedAt": "2026-11-03T12:28:08.216Z",
+  "payload": {
+    "lang": "fr",
+    "angles": [
+      {
+        "title": "Pauvreté et accès à l'éducation dans la région d'Analamanga",
+        "premise": "Avec plus de 75 % des Malgaches vivant sous le seuil de pauvreté en 2022, les familles d'Analamanga peinent à assurer la scolarisation de leurs enfants, ce qui menace le taux de décrochage scolaire.",
+        "interviewQuestions": [
+          "Comment la pauvreté affecte-t-elle la fréquentation scolaire des élèves dans votre établissement ?",
+          "Quelles mesures le ministère de l'Éducation a-t-il mises en place pour soutenir les familles pauvres de la région ?",
+          "Quel est le taux de décrochage scolaire dans les zones les plus défavorisées d'Analamanga ?",
+          "Comment les ONG locales contribuent-elles à la lutte contre le décrochage lié à la pauvreté ?",
+          "Quelles solutions à moyen terme proposez‑vous pour améliorer l'accès à l'éducation des enfants pauvres ?"
+        ],
+        "actorTypes": [
+          "directeur ou directrice d'une école publique d'Analamanga",
+          "représentant du ministère de l'Éducation chargé des programmes de soutien",
+          "parent d'élève vivant sous le seuil de pauvreté",
+          "responsable d'une ONG locale œuvrant dans le secteur éducatif"
+        ],
+        "dataToFind": [
+          "données détaillées de l'INSTAT sur la pauvreté par région pour 2022",
+          "statistiques du ministère de l'Éducation sur le taux de décrochage scolaire par district",
+          "rapports d'évaluation des programmes de bourses scolaires dans la région d'Analamanga"
+        ],
+        "format": "investigation",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Impact de la pauvreté sur la santé maternelle à Toamasina",
+        "premise": "La forte prévalence de la pauvreté expose les femmes enceintes de Toamasina à des risques accrus de complications, mettant en lumière les limites du système de santé local.",
+        "interviewQuestions": [
+          "Quel est le taux de mortalité maternelle dans les zones les plus pauvres de Toamasina ?",
+          "Comment la pauvreté influence‑t‑elle l'accès aux soins prénatals pour les femmes ?",
+          "Quelles initiatives le ministère de la Santé a‑t‑il lancées pour soutenir les femmes enceintes en situation de précarité ?",
+          "Quel rôle jouent les organisations communautaires dans la prise en charge des grossesses à risque ?",
+          "Quelles améliorations sont nécessaires pour réduire les inégalités en santé maternelle ?"
+        ],
+        "actorTypes": [
+          "directeur ou directrice d'un centre de santé maternelle à Toamasina",
+          "responsable du programme de santé maternelle du ministère de la Santé",
+          "sage‑femme ou infirmière travaillant avec des populations pauvres",
+          "représentant d'une ONG locale spécialisée en santé maternelle"
+        ],
+        "dataToFind": [
+          "statistiques du ministère de la Santé sur la mortalité maternelle par district pour 2022",
+          "données de l'INSTAT sur la pauvreté à Toamasina",
+          "rapports d'évaluation des programmes de soins prénatals dans la région"
+        ],
+        "format": "brief",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Pauvreté et agriculture de subsistance dans la région de Sava",
+        "premise": "Dans la région de Sava, où la culture du vanille domine, la pauvreté généralisée contraint de nombreuses familles à recourir à l'agriculture de subsistance, affectant la sécurité alimentaire et les revenus.",
+        "interviewQuestions": [
+          "Quel pourcentage des agriculteurs de vanille vit sous le seuil de pauvreté ?",
+          "Comment la pauvreté influence‑t‑elle les pratiques agricoles et la diversification des cultures ?",
+          "Quelles aides le ministère de l'Agriculture propose‑t‑il aux petits producteurs pauvres ?",
+          "Quel est le rôle des coopératives de vanille dans la lutte contre la pauvreté ?",
+          "Quelles alternatives de revenus sont envisagées pour les familles les plus vulnérables ?"
+        ],
+        "actorTypes": [
+          "président ou présidente d'une coopérative de vanille dans le Sava",
+          "responsable du service de l'agriculture du ministère de l'Agriculture pour la région",
+          "agriculteur·rice de petite exploitation vivant sous le seuil de pauvreté",
+          "représentant d'une ONG travaillant sur la sécurité alimentaire dans le Sava"
+        ],
+        "dataToFind": [
+          "données de l'INSTAT sur la pauvreté par région pour 2022, avec focus sur le Sava",
+          "statistiques du ministère de l'Agriculture sur la production de vanille et les revenus des petits producteurs",
+          "études de terrain sur l'agriculture de subsistance dans le Sava"
+        ],
+        "format": "investigation",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      },
+      {
+        "title": "Urbanisation et pauvreté à Antananarivo : défis du logement informel",
+        "premise": "La concentration de la pauvreté à Antananarivo alimente la croissance des quartiers informels, posant des problèmes d'accès aux services de base et de sécurité urbaine.",
+        "interviewQuestions": [
+          "Quel est le nombre de ménages vivant dans des habitats informels à Antananarivo ?",
+          "Comment la pauvreté influence‑t‑elle la capacité des habitants à accéder à l'eau potable et à l'électricité ?",
+          "Quelles politiques la mairie d'Antananarivo a‑t‑elle mises en place pour régulariser les zones informelles ?",
+          "Quel rôle jouent les organisations communautaires dans l'amélioration des conditions de vie ?",
+          "Quelles solutions de logement abordable sont envisagées pour les populations pauvres ?"
+        ],
+        "actorTypes": [
+          "maire ou adjoint du maire d'Antananarivo chargé du logement",
+          "responsable du service d'urbanisme de la ville",
+          "habitants d'un quartier informel d'Antananarivo",
+          "représentant d'une ONG locale œuvrant pour le logement décent"
+        ],
+        "dataToFind": [
+          "enquêtes de l'INSTAT sur la pauvreté à Antananarivo en 2022",
+          "inventaires de logements informels réalisés par la mairie d'Antananarivo",
+          "rapports du ministère du Logement sur les programmes de logement social"
+        ],
+        "format": "brief",
+        "basedOn": [
+          "Selon l'INSTAT, plus de 75 % des Malgaches vivaient sous le seuil de pauvreté en 2022."
+        ],
+        "toVerifyFirst": []
+      }
+    ],
+    "limitations": [
+      "Le sujet fourni ne précise aucun contexte géographique ou sectoriel, les angles proposés s'appuient uniquement sur le taux de pauvreté national déclaré par l'INSTAT."
+    ]
+  }
+}
