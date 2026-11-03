@@ -15,7 +15,7 @@ function memoryStorage(initial = {}) {
 }
 
 test("the brand is defined once with a straight apostrophe", () => {
-  assert.equal(BRAND_NAME, "Zahavan'Ia");
+  assert.equal(BRAND_NAME, "Zahavan'ia");
   assert.equal(BRAND_NAME_UPPER, "ZAHAVAN'IA");
   assert.equal(BRAND_SLUG, "zahavania");
   assert.equal(DOSSIERS_KEY, "zahavania:dossiers:v1");
