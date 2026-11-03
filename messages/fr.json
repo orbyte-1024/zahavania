@@ -212,7 +212,12 @@
       "directory_unavailable": "L'annuaire des experts est momentanément indisponible.",
       "network_error": "Le serveur est injoignable. Vérifiez la connexion.",
       "unexpected_response": "Réponse inattendue du serveur.",
-      "request_failed": "La demande a échoué."
+      "request_failed": "La demande a échoué.",
+      "image_decode_failed": "Ce navigateur ne sait pas lire ce fichier. Exportez la photo en JPEG puis réessayez.",
+      "image_missing": "Aucune image n'a été reçue.",
+      "image_too_large": "L'image est trop lourde.",
+      "unsupported_media": "Seules les images JPEG, PNG et WebP sont acceptées.",
+      "invalid_image": "L'image est illisible ou endommagée."
     }
   },
   "status": {
@@ -318,7 +323,7 @@
   },
   "image": {
     "title": "Authentifier une image",
-    "lead": "Déposez une image JPEG, PNG ou WebP (5 Mo maximum). Les coordonnées GPS ne sont jamais conservées.",
+    "lead": "Déposez une photo JPEG, PNG ou WebP. Elle est réduite sur votre appareil avant l'envoi, et ses coordonnées GPS ne quittent jamais le téléphone.",
     "drop": "Déposez une image ici",
     "or": "ou",
     "browse": "choisissez un fichier",
@@ -345,6 +350,13 @@
       "indices concordants": "Indices concordants",
       "indices contradictoires": "Indices contradictoires",
       "non concluant": "Non concluant"
+    },
+    "preparing": "Préparation de l'image sur l'appareil…",
+    "analysing": "Analyse en cours…",
+    "metadataSource": {
+      "file": "lues dans le fichier",
+      "device": "lues sur l'appareil avant compression",
+      "none": "aucune"
     }
   },
   "translate": {

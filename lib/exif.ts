@@ -1,14 +1,8 @@
 import exifr from "exifr";
+import { EXIF_PARSE_OPTIONS, emptyMetadata, summarizeExifTags, type ImageMetadata } from "@/lib/exif-summary";
 import type { ImageFormat } from "./image-intake";
 
-export type ImageMetadata = {
-  available: boolean;
-  dateTaken: string | null;
-  creationDate: string | null;
-  camera: string | null;
-  software: string | null;
-  hasGPS: boolean;
-};
+export type { ImageMetadata } from "@/lib/exif-summary";
 
 export type MetadataWarning = {
   code: "EXIF_UNAVAILABLE" | "EXIF_UNREADABLE";
@@ -33,53 +27,6 @@ export const EXIF_UNREADABLE_WARNING: MetadataWarning = {
 };
 
 /** Only the fields shown to the journalist: no thumbnails, no maker notes, no serial numbers. */
-const PICKED_TAGS = [
-  "DateTimeOriginal",
-  "CreateDate",
-  "Make",
-  "Model",
-  "Software",
-  "GPSLatitude",
-  "GPSLongitude",
-];
-
-/**
- * exifr derives decimal `latitude`/`longitude` as soon as GPS tags are picked,
- * so those keys are dropped along with the tags themselves.
- */
-const GPS_KEYS = [
-  "GPSLatitude",
-  "GPSLongitude",
-  "latitude",
-  "longitude",
-] as const;
-
-function emptyMetadata(): ImageMetadata {
-  return {
-    available: false,
-    dateTaken: null,
-    creationDate: null,
-    camera: null,
-    software: null,
-    hasGPS: false,
-  };
-}
-
-function text(value: unknown): string | null {
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
-}
-
-/** "Canon" + "Canon EOS 90D" reads better as "Canon EOS 90D". */
-function cameraName(make: string | null, model: string | null): string | null {
-  if (!make) return model;
-  if (!model) return make;
-  return model.toLowerCase().startsWith(make.toLowerCase())
-    ? model
-    : `${make} ${model}`;
-}
-
 /**
  * Reads the EXIF fields of an already validated image. Dates are kept exactly
  * as stored: an EXIF timestamp has no timezone, so converting it to UTC would
@@ -100,11 +47,7 @@ export async function readImageMetadata(
 
   let parsed: Record<string, unknown> | undefined;
   try {
-    parsed = (await exifr.parse(bytes, {
-      pick: PICKED_TAGS,
-      reviveValues: false,
-      translateValues: false,
-    })) as Record<string, unknown> | undefined;
+    parsed = (await exifr.parse(bytes, { ...EXIF_PARSE_OPTIONS })) as Record<string, unknown> | undefined;
   } catch {
     // The thrown message quotes internal offsets, so it is not logged or
     // returned; a broken metadata block says nothing about the image itself.
@@ -120,24 +63,7 @@ export async function readImageMetadata(
   const unreadable = parsed.errors !== undefined;
   delete parsed.errors;
 
-  const hasGPS =
-    parsed.GPSLatitude !== undefined || parsed.GPSLongitude !== undefined;
-  for (const key of GPS_KEYS) delete parsed[key];
-
-  const metadata: ImageMetadata = {
-    available: false,
-    dateTaken: text(parsed.DateTimeOriginal),
-    creationDate: text(parsed.CreateDate),
-    camera: cameraName(text(parsed.Make), text(parsed.Model)),
-    software: text(parsed.Software),
-    hasGPS,
-  };
-  metadata.available =
-    metadata.dateTaken !== null ||
-    metadata.creationDate !== null ||
-    metadata.camera !== null ||
-    metadata.software !== null ||
-    metadata.hasGPS;
+  const metadata = summarizeExifTags(parsed);
 
   if (!metadata.available) {
     return {

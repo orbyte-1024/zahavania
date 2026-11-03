@@ -212,7 +212,12 @@
       "directory_unavailable": "The expert directory is temporarily unavailable.",
       "network_error": "The server cannot be reached. Check the connection.",
       "unexpected_response": "Unexpected response from the server.",
-      "request_failed": "The request failed."
+      "request_failed": "The request failed.",
+      "image_decode_failed": "This browser cannot read this file. Export the photo as JPEG and try again.",
+      "image_missing": "No image was received.",
+      "image_too_large": "The image is too large.",
+      "unsupported_media": "Only JPEG, PNG and WebP images are accepted.",
+      "invalid_image": "The image is unreadable or damaged."
     }
   },
   "status": {
@@ -318,7 +323,7 @@
   },
   "image": {
     "title": "Authenticate an image",
-    "lead": "Drop a JPEG, PNG or WebP image (5 MB max). GPS coordinates are never kept.",
+    "lead": "Drop a JPEG, PNG or WebP photo. It is reduced on your device before upload, and its GPS coordinates never leave the phone.",
     "drop": "Drop an image here",
     "or": "or",
     "browse": "choose a file",
@@ -345,6 +350,13 @@
       "indices concordants": "Consistent hints",
       "indices contradictoires": "Conflicting hints",
       "non concluant": "Inconclusive"
+    },
+    "preparing": "Preparing the image on your device…",
+    "analysing": "Analysing…",
+    "metadataSource": {
+      "file": "read from the file",
+      "device": "read on the device before compression",
+      "none": "none"
     }
   },
   "translate": {
