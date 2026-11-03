@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { LIVE_MODULES, MODULE_IDS, modulePath, type ModuleId } from "@/lib/modules";
 import "@/components/workspace/workspace.css";
 import { BRAND_NAME } from "@/lib/brand";
@@ -70,6 +71,7 @@ export function Workspace({ children }: { children: ReactNode }) {
         <FilesLink />
         <div className="rail-foot">
           <LanguageSwitch />
+          <ThemeToggle />
         </div>
       </aside>
 
@@ -103,6 +105,7 @@ export function Workspace({ children }: { children: ReactNode }) {
             <FilesLink onNavigate={() => setOpen(false)} />
             <div className="rail-foot">
               <LanguageSwitch />
+              <ThemeToggle />
             </div>
           </motion.div>
         )}

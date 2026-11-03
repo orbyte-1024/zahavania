@@ -4,7 +4,9 @@ import { Suspense } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { LocaleSync } from "@/components/LocaleSync";
+import { ThemeSync } from "@/components/ThemeSync";
 import { routing } from "@/i18n/routing";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 import { BRAND_NAME } from "@/lib/brand";
 
@@ -28,8 +30,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#15130f",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f0e6" },
+    { media: "(prefers-color-scheme: dark)", color: "#15130f" },
+  ],
+  colorScheme: "dark light",
 };
 
 async function IntlProvider({ children }: { children: React.ReactNode }) {
@@ -48,8 +53,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang={routing.defaultLocale} className={`${display.variable} ${mono.variable}`}>
+    <html lang={routing.defaultLocale} className={`${display.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript() }} />
+      </head>
       <body>
+        <ThemeSync />
         <Suspense>
           <IntlProvider>{children}</IntlProvider>
         </Suspense>

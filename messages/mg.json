@@ -11,7 +11,13 @@
     "skip": "Mankany amin'ny votoaty",
     "rule": "Ny fitsipika",
     "menu": "Menio",
-    "close": "Hidio"
+    "close": "Hidio",
+    "theme": {
+      "light": "Mazava",
+      "dark": "Maizina",
+      "toLight": "Hampiasa ny endrika mazava",
+      "toDark": "Hampiasa ny endrika maizina"
+    }
   },
   "modules": {
     "verify": {
