@@ -2,7 +2,8 @@ import "server-only";
 import OpenAI from "openai";
 import type { ChatCompletion, ChatCompletionContentPart, ChatCompletionCreateParamsNonStreaming } from "openai/resources/chat/completions";
 import type { ZodType } from "zod";
-import { resolveFallback, resolveModel, type AiTask } from "@/lib/ai/models";
+import { resolveFallbacks, resolveModel, type AiTask } from "@/lib/ai/models";
+import { isCoolingDown, orderCandidates, recordFailure, recordSuccess } from "@/lib/ai/rotation";
 import { readIntEnv } from "@/lib/env";
 
 export type { AiTask } from "@/lib/ai/models";
@@ -12,7 +13,9 @@ const DEFAULT_TIMEOUT_MS = 25_000;
 const DEFAULT_MAX_TOKENS = 2_000;
 const DEFAULT_OUTPUT_RETRIES = 1;
 const MIN_ATTEMPT_MS = 3_000;
-const SHARED_FREE_QUOTA = /free-models-per-day/i;
+const MODEL_SHARE_WITH_NEXT = 0.6;
+const NEXT_MODEL_RESERVE_MS = MIN_ATTEMPT_MS + 1_000;
+const BUDGET_EXHAUSTED = "time budget exhausted";
 
 export type AiErrorCode =
   | "config_missing"
@@ -95,7 +98,7 @@ export type ChatParams = ChatCompletionCreateParamsNonStreaming & {
 
 export const isMockMode = (): boolean => process.env.USE_MOCK === "true" && process.env.NODE_ENV !== "production";
 
-const FALLBACK_CODES: ReadonlySet<AiErrorCode> = new Set(["rate_limited", "provider_error", "invalid_output"]);
+const FALLBACK_CODES: ReadonlySet<AiErrorCode> = new Set(["rate_limited", "provider_error", "invalid_output", "timeout"]);
 
 let client: OpenAI | null = null;
 
@@ -195,7 +198,7 @@ type Parsed<R> = { value: R } | { error: AiError };
 
 function remainingMs(deadline: number): number {
   const left = deadline - Date.now();
-  if (left < MIN_ATTEMPT_MS) throw new AiError("timeout", "time budget exhausted");
+  if (left < MIN_ATTEMPT_MS) throw new AiError("timeout", BUDGET_EXHAUSTED);
   return left;
 }
 
@@ -225,27 +228,49 @@ async function runAttempts<R>(
   throw lastError;
 }
 
+function logRotation(task: AiTask, model: string, failure: AiError, cooldownMs: number | null) {
+  console.warn(
+    JSON.stringify({ scope: "ai", event: "model_failed", task, model, code: failure.code, providerStatus: failure.providerStatus, cooldownS: cooldownMs === null ? 0 : cooldownMs / 1000 }),
+  );
+}
+
 async function withFallback<R extends { attempts: number }>(
   task: AiTask,
   outputRetries: number | undefined,
-  run: (modelId: string, retries: number | undefined) => Promise<R>,
+  deadline: number,
+  run: (modelId: string, retries: number | undefined, modelDeadline: number) => Promise<R>,
 ): Promise<R & { model: string }> {
-  const modelId = resolveModel(task);
-  if (!modelId) throw new AiError("config_missing", `no model configured for task ${task}`);
+  const primary = resolveModel(task);
+  if (!primary) throw new AiError("config_missing", `no model configured for task ${task}`);
 
-  try {
-    return { ...(await run(modelId, outputRetries)), model: modelId };
-  } catch (error) {
-    const failure = toAiError(error);
-    const fallback = resolveFallback(task);
-    if (!fallback || !FALLBACK_CODES.has(failure.code) || sharesExhaustedQuota(failure, fallback)) throw failure;
-    const result = await run(fallback, 0);
-    return { ...result, attempts: result.attempts + 1 + (outputRetries ?? DEFAULT_OUTPUT_RETRIES), model: fallback };
+  const candidates = orderCandidates([primary, ...resolveFallbacks(task)]);
+  const budget = deadline - Date.now();
+  let failedAttempts = 0;
+  let lastError: AiError | null = null;
+
+  for (const [index, model] of candidates.entries()) {
+    if (index > 0 && isCoolingDown(model)) continue;
+    const retries = model === primary ? outputRetries : 0;
+    const hasNext = candidates.slice(index + 1).some((next) => !isCoolingDown(next));
+    const share = Math.min(Math.ceil(budget * MODEL_SHARE_WITH_NEXT), budget - NEXT_MODEL_RESERVE_MS);
+    const modelDeadline = hasNext && share >= MIN_ATTEMPT_MS ? Math.min(deadline, Date.now() + share) : deadline;
+    try {
+      const result = await run(model, retries, modelDeadline);
+      recordSuccess(model);
+      return { ...result, attempts: result.attempts + failedAttempts, model };
+    } catch (error) {
+      const failure = toAiError(error);
+      lastError = failure;
+      if (!FALLBACK_CODES.has(failure.code)) throw failure;
+      const outOfTime = failure.message === BUDGET_EXHAUSTED;
+      if (outOfTime && deadline - Date.now() < MIN_ATTEMPT_MS) throw failure;
+      const cooldown = outOfTime ? null : recordFailure(model, failure);
+      logRotation(task, model, failure, cooldown);
+      failedAttempts += 1 + (retries ?? DEFAULT_OUTPUT_RETRIES);
+    }
   }
-}
 
-function sharesExhaustedQuota(failure: AiError, fallback: string): boolean {
-  return failure.code === "rate_limited" && SHARED_FREE_QUOTA.test(failure.message) && fallback.endsWith(":free");
+  throw lastError ?? new AiError("provider_error", "no model available");
 }
 
 function deadlineFor(options: BaseOptions): number {
@@ -265,8 +290,8 @@ export async function askJson<T>(options: AskJsonOptions<T>): Promise<AskJsonRes
   };
 
   const deadline = deadlineFor(options);
-  const result = await withFallback(options.task, options.outputRetries, (modelId, retries) =>
-    runAttempts(buildChatParams(options, modelId, "json"), { ...options, outputRetries: retries }, deadline, parse),
+  const result = await withFallback(options.task, options.outputRetries, deadline, (modelId, retries, modelDeadline) =>
+    runAttempts(buildChatParams(options, modelId, "json"), { ...options, outputRetries: retries }, modelDeadline, parse),
   );
   return { data: result.value, citedUrls: result.citedUrls, usage: result.usage, attempts: result.attempts, model: result.model };
 }
@@ -280,8 +305,8 @@ export async function askText(options: AskTextOptions): Promise<AskTextResult> {
   };
 
   const deadline = deadlineFor(options);
-  const result = await withFallback(options.task, options.outputRetries, (modelId, retries) =>
-    runAttempts(buildChatParams(options, modelId, "text"), { ...options, outputRetries: retries }, deadline, parse),
+  const result = await withFallback(options.task, options.outputRetries, deadline, (modelId, retries, modelDeadline) =>
+    runAttempts(buildChatParams(options, modelId, "text"), { ...options, outputRetries: retries }, modelDeadline, parse),
   );
   return { text: result.value, usage: result.usage, attempts: result.attempts, model: result.model };
 }

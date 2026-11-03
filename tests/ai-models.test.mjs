@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { AI_TASKS, TASK_MODEL_ENV, isAiTask, resolveFallback, resolveModel } from "../lib/ai/models.ts";
+import { AI_TASKS, TASK_MODEL_ENV, isAiTask, resolveFallback, resolveFallbacks, resolveModel } from "../lib/ai/models.ts";
 
 test("each task uses its own model when its variable is set", () => {
   const env = {
@@ -36,4 +36,10 @@ test("every task has a distinct environment variable", () => {
   assert.ok(names.every((name) => /^AI_MODEL_[A-Z]+$/.test(name)));
   assert.equal(isAiTask("vision"), true);
   assert.equal(isAiTask("chat"), false);
+});
+
+test("the fallback list keeps its order, drops blanks, duplicates and the task's own model", () => {
+  const env = { AI_MODEL: "base/model", AI_FALLBACK_MODELS: " b/one , ,base/model, c/two,b/one", AI_FALLBACK_MODEL: "d/three" };
+  assert.deepEqual(resolveFallbacks("verify", env), ["b/one", "c/two", "d/three"]);
+  assert.deepEqual(resolveFallbacks("verify", { AI_MODEL: "base/model", AI_FALLBACK_MODEL: "base/model" }), []);
 });

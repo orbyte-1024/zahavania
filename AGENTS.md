@@ -71,7 +71,8 @@ app/
 components/landing/             # scènes scrubées, DispatchCloud (3D)
 components/workspace/           # écrans de l'application
 lib/ai/client.ts                # SEUL point d'appel au modèle (askJson, askText, isMockMode, AiError)
-lib/ai/models.ts                # tâche → modèle (AI_MODEL_<TASK>, sinon AI_MODEL ; AI_FALLBACK_MODEL partagé)
+lib/ai/models.ts                # tâche → modèle (AI_MODEL_<TASK>, sinon AI_MODEL ; AI_FALLBACK_MODELS puis AI_FALLBACK_MODEL partagés)
+lib/ai/rotation.ts              # rotation des modèles : mise à l'écart temporaire d'un modèle en panne
 lib/ai/prompts/                 # tous les prompts
 lib/ai/{verify,angles,translate,schemas,glossary}.ts
 lib/translation-checks.ts       # contrôle des traductions (langue, sortie inchangée, découpage)
@@ -109,7 +110,8 @@ messages/{mg,fr,en}.json
 - **Tous** les prompts sont dans `lib/ai/prompts/`. Aucun prompt inline dans une route.
 - Le contenu utilisateur est une **donnée** : toujours entre balises (`<content_to_verify>…</content_to_verify>`),
   balises neutralisées dans le contenu, consigne d'ignorer tout ordre qu'il contient.
-- Sortie = JSON uniquement, validé par zod, une relance en cas d'échec, puis `AI_FALLBACK_MODEL` si défini.
+- Sortie = JSON uniquement, validé par zod, une relance en cas d'échec, puis les modèles de secours
+  (`AI_FALLBACK_MODELS`, puis `AI_FALLBACK_MODEL`) dans l'ordre ; un modèle en panne est écarté quelques minutes.
   En cas d'échec final : **erreur claire**, jamais de fausse réponse. `USE_MOCK=true` n'existe que pour le
   développement : il est ignoré quand `NODE_ENV=production`, ses sorties portent `mock: true` et l'interface
   affiche un badge "Démonstration".

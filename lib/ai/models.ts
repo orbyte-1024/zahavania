@@ -26,6 +26,13 @@ export function resolveModel(task: AiTask, env: Env = process.env): string | nul
   return read(env, TASK_MODEL_ENV[task]) ?? read(env, "AI_MODEL");
 }
 
+export function resolveFallbacks(task: AiTask, env: Env = process.env): string[] {
+  const primary = resolveModel(task, env);
+  const listed = (read(env, "AI_FALLBACK_MODELS") ?? "").split(",").map((model) => model.trim());
+  const models = [...listed, read(env, "AI_FALLBACK_MODEL") ?? ""].filter((model) => model !== "" && model !== primary);
+  return [...new Set(models)];
+}
+
 export function resolveFallback(task: AiTask, env: Env = process.env): string | null {
   const fallback = read(env, "AI_FALLBACK_MODEL");
   if (!fallback || fallback === resolveModel(task, env)) return null;
