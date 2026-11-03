@@ -4,11 +4,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { callForm, type Phase } from "@/components/workspace/requests";
-import type { ImageEvidence, VerifyImageSuccess, VerifyVideoSuccess } from "@/lib/api/contract";
+import type { AiDetection, AiSignalLevel, ImageEvidence, VerifyImageSuccess, VerifyVideoSuccess } from "@/lib/api/contract";
 import { compressImage, ImageDecodeError, readDeviceExif, SOURCE_MAX_BYTES } from "@/lib/browser/image-prep";
 import { extractKeyframes, VIDEO_SOURCE_MAX_BYTES, VideoTooLongError } from "@/lib/browser/video-prep";
 import { VideoFindings } from "@/components/workspace/VideoFindings";
-import { Badge, ErrorNote, ScreenHeader, SubmitButton, rise, stagger } from "@/components/workspace/ui";
+import { Badge, ErrorNote, IndexGauge, ScreenHeader, SubmitButton, rise, stagger } from "@/components/workspace/ui";
 
 type Evidence = ImageEvidence;
 
@@ -17,6 +17,8 @@ type Report = { kind: "image"; data: VerifyImageSuccess } | { kind: "video"; dat
 type Progress = { stage: "preparing" } | { stage: "extracting"; done: number; total: number } | { stage: "analysing"; frames: number | null };
 
 const IMAGE_ACCEPT = ["image/jpeg", "image/png", "image/webp"];
+// Below this length the summary is short enough to be shown in full.
+const SUMMARY_CLAMP_CHARS = 140;
 const VIDEO_ACCEPT = ["video/mp4", "video/webm", "video/quicktime"];
 const ACCEPT = [...IMAGE_ACCEPT, ...VIDEO_ACCEPT];
 
@@ -43,12 +45,35 @@ function EvidenceList({ title, items }: { title: string; items: Evidence[] }) {
   );
 }
 
+const LEVEL_SYMBOLS: Record<AiSignalLevel, string> = { low: "▽", uncertain: "◇", high: "▲" };
+
+function AiDetectionBlock({ detection }: { detection: AiDetection }) {
+  const t = useTranslations("image.aiDetection");
+  const locale = useLocale();
+  return (
+    <motion.div className="claim-block" variants={rise}>
+      <p className="mono ash">{t("title")}</p>
+      {detection.status === "ok" ? (
+        <>
+          <IndexGauge value={detection.index} label={`${LEVEL_SYMBOLS[detection.level]} ${t(`level.${detection.level}`)}`} note={t("note")} />
+          <p className="mono ash">
+            {t("source", { provider: detection.provider, date: new Date(detection.checkedAt).toLocaleString(locale) })}
+          </p>
+        </>
+      ) : (
+        <p className="ash">{t(`unavailable.${detection.reason}`)}</p>
+      )}
+    </motion.div>
+  );
+}
+
 export function ImageScreen() {
   const t = useTranslations("image");
   const tm = useTranslations("modules.image");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [phase, setPhase] = useState<Phase<Report>>({ kind: "idle" });
   const [progress, setProgress] = useState<Progress>({ stage: "preparing" });
   const locale = useLocale();
@@ -83,6 +108,7 @@ export function ImageScreen() {
   };
 
   const submitVideo = async (video: File) => {
+    setSummaryOpen(false);
     setProgress({ stage: "extracting", done: 0, total: 0 });
     const form = new FormData();
     try {
@@ -109,6 +135,7 @@ export function ImageScreen() {
       await submitVideo(file);
       return;
     }
+    setSummaryOpen(false);
     setProgress({ stage: "preparing" });
     const form = new FormData();
     try {
@@ -196,77 +223,85 @@ export function ImageScreen() {
         )}
         {phase.kind === "error" && <ErrorNote key="error" code={phase.code} retryAfter={phase.retryAfter} />}
         {report && (
-          <motion.section key="done" className="result" variants={stagger} initial="hidden" animate="show">
+          <motion.section key="done" className="result result-split" variants={stagger} initial="hidden" animate="show">
             <motion.div className="verdict" variants={rise} data-verdict={report.verification.status}>
               <span className="mono ash">{t("summary")}</span>
               <p className="verdict-status">{t(`verdict.${report.verification.status}`)}</p>
-              <p className="result-summary-text">{report.verification.summary}</p>
+              <p className={`result-summary-text${summaryOpen ? " is-open" : ""}`}>{report.verification.summary}</p>
+              {report.verification.summary.length > SUMMARY_CLAMP_CHARS && (
+                <button type="button" className="link-button mono summary-toggle" aria-expanded={summaryOpen} onClick={() => setSummaryOpen((open) => !open)}>
+                  {summaryOpen ? t("summaryLess") : t("summaryMore")}
+                </button>
+              )}
             </motion.div>
 
-            <EvidenceList title={t("supporting")} items={report.verification.supportingEvidence} />
-            <EvidenceList title={t("contradictory")} items={report.verification.contradictoryEvidence} />
-
-            {result?.kind === "video" && <VideoFindings report={result.data} />}
-
-            {result?.kind === "image" && (
-              <motion.div className="claim-block" variants={rise}>
-                <p className="mono ash">
-                  {t("metadata")} · {t(`metadataSource.${result.data.metadataSource}`)}
-                </p>
-                {result.data.metadata.available ? (
-                  <dl className="meta-table">
-                    {(
-                      [
-                        ["dateTaken", result.data.metadata.dateTaken],
-                        ["created", result.data.metadata.creationDate],
-                        ["camera", result.data.metadata.camera],
-                        ["software", result.data.metadata.software],
-                      ] as const
-                    ).map(([key, value]) =>
-                      value ? (
-                        <div key={key}>
-                          <dt className="mono ash">{t(key)}</dt>
-                          <dd>{value}</dd>
+            <div className="result-main">
+              {result?.kind === "image" && <AiDetectionBlock detection={result.data.aiDetection} />}
+              {result?.kind === "image" && (
+                <motion.div className="claim-block" variants={rise}>
+                  <p className="mono ash">
+                    {t("metadata")} · {t(`metadataSource.${result.data.metadataSource}`)}
+                  </p>
+                  {result.data.metadata.available ? (
+                    <dl className="meta-table">
+                      {(
+                        [
+                          ["dateTaken", result.data.metadata.dateTaken],
+                          ["created", result.data.metadata.creationDate],
+                          ["camera", result.data.metadata.camera],
+                          ["software", result.data.metadata.software],
+                        ] as const
+                      ).map(([key, value]) =>
+                        value ? (
+                          <div key={key}>
+                            <dt className="mono ash">{t(key)}</dt>
+                            <dd>{value}</dd>
+                          </div>
+                        ) : null,
+                      )}
+                      {result.data.metadata.hasGPS && (
+                        <div>
+                          <dt className="mono ash">GPS</dt>
+                          <dd>{t("gps")}</dd>
                         </div>
-                      ) : null,
-                    )}
-                    {result.data.metadata.hasGPS && (
-                      <div>
-                        <dt className="mono ash">GPS</dt>
-                        <dd>{t("gps")}</dd>
-                      </div>
-                    )}
-                  </dl>
-                ) : (
-                  <p className="ash">{t("noExif")}</p>
-                )}
-              </motion.div>
-            )}
+                      )}
+                    </dl>
+                  ) : (
+                    <p className="ash">{t("noExif")}</p>
+                  )}
+                </motion.div>
+              )}
 
-            <motion.div className="claim-block" variants={rise}>
-              <p className="mono ash">{t("reverse")}</p>
-              <div className="handoff">
-                {[report.reverseSearch.googleLens, report.reverseSearch.tineye].map((service) => (
-                  <a key={service.url} className="ghost-button" href={service.url} target="_blank" rel="noopener noreferrer">
-                    {service.name} ↗
-                  </a>
-                ))}
-              </div>
-              <p className="mono ash">{t("reverseNote")}</p>
-            </motion.div>
-
-            {report.verification.limitations.length > 0 && (
-              <motion.div className="limitations" variants={rise}>
-                <ul className="bullets">
-                  {report.verification.limitations.map((l) => (
-                    <li key={l}>{l}</li>
+              <motion.div className="claim-block" variants={rise}>
+                <p className="mono ash">{t("reverse")}</p>
+                <div className="handoff">
+                  {[report.reverseSearch.googleLens, report.reverseSearch.tineye].map((service) => (
+                    <a key={service.url} className="ghost-button" href={service.url} target="_blank" rel="noopener noreferrer">
+                      {service.name} ↗
+                    </a>
                   ))}
-                </ul>
+                </div>
+                <p className="mono ash">{t("reverseNote")}</p>
               </motion.div>
-            )}
-            <motion.div variants={rise}>
-              <Badge>{result?.kind === "image" ? result.data.file.format.toUpperCase() : `${result?.data.frames.length ?? 0} × JPEG`}</Badge>
-            </motion.div>
+
+              {result?.kind === "video" && <VideoFindings report={result.data} />}
+
+              <EvidenceList title={t("supporting")} items={report.verification.supportingEvidence} />
+              <EvidenceList title={t("contradictory")} items={report.verification.contradictoryEvidence} />
+
+              {report.verification.limitations.length > 0 && (
+                <motion.div className="limitations" variants={rise}>
+                  <ul className="bullets">
+                    {report.verification.limitations.map((l) => (
+                      <li key={l}>{l}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+              <motion.div variants={rise}>
+                <Badge>{result?.kind === "image" ? result.data.file.format.toUpperCase() : `${result?.data.frames.length ?? 0} × JPEG`}</Badge>
+              </motion.div>
+            </div>
           </motion.section>
         )}
       </AnimatePresence>

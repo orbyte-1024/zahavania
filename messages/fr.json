@@ -330,6 +330,8 @@
     "submit": "Analyser",
     "change": "Changer de fichier",
     "summary": "Synthèse",
+    "summaryMore": "Voir plus",
+    "summaryLess": "Voir moins",
     "supporting": "Indices concordants",
     "contradictory": "Indices contradictoires",
     "metadata": "Métadonnées",
@@ -371,6 +373,21 @@
       "aiIndicators": "Indices possibles de génération par IA",
       "locationClues": "Indices sur le lieu",
       "note": "Seules 6 images fixes ont été examinées : le son, le montage et le reste de la vidéo n'ont pas été analysés."
+    },
+    "aiDetection": {
+      "title": "Indice de génération par IA",
+      "level": {
+        "low": "Signal faible",
+        "uncertain": "Signal incertain",
+        "high": "Signal élevé"
+      },
+      "note": "Indicatif, ce n'est pas une probabilité. Un indice faible ne prouve pas que l'image est authentique.",
+      "source": "Détecteur {provider}, analysé le {date}. L'image, réduite et sans métadonnées, est envoyée à {provider} pour ce calcul.",
+      "unavailable": {
+        "not_configured": "Le détecteur n'est pas configuré sur ce serveur : aucun indice n'a été calculé.",
+        "failed": "Le détecteur n'a pas répondu : aucun indice n'a été calculé. Réessayez plus tard.",
+        "mock": "Mode démonstration : le détecteur n'a pas été appelé."
+      }
     }
   },
   "translate": {
@@ -471,5 +488,55 @@
     "lead": "Vérifier une affirmation demande le réseau : les sources sont cherchées en direct, et rien n'est inventé sans elles.",
     "files": "Vos dossiers enregistrés restent sur cet appareil. Ils réapparaîtront dès que la connexion reviendra.",
     "retry": "Réessayer"
+  },
+  "imageReport": {
+    "evidence": {
+      "camera": "Appareil photographique déclaré dans les métadonnées : {value}.",
+      "software": "Logiciel de traitement détecté dans les métadonnées : {value}.",
+      "dateTaken": "Date de prise de vue déclarée dans les métadonnées : {value}. Une date EXIF ne prouve pas la date réelle de prise de vue.",
+      "creationDate": "Date de création déclarée dans les métadonnées : {value}. Une date EXIF ne prouve pas la date réelle de création.",
+      "gps": "Des coordonnées GPS sont présentes dans les métadonnées. Leur présence ne prouve pas que la photo a été prise à l'endroit indiqué.",
+      "description": "Analyse visuelle (IA) — description : {value}",
+      "locationClue": "Analyse visuelle (IA) — indice de lieu : {value}",
+      "noInconsistency": "L'analyse visuelle n'a relevé aucune incohérence majeure. L'absence d'indice ne prouve pas que l'image est authentique."
+    },
+    "limits": {
+      "visionUnavailable": "L'analyse visuelle automatique est indisponible. Les indices qui dépendent de cette analyse ne peuvent pas être produits.",
+      "visionOwn": "L'analyse visuelle rend compte de ses propres limites : {value}",
+      "uncertainAiHints": "Les indices de génération artificielle relevés sont incertains. Un tel indice ne prouve pas à lui seul que l'image est fausse.",
+      "noSignal": "L'analyse visuelle n'a relevé aucun indice significatif.",
+      "sameModel": "Plusieurs observations peuvent provenir du même modèle d'intelligence artificielle ; elles ne forment pas plusieurs sources indépendantes.",
+      "noExif": "Aucune métadonnée exploitable n'a été trouvée. Certaines plateformes, notamment WhatsApp et Facebook, peuvent supprimer les métadonnées lors du partage des images.",
+      "exifAndVision": "Les informations EXIF et les observations de l'analyse visuelle proviennent de la même image et ne constituent pas, à elles seules, plusieurs sources indépendantes de corroboration.",
+      "reverseLinks": "Les liens de recherche inversée sont des outils que le journaliste peut consulter. Leur présence ne constitue pas un résultat de recherche.",
+      "detectorUnavailable": "La détection automatique d'image générée par IA est indisponible : aucun indice de génération n'a pu être calculé.",
+      "detectorNotProbability": "L'indice de génération par IA vient d'un détecteur automatique. Ce n'est pas une probabilité : les détecteurs se trompent, surtout sur les images compressées, retouchées, recadrées ou les captures d'écran.",
+      "detectorNotProof": "Un indice faible ne prouve pas que l'image est authentique ; un indice élevé ne prouve pas qu'elle a été générée."
+    },
+    "summary": {
+      "exifUnreadable": "Les métadonnées EXIF n'ont pas pu être lues.",
+      "noExif": "Aucune métadonnée EXIF exploitable n'a été trouvée. Leur absence ne prouve pas que l'image est fausse.",
+      "exif": "Métadonnées EXIF : {facts}.",
+      "fact": {
+        "dateTaken": "date de prise de vue : {value}",
+        "creationDate": "date de création : {value}",
+        "camera": "appareil : {value}",
+        "software": "logiciel : {value}",
+        "gps": "coordonnées GPS présentes dans les métadonnées"
+      },
+      "visionUnavailable": "L'analyse visuelle est indisponible.",
+      "noVision": "Aucune analyse visuelle n'a pu être produite.",
+      "vision": "Analyse visuelle (IA) : {value}",
+      "inconsistencies": "Incohérences visuelles possiblement relevées : {value}",
+      "aiIndicators": "Indices possibles de génération par IA : {value}",
+      "detector": "Détecteur de génération par IA ({provider}) : indice {index}/100, {level}. Cet indice est indicatif.",
+      "level": {
+        "low": "signal faible",
+        "uncertain": "signal incertain",
+        "high": "signal élevé"
+      },
+      "limits": "Limites : {value}",
+      "conclusion": "La vérification reste non concluante : les éléments disponibles ne permettent pas d'affirmer que l'image est authentique ou falsifiée."
+    }
   }
 }

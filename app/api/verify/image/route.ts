@@ -8,6 +8,7 @@ import { EXIF_UNAVAILABLE_WARNING, readImageMetadata, type ImageMetadata } from 
 import { acceptUploadedImage } from "@/lib/image-intake";
 import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
 import { reverseSearchLinks } from "@/lib/reverse-search";
+import { detectAiGeneration } from "@/lib/sightengine";
 import { authenticate } from "@/lib/security/auth";
 import { errorResponse, jsonResponse, startTimer, tooManyRequests } from "@/lib/security/request";
 import { buildVerification, type VisionWarning } from "@/lib/verification-summary";
@@ -53,7 +54,7 @@ const fieldsSchema = z.object({
     .optional(),
 });
 
-type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; metadataSource?: string; analysis?: boolean };
+type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; metadataSource?: string; analysis?: boolean; aiDetection?: string };
 
 function logRequest(entry: LogEntry) {
   const line = JSON.stringify({ route: "POST /api/verify/image", ...entry });
@@ -143,19 +144,25 @@ export async function POST(req: NextRequest) {
     const exifWarnings = useDevice ? fromFile.warnings.filter((w) => w.code !== EXIF_UNAVAILABLE_WARNING.code) : fromFile.warnings;
     const metadataSource = fromFile.metadata.available ? "file" : useDevice ? "device" : "none";
 
-    const vision = await analyzeImage(intake.bytes, intake.format, fields.data.lang);
-    const verification = buildVerification(metadata, exifWarnings, vision.analysis, vision.warnings as VisionWarning[], reverseSearch);
+    const [vision, detector] = await Promise.all([
+      analyzeImage(intake.bytes, intake.format, fields.data.lang),
+      detectAiGeneration(intake.bytes, fields.data.lang),
+    ]);
+    const aiDetection = detector.detection;
+    const verification = buildVerification(metadata, exifWarnings, vision.analysis, vision.warnings as VisionWarning[], reverseSearch, aiDetection, fields.data.lang);
+    const aiDetectionLog = aiDetection.status === "ok" ? "ok" : aiDetection.reason;
 
-    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, metadataSource, analysis: vision.analysis !== null });
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, metadataSource, analysis: vision.analysis !== null, aiDetection: aiDetectionLog });
     return jsonResponse({
       ok: true,
       mock: isMockMode(),
       file: { format: intake.format, size: intake.size },
       metadata,
       metadataSource,
-      warnings: [...exifWarnings, ...vision.warnings],
+      warnings: [...exifWarnings, ...vision.warnings, ...detector.warnings],
       reverseSearch,
       analysis: vision.analysis,
+      aiDetection,
       verification: {
         status: verification.status,
         summary: verification.summary,

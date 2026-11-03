@@ -330,6 +330,8 @@
     "submit": "Dinihina",
     "change": "Hanova rakitra",
     "summary": "Famintinana",
+    "summaryMore": "Mandika",
+    "summaryLess": "Mandoro",
     "supporting": "Famantarana mifanaraka",
     "contradictory": "Famantarana mifanohitra",
     "metadata": "Metadata",
@@ -371,6 +373,21 @@
       "aiIndicators": "Famantarana mety ho noforonin'ny IA",
       "locationClues": "Famantarana momba ny toerana",
       "note": "Sary tsy mihetsika 6 ihany no nodinihina: tsy nodinihina ny feo, ny fanovana ary ny ambin'ny horonan-tsary."
+    },
+    "aiDetection": {
+      "title": "Tondro famoronana amin'ny IA",
+      "level": {
+        "low": "Famantarana malemy",
+        "uncertain": "Famantarana tsy azo antoka",
+        "high": "Famantarana mahery"
+      },
+      "note": "Tondro fotsiny, tsy probabilité. Ny tondro ambany dia tsy porofo fa tena izy ny sary.",
+      "source": "Mpitsikilo {provider}, nojerena tamin'ny {date}. Alefa any amin'ny {provider} ny sary, nahena sady tsy misy metadata, mba hanaovana ity kajy ity.",
+      "unavailable": {
+        "not_configured": "Tsy voalamina amin'ity mpizara ity ilay mpitsikilo: tsy nisy tondro voakajy.",
+        "failed": "Tsy namaly ilay mpitsikilo: tsy nisy tondro voakajy. Andramo indray any aoriana.",
+        "mock": "Fampisehoana: tsy nantsoina ilay mpitsikilo."
+      }
     }
   },
   "translate": {
@@ -471,5 +488,55 @@
     "lead": "Mila Internet ny fanamarinana filazana: karohina mivantana ny loharano, ary tsy misy foronina raha tsy misy azy ireo.",
     "files": "Mijanona ao amin'ity fitaovana ity ny antontan-taratasy voatahirinao. Hiseho indray izy ireo raha vao miverina ny fifandraisana.",
     "retry": "Andramo indray"
+  },
+  "imageReport": {
+    "evidence": {
+      "camera": "Fakan-tsary voalaza ao amin'ny metadata: {value}.",
+      "software": "Rindrankajy fanodinana hita ao amin'ny metadata: {value}.",
+      "dateTaken": "Daty nakana ny sary voalaza ao amin'ny metadata: {value}. Tsy porofon'ny tena daty nakana ny sary ny daty EXIF.",
+      "creationDate": "Daty namoronana voalaza ao amin'ny metadata: {value}. Tsy porofon'ny tena daty namoronana ny daty EXIF.",
+      "gps": "Misy koordinata GPS ao amin'ny metadata. Tsy porofo izany fa tany amin'io toerana io no nakana ny sary.",
+      "description": "Fandinihana maso (IA) — famaritana: {value}",
+      "locationClue": "Fandinihana maso (IA) — famantarana ny toerana: {value}",
+      "noInconsistency": "Tsy nahita tsy fitoviana lehibe ny fandinihana maso. Ny tsy fisian'ny famantarana dia tsy porofo fa tena izy ny sary."
+    },
+    "limits": {
+      "visionUnavailable": "Tsy misy ny fandinihana maso ho azy. Tsy azo natao ireo famantarana miankina aminy.",
+      "visionOwn": "Ny fandinihana maso dia milaza ny fetrany: {value}",
+      "uncertainAiHints": "Tsy azo antoka ireo famantarana famoronana amin'ny IA hita. Ny famantarana toy izany irery dia tsy porofo fa sandoka ny sary.",
+      "noSignal": "Tsy nahita famantarana manan-danja ny fandinihana maso.",
+      "sameModel": "Mety avy amin'ny modely IA iray ihany ny fandinihana maromaro; tsy loharano mahaleo tena maromaro izy ireo.",
+      "noExif": "Tsy nisy metadata azo ampiasaina hita. Misy sehatra, toa an'i WhatsApp sy Facebook, mamafa ny metadata rehefa mizara sary.",
+      "exifAndVision": "Avy amin'ny sary iray ihany ny angona EXIF sy ny fandinihana maso; raha izy ireo irery dia tsy loharano mahaleo tena maromaro manamarina.",
+      "reverseLinks": "Fitaovana azon'ny mpanao gazety sokafana ireo rohy fikarohana mivadika. Tsy valin'ny fikarohana izy ireo.",
+      "detectorUnavailable": "Tsy misy ny fitadiavana ho azy ny sary noforonin'ny IA: tsy nisy tondro famoronana voakajy.",
+      "detectorNotProbability": "Avy amin'ny mpitsikilo ho azy ny tondro famoronana amin'ny IA. Tsy probabilité izy: diso ny mpitsikilo indraindray, indrindra amin'ny sary voatsindry, voaova, voatapaka na sary an-efijery.",
+      "detectorNotProof": "Ny tondro ambany dia tsy porofo fa tena izy ny sary; ny tondro avo dia tsy porofo fa noforonina ilay izy."
+    },
+    "summary": {
+      "exifUnreadable": "Tsy voavaky ny metadata EXIF.",
+      "noExif": "Tsy nisy metadata EXIF azo ampiasaina hita. Ny tsy fisiany dia tsy porofo fa sandoka ny sary.",
+      "exif": "Metadata EXIF: {facts}.",
+      "fact": {
+        "dateTaken": "daty nakana ny sary: {value}",
+        "creationDate": "daty namoronana: {value}",
+        "camera": "fakan-tsary: {value}",
+        "software": "rindrankajy: {value}",
+        "gps": "misy koordinata GPS ao amin'ny metadata"
+      },
+      "visionUnavailable": "Tsy misy ny fandinihana maso.",
+      "noVision": "Tsy nisy fandinihana maso azo natao.",
+      "vision": "Fandinihana maso (IA): {value}",
+      "inconsistencies": "Tsy fitoviana mety hita: {value}",
+      "aiIndicators": "Famantarana mety ho famoronana amin'ny IA: {value}",
+      "detector": "Mpitsikilo famoronana amin'ny IA ({provider}): tondro {index}/100, {level}. Tondro fotsiny ity.",
+      "level": {
+        "low": "famantarana malemy",
+        "uncertain": "famantarana tsy azo antoka",
+        "high": "famantarana mahery"
+      },
+      "limits": "Fetra: {value}",
+      "conclusion": "Mbola tsy misy fehiny ny fanamarinana: tsy ahafahana milaza ireo singa misy fa tena izy na sandoka ny sary."
+    }
   }
 }
