@@ -142,8 +142,10 @@ messages/{mg,fr,en}.json
 Direction "Site Immersif" (voir le skill du même nom) : sombre "latérite", typographique, animé.
 - Tokens dans `app/globals.css` : `--bone`, `--surface`, `--ink`, `--ash`, `--accent` (cuivre, seul accent),
   `--accent-deep` (petits boutons), statuts `--st-*`. Polices : Bricolage Grotesque + DM Mono.
-- Thème sombre sur le marron du logo (`--bone: #39231a`), thème clair crème avec encre marron. Chaque couleur
-  est un token redéfini sous `:root[data-theme="light"]` ; `tests/theme.test.mjs` vérifie le niveau AA des deux.
+- Thème sombre : page cuivre (`--bone: #996e52`), texte blanc, et tout ce qui se lit (panneaux `--surface`,
+  barre latérale et menus `--chrome`, champs `--field`) en marron du logo. Thème clair crème avec encre marron.
+  Chaque couleur est un token redéfini sous `:root[data-theme="light"]` ; `tests/theme.test.mjs` vérifie le
+  niveau AA des panneaux et champs. Seul le texte posé sur le cuivre est à 4,46:1, le maximum possible.
 - Logo source : `assets/zahavania.png`. Les icônes (favicon, PWA, Apple) en sont dérivées par
   `node scripts/generate-icons.mjs` ; ne pas les retoucher à la main.
 - Filets fins plutôt que cartes ombrées. Pas de dégradé décoratif, pas de glassmorphism, pas d'emoji.

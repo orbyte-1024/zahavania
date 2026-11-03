@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --ink-rgb: 239, 233, 220;
-  --bone-rgb: 57, 35, 26;
-  --surface-rgb: 69, 44, 34;
-  --bone: #39231a;
-  --surface: #452c22;
-  --surface-2: #50352a;
-  --ink: #efe9dc;
-  --ash: #c2b4a4;
+  --ink-rgb: 255, 255, 255;
+  --bone-rgb: 153, 110, 82;
+  --surface-rgb: 57, 35, 26;
+  --bone: #996e52;
+  --surface: #39231a;
+  --surface-2: #452c22;
+  --chrome: #39231a;
+  --field: #2b1a13;
+  --ink: #ffffff;
+  --ash: #f6eee4;
   --ink-faint: rgba(var(--ink-rgb), 0.16);
   --ink-hair: rgba(var(--ink-rgb), 0.09);
 
@@ -25,9 +27,9 @@
   --st-needs-rgb: 232, 197, 124;
   --st-insufficient: #c2b4a4;
 
-  --scene-paper: #d7d1be;
-  --scene-dim: #4d3226;
-  --scene-accent: #d29a72;
+  --scene-paper: #fbf6ee;
+  --scene-dim: #6b4630;
+  --scene-accent: #39231a;
 
   --sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -49,6 +51,8 @@
   --bone: #f6f1e7;
   --surface: #ede5d6;
   --surface-2: #e2d8c6;
+  --chrome: #f6f1e7;
+  --field: #f6f1e7;
   --ink: #39231a;
   --ash: #6b5548;
 

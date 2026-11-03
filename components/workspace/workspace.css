@@ -13,6 +13,7 @@
   height: 100dvh;
   padding: 26px 18px 22px 22px;
   border-right: 1px solid var(--ink-hair);
+  background: var(--chrome);
 }
 
 .rail-wordmark {
@@ -168,7 +169,7 @@
   width: 100%;
   min-height: 48px;
   padding: 12px 14px;
-  background: var(--bone);
+  background: var(--field);
   border: 1px solid var(--ink-hair);
   border-radius: var(--radius);
   font-size: 17px;
@@ -209,7 +210,7 @@
 .segmented {
   display: inline-flex;
   padding: 3px;
-  background: var(--bone);
+  background: var(--field);
   border-radius: var(--radius);
 }
 
@@ -847,7 +848,7 @@
   padding: 0 14px;
   border: 1px solid var(--ink-hair);
   border-radius: var(--radius);
-  background: var(--bone);
+  background: var(--field);
   color: var(--ash);
   cursor: pointer;
 }
@@ -865,7 +866,7 @@
   overflow: hidden;
   border: 1px dashed var(--ink-faint);
   border-radius: var(--radius);
-  background: var(--bone);
+  background: var(--field);
   cursor: pointer;
   transition:
     border-color 0.3s,
@@ -1160,7 +1161,7 @@
     align-items: center;
     justify-content: space-between;
     padding: calc(10px + env(safe-area-inset-top, 0px)) var(--gutter) 10px;
-    background: var(--bone);
+    background: var(--chrome);
     border-bottom: 1px solid var(--ink-hair);
   }
 
@@ -1181,7 +1182,7 @@
     flex-direction: column;
     gap: 28px;
     padding: calc(10px + env(safe-area-inset-top, 0px)) var(--gutter) calc(24px + env(safe-area-inset-bottom, 0px));
-    background: var(--bone);
+    background: var(--chrome);
     overflow-y: auto;
   }
 

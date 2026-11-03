@@ -90,17 +90,28 @@ test("light theme text and the four statuses meet WCAG AA on every background", 
   }
 });
 
-test("the dark theme uses the logo brown and keeps text and statuses at WCAG AA", () => {
-  assert.equal(dark.bone, "#39231a");
+test("dark theme: copper page, brown panels where text and statuses meet WCAG AA", () => {
+  assert.equal(dark.bone, "#996e52");
+  assert.equal(dark.surface, "#39231a");
+  assert.equal(dark.chrome, "#39231a");
   const foregrounds = ["ink", "ash", "accent", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
   for (const fg of foregrounds) {
-    for (const bg of ["bone", "surface", "surface-2"]) {
+    for (const bg of ["surface", "surface-2", "chrome", "field"]) {
       const ratio = contrast(dark[fg], dark[bg]);
       assert.ok(ratio >= 4.5, `${fg} on ${bg}: ${ratio.toFixed(2)}`);
     }
   }
+  assert.ok(contrast(dark.ink, dark.bone) >= 4.4, "white on the copper page is the best a light text can reach");
   for (const bg of ["accent", "accent-deep"]) {
     assert.ok(contrast(dark["accent-ink"], dark[bg]) >= 4.5, `accent-ink on ${bg}`);
+  }
+});
+
+test("paper slips of the 3D scene stand out from the background in both themes", () => {
+  for (const theme of [dark, light]) {
+    assert.ok(contrast(theme["scene-paper"], theme.bone) >= 1.08, `paper on ${theme.bone}`);
+    assert.ok(contrast(theme["scene-dim"], theme.bone) >= 1.15, `sorted slips on ${theme.bone}`);
+    assert.ok(contrast(theme["scene-accent"], theme.bone) >= 3, `sourced slips on ${theme.bone}`);
   }
 });
 
