@@ -8,7 +8,7 @@ const ImageResultSchema = z.object({
   ok: z.boolean(),
   format: z.string().optional(),
   size: z.number().optional(),
-  exif: z.record(z.unknown()).optional(),
+  exif: z.record(z.string(), z.unknown()).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     // Vision IA (optionnelle : désactivée par défaut, consentement explicite)
     let visionResult: { analysis: unknown | null; warnings: { code: string; message: string }[] } = { analysis: null, warnings: [] };
     try {
-      const { analyzeImage } = await import("@/lib/image/vision-analyzer");
+      const { analyzeImage } = await import("@/lib/vision-analyzer");
       visionResult = await analyzeImage(bytes, validation.format);
     } catch {
       visionResult = {
