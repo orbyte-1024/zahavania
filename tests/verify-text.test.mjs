@@ -25,14 +25,14 @@ const claim = (sources, overrides = {}) => ({
   ...overrides,
 });
 
-test("rate limiter blocks after the limit and returns retry-after", () => {
-  const limiter = createRateLimiter({ limit: 2, windowMs: 60_000 });
-  assert.equal(limiter.check("user-a").allowed, true);
-  assert.equal(limiter.check("user-a").allowed, true);
-  const blocked = limiter.check("user-a");
+test("rate limiter blocks after the limit and returns retry-after", async () => {
+  const limiter = createRateLimiter({ name: "test", limit: 2, windowMs: 60_000 }, null);
+  assert.equal((await limiter.check("user-a")).allowed, true);
+  assert.equal((await limiter.check("user-a")).allowed, true);
+  const blocked = await limiter.check("user-a");
   assert.equal(blocked.allowed, false);
   assert.ok(blocked.retryAfterSeconds >= 1 && blocked.retryAfterSeconds <= 60);
-  assert.equal(limiter.check("user-b").allowed, true);
+  assert.equal((await limiter.check("user-b")).allowed, true);
 });
 
 test("ssrf guard rejects private, local and non-standard destinations", () => {

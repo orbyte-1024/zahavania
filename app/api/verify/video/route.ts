@@ -19,9 +19,10 @@ const MINUTE_MS = 60_000;
 const FRAME_CONCURRENCY = 2;
 const FRAME_TIMEOUT_MS = 30_000;
 
-const ipLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
-const userLimiter = createRateLimiter({ limit: 5, windowMs: MINUTE_MS });
+const ipLimiter = createRateLimiter({ name: "verify-video:ip", limit: 10, windowMs: MINUTE_MS });
+const userLimiter = createRateLimiter({ name: "verify-video:user", limit: 5, windowMs: MINUTE_MS });
 const dailyLimiter = createRateLimiter({
+  name: "verify-video:daily",
   limit: readIntEnv("AI_DAILY_LIMIT_PER_USER", 50, 1, 10_000),
   windowMs: 24 * 60 * MINUTE_MS,
 });
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
   const elapsed = startTimer();
   const ip = clientIp(req);
 
-  const ipCheck = ipLimiter.check(ip);
+  const ipCheck = await ipLimiter.check(ip);
   if (!ipCheck.allowed) {
     logRequest({ userId: null, durationMs: elapsed(), status: 429, code: "ip_rate_limited" });
     return tooManyRequests(ipCheck.retryAfterSeconds, "rate_limited");
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest) {
   }
   const userKey = auth.demo ? `demo:${ip}` : auth.userId;
 
-  const userCheck = userLimiter.check(userKey);
+  const userCheck = await userLimiter.check(userKey);
   if (!userCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "user_rate_limited" });
     return tooManyRequests(userCheck.retryAfterSeconds, "rate_limited");
@@ -99,7 +100,7 @@ export async function POST(req: NextRequest) {
     return jsonResponse({ ok: false, error: { code: "invalid_input", message: "Invalid request.", fields: ["lang", "duration", "timestamps"] } }, 400);
   }
 
-  const dailyCheck = dailyLimiter.check(userKey);
+  const dailyCheck = await dailyLimiter.check(userKey);
   if (!dailyCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
     return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
