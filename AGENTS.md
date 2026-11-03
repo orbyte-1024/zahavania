@@ -114,7 +114,8 @@ messages/{mg,fr,en}.json
   affiche un badge "Démonstration".
 - Le **score est calculé par le code** (`lib/score.ts`), jamais "décidé" par le modèle : type de source,
   sens, domaines distincts, date, contradictions. Le nombre de sources seul ne suffit pas.
-- Quota limité : cache par utilisateur (`lib/cache.ts`), limites IP + utilisateur + jour (`lib/security/ratelimit.ts`).
+- Quota limité : cache par utilisateur (`lib/cache.ts`), limites IP + utilisateur + jour (`lib/security/ratelimit.ts`,
+  partagées via Supabase si `RATE_LIMIT_STORE=supabase`, en mémoire sinon).
 - L'assistant éditorial ne part que des affirmations `confirmed`. Il propose des **profils**, jamais des noms.
 - Le malagasy est moins bien géré par les modèles : ne pas promettre plus que ce qui a été testé.
 
