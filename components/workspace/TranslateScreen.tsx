@@ -47,7 +47,7 @@ export function TranslateScreen() {
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need={`${tm("need")} · ${tm("state")}`} title={t("title")} lead={t("lead")} />
+      <ScreenHeader kicker={`${tm("state")}`} title={t("title")} lead={t("lead")} />
 
       <motion.form className="panel form" onSubmit={submit} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}>
         <div className="lang-pair">

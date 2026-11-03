@@ -159,7 +159,7 @@ Remarque : je n'ai pas fait de correction et je n'ai pas ajouté de commit sans 
 
 ### 6.5 Limites du rate limiter
 - Map en mémoire.
-- Acceptable pour du local/dev, mais à signaler si le besoin évolue vers un environnement scale-out ou redémarrage fréquent.
+- Acceptable pour du local/dev, mais à signaler si le produit évolue vers un environnement scale-out ou redémarrage fréquent.
 - Pas un bug du code, juste une limite d'architecture.
 
 ### 6.6 Build non encore confirmé

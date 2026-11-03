@@ -13,14 +13,14 @@ export function Overview() {
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need={BRAND_NAME_UPPER} title={t("workspace.overviewTitle")} lead={t("workspace.overviewLead")} />
+      <ScreenHeader kicker={BRAND_NAME_UPPER} title={t("workspace.overviewTitle")} lead={t("workspace.overviewLead")} />
       <motion.ol className="overview" variants={stagger} initial="hidden" animate="show">
         {MODULE_IDS.map((id) => (
           <motion.li key={id} variants={rise}>
             <Link href={modulePath(id)} className="overview-card" data-live={LIVE_MODULES.has(id) || undefined}>
               <ModuleGlyph id={id} className="overview-glyph" />
               <span className="mono ash">
-                {t(`modules.${id}.need`)} · {t(`modules.${id}.state`)}
+                {t(`modules.${id}.state`)}
               </span>
               <span className="overview-name">{t(`modules.${id}.name`)}</span>
               <span className="overview-desc">{t(`modules.${id}.desc`)}</span>

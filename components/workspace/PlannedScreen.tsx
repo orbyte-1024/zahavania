@@ -12,7 +12,7 @@ export function PlannedScreen({ id }: { id: "monitor" }) {
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need={tm("need")} title={t("title")} lead={t("lead")}>
+      <ScreenHeader kicker={tm("name")} title={t("title")} lead={t("lead")}>
         <Badge tone="warn">{tm("state")}</Badge>
       </ScreenHeader>
       <motion.section className="panel planned" variants={stagger} initial="hidden" animate="show">

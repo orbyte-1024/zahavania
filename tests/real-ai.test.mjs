@@ -52,7 +52,7 @@ test("figures without a source are dropped and old figures are flagged", () => {
   assert.equal(population.stale, false);
 });
 
-test("agenda entries need a source", () => {
+test("agenda entries require a source", () => {
   const data = parseAgenda({
     updatedAt: "2026-11-03",
     watch: [],

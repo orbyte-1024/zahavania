@@ -32,11 +32,11 @@ export function StatusChip({ status }: { status: ClaimStatus }) {
   );
 }
 
-export function ScreenHeader({ need, title, lead, children }: { need: string; title: string; lead: string; children?: ReactNode }) {
+export function ScreenHeader({ kicker, title, lead, children }: { kicker: string; title: string; lead: string; children?: ReactNode }) {
   return (
     <motion.header className="screen-head" variants={stagger} initial="hidden" animate="show">
       <motion.p className="mono ash" variants={rise}>
-        {need}
+        {kicker}
       </motion.p>
       <motion.h1 className="screen-title" variants={rise}>
         {title}

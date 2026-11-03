@@ -24,7 +24,6 @@
       "name": "Hamarino vaovao",
       "short": "Hamarino",
       "desc": "Lahatsoratra na rohy. Sarahina ireo filazana, ampitahaina amin'ny loharano hitan'ny fikarohana an-tranonkala, ary isain'ny kaody.",
-      "need": "FILANA 1",
       "state": "MANDEHA",
       "rail": "Hamarino vaovao"
     },
@@ -32,7 +31,6 @@
       "name": "Hamarino sary",
       "short": "Sary",
       "desc": "Metadata EXIF, fandinihana ny sary atolotra ho famantarana, rohy fikarohana mivadika. Tsy milaza mihitsy hoe « marina » na « diso ».",
-      "need": "FILANA 2",
       "state": "MANDEHA",
       "rail": "Hamarino sary"
     },
@@ -40,7 +38,6 @@
       "name": "Fanaraha-maso nasionaly",
       "short": "Fanaraha-maso",
       "desc": "Ny RSS an'ny haino aman-jery malagasy, sivanina araka ny loharano, ny fiteny ary ny lohahevitra. Lohateny, rohy ary sombiny ihany.",
-      "need": "FILANA 3",
       "state": "AN-DALAM-PANOMANANA",
       "rail": "Fanaraha-maso"
     },
@@ -48,7 +45,6 @@
       "name": "Handika teny",
       "short": "Handika",
       "desc": "Malagasy, frantsay, anglisy. Ny teny malagasy novokarina dia voamarika foana hoe « hojerena indray ».",
-      "need": "FILANA 4",
       "state": "MANDEHA",
       "rail": "Handika teny"
     },
@@ -56,7 +52,6 @@
       "name": "Hitady manam-pahaizana",
       "short": "Manam-pahaizana",
       "desc": "Lohahevitra, faritra, fiteny. Avy amin'ny lisitra nekena ihany ny manam-pahaizana, tsy avy amin'ny modely mihitsy.",
-      "need": "FILANA 6",
       "state": "MANDEHA",
       "rail": "Manam-pahaizana"
     },
@@ -64,7 +59,6 @@
       "name": "Isa sy fandaharana",
       "short": "Isa",
       "desc": "Tondro vitsivitsy, samy manana ny loharanony, ny fe-potoana ary ny daty nanavaozana azy.",
-      "need": "FILANA 7",
       "state": "MANDEHA",
       "rail": "Isa fototra"
     },
@@ -72,7 +66,6 @@
       "name": "Lafiny tatitra",
       "short": "Lafiny",
       "desc": "Lafiny telo ka hatramin'ny dimy miorina amin'ny filazana voamarina ihany, miaraka amin'ny fanontaniana sy ireo olona hanontaniana.",
-      "need": "FILANA 8",
       "state": "MANDEHA",
       "rail": "Lafiny tatitra"
     }
@@ -103,8 +96,8 @@
     "toolsHead": {
       "kicker": "NY FITAOVANA",
       "title": "Fitaovana fito, tranom-gazety iray",
-      "sub": "Samy manana ny efijeriny ny filana tsirairay nambaran'ny mpanao gazety. Mandeha ireo dimy voalohany.",
-      "meta": "FILANA 1 KA HATRAMIN'NY 8 — AFA-TSY NY TSY MISY INTERNET"
+      "sub": "Samy manana ny efijeriny ny fanambarana tsirairay nambaran'ny mpanao gazety. Mandeha ireo dimy voalohany.",
+      "meta": "FANDINIHANA 1 KA HATRAMIN'NY 8 — AFA-TSY NY TSY MISY INTERNET"
     },
     "tools": {
       "discover": "Mahita"
