@@ -27,12 +27,40 @@ const agendaSchema = z.object({
 const fileSchema = z.object({
   retrievedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   indicators: z.array(z.unknown()),
-  agenda: z.array(z.unknown()),
+});
+
+const watchSchema = z.object({
+  name: z.string().min(1),
+  url: z.url({ protocol: /^https$/ }),
+  topic: localized,
+});
+
+const agendaFileSchema = z.object({
+  updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  items: z.array(z.unknown()),
+  watch: z.array(watchSchema),
 });
 
 export type Indicator = z.infer<typeof indicatorSchema> & { stale: boolean };
 export type AgendaItem = z.infer<typeof agendaSchema>;
-export type StatsData = { retrievedAt: string; indicators: Indicator[]; agenda: AgendaItem[] };
+export type WatchedSource = z.infer<typeof watchSchema>;
+export type StatsData = { retrievedAt: string; indicators: Indicator[] };
+export type AgendaData = { updatedAt: string; items: AgendaItem[]; watch: WatchedSource[] };
+
+export function parseAgenda(input: unknown): AgendaData {
+  const file = agendaFileSchema.parse(input);
+  const items = file.items
+    .flatMap((entry) => {
+      const parsed = agendaSchema.safeParse(entry);
+      return parsed.success ? [parsed.data] : [];
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
+  return { updatedAt: file.updatedAt, items, watch: file.watch };
+}
+
+export function upcomingAgenda(items: AgendaItem[], today: string): AgendaItem[] {
+  return items.filter((item) => item.date >= today);
+}
 
 export function parseStats(input: unknown): StatsData {
   const file = fileSchema.parse(input);
@@ -42,9 +70,5 @@ export function parseStats(input: unknown): StatsData {
     if (!parsed.success) return [];
     return [{ ...parsed.data, stale: referenceYear - Number(parsed.data.period) > STALE_AFTER_YEARS }];
   });
-  const agenda = file.agenda.flatMap((entry) => {
-    const parsed = agendaSchema.safeParse(entry);
-    return parsed.success ? [parsed.data] : [];
-  });
-  return { retrievedAt: file.retrievedAt, indicators, agenda };
+  return { retrievedAt: file.retrievedAt, indicators };
 }

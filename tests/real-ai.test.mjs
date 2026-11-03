@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { isMockMode } from "../lib/ai/client.ts";
 import { translateInputSchema } from "../lib/ai/translate.ts";
 import { parseReports, reportToText } from "../lib/dossiers.ts";
-import { parseStats } from "../lib/stats.ts";
+import { parseAgenda, parseStats } from "../lib/stats.ts";
 
 const stats = JSON.parse(readFileSync(new URL("../data/stats.json", import.meta.url), "utf8"));
 
@@ -53,15 +53,15 @@ test("figures without a source are dropped and old figures are flagged", () => {
 });
 
 test("agenda entries need a source", () => {
-  const data = parseStats({
-    retrievedAt: "2026-11-03",
-    indicators: [],
-    agenda: [
+  const data = parseAgenda({
+    updatedAt: "2026-11-03",
+    watch: [],
+    items: [
       { date: "2026-12-01", title: { mg: "a", fr: "b", en: "c" }, organizer: "INSTAT", source: { url: "https://www.instat.mg/" } },
       { date: "2026-12-02", title: { mg: "a", fr: "b", en: "c" }, organizer: "Unknown" },
     ],
   });
-  assert.equal(data.agenda.length, 1);
+  assert.equal(data.items.length, 1);
 });
 
 test("translation input is strict and rejects identical languages", () => {

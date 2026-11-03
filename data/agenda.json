@@ -1,0 +1,42 @@
+{
+  "updatedAt": "2026-11-03",
+  "items": [],
+  "watch": [
+    {
+      "name": "INSTAT Madagascar",
+      "url": "https://www.instat.mg/",
+      "topic": {
+        "mg": "Tondro ny vidim-piainana (NIPC) isam-bolana, tabilao momba ny toekarena",
+        "fr": "Indice des prix (NIPC) mensuel, tableaux de bord de l'économie",
+        "en": "Monthly consumer price index (NIPC), economic dashboards"
+      }
+    },
+    {
+      "name": "Banky Foiben'i Madagasikara",
+      "url": "https://www.banky-foibe.mg/",
+      "topic": {
+        "mg": "Fanapahan-kevitry ny komity momba ny politika ara-bola",
+        "fr": "Décisions du comité de politique monétaire",
+        "en": "Monetary policy committee decisions"
+      }
+    },
+    {
+      "name": "IMF — Madagascar",
+      "url": "https://www.imf.org/en/countries/mdg",
+      "topic": {
+        "mg": "Fanombanana ny fandaharan'asa FEC sy FRD",
+        "fr": "Revues des programmes FEC et FRD",
+        "en": "Reviews of the ECF and RSF programmes"
+      }
+    },
+    {
+      "name": "World Bank — Madagascar",
+      "url": "https://www.worldbank.org/en/country/madagascar",
+      "topic": {
+        "mg": "Tatitra momba ny toekarena malagasy",
+        "fr": "Rapports sur l'économie malgache",
+        "en": "Madagascar Economic Update"
+      }
+    }
+  ]
+}

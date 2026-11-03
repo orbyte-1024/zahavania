@@ -53,5 +53,5 @@ for (const indicator of INDICATORS) {
 }
 
 const retrievedAt = new Date().toISOString().slice(0, 10);
-await writeFile(OUTPUT, `${JSON.stringify({ retrievedAt, indicators, agenda: [] }, null, 2)}\n`);
+await writeFile(OUTPUT, `${JSON.stringify({ retrievedAt, indicators }, null, 2)}\n`);
 process.stdout.write(`wrote data/stats.json (${indicators.length} indicators)\n`);
