@@ -3,8 +3,12 @@ import type { AiUsage } from "@/lib/ai/client";
 import type { suggestInputSchema } from "@/lib/ai/expert-schemas";
 import type { anglesInputSchema, AnglesOutput, verifyInputSchema } from "@/lib/ai/schemas";
 import type { Domain } from "@/lib/constants/domains";
+import type { Region } from "@/lib/constants/regions";
 import type { ExpertSuggestion, SuggestNotice } from "@/lib/experts/suggest";
 import type { ScoredVerification } from "@/lib/score";
+import type { monitorInputSchema } from "@/lib/monitor/input";
+import type { MonitorPayload, MonitorSourceSummary } from "@/lib/monitor/types";
+import type { MonitorThemeId } from "@/lib/monitor/taxonomy";
 
 export type {
   ClaimStatus,
@@ -17,6 +21,14 @@ export type { ContributionType } from "@/lib/ai/expert-schemas";
 export type { Domain } from "@/lib/constants/domains";
 export type { Region } from "@/lib/constants/regions";
 export type { ExpertSuggestion, SuggestNotice, SuggestNoticeCode } from "@/lib/experts/suggest";
+export type {
+  MonitorAlert,
+  MonitorArticle,
+  MonitorEvent,
+  MonitorSourceSummary,
+  MonitorTheme,
+  MonitorVersions,
+} from "@/lib/monitor/types";
 
 export type ApiErrorBody<Code extends string = string> = {
   ok: false;
@@ -174,4 +186,22 @@ export type VerifyVideoSuccess = {
 export type VerifyVideoErrorCode = CommonErrorCode | "frames_missing" | "frames_too_large" | "unsupported_media" | "invalid_image";
 
 export type VerifyVideoResponse = VerifyVideoSuccess | ApiErrorBody<VerifyVideoErrorCode>;
+
+export type MonitorRequest = z.input<typeof monitorInputSchema>;
+
+export type MonitorSuccess = MonitorPayload & { ok: true; mock: boolean };
+
+export type MonitorErrorCode = CommonErrorCode | "feeds_unavailable" | "monitor_unavailable";
+
+export type MonitorResponse = MonitorSuccess | ApiErrorBody<MonitorErrorCode>;
+
+export type MonitorMetadataSuccess = {
+  ok: true;
+  auditedAt: string;
+  policy: string;
+  sources: MonitorSourceSummary[];
+  regions: { id: Region; name: string; districts: { id: string; name: string }[] }[];
+  themes: MonitorThemeId[];
+  limitations: string[];
+};
 

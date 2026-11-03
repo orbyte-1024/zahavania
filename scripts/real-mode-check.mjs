@@ -54,6 +54,7 @@ const ROUTES = [
   ["translate", () => call("/api/translate", { sourceLang: "fr", targetLang: "mg", text: "L'Assemblée nationale a adopté la loi de finances 2025." })],
   ["sources-suggest", () => call("/api/sources/suggest", { topic: "Prix du riz à Antananarivo", lang: "fr" })],
   ["angles", () => call("/api/editorial/angles", { subject: "Prix du riz à Antananarivo", lang: "fr" })],
+  ["monitor", () => call("/api/monitor", { lang: "fr", sinceHours: 72 })],
   ["verify-image", async () => {
     const form = await imageForm("image", ["public/images/landing/f02.jpg"]);
     form.append("lang", "fr");

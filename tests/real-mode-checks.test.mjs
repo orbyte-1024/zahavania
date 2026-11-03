@@ -40,6 +40,36 @@ test("each route has its own minimal real-mode check", () => {
   assert.equal(checkResponse("verify-video", 200, { ...base, analysedCount: 2, failedCount: 0 }).ok, true);
 });
 
+test("monitoring fails without articles, events or traceable sources", () => {
+  const base = { ok: true, mock: false };
+  const event = {
+    id: "evt-1",
+    sources: [{ sourceId: "midi", sourceName: "Midi", articleCount: 2 }],
+    momentum: { score: 66, level: "surge" },
+    versions: { coverage: "divergent" },
+  };
+  const article = { id: "a1", title: "Titre", url: "https://example.org/a", publishedAt: "2026-11-03T08:00:00Z" };
+  const result = checkResponse("monitor", 200, {
+    ...base,
+    articles: [article],
+    events: [event],
+    alerts: [],
+    meta: { analysis: "ok" },
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.events, 1);
+  assert.equal(checkResponse("monitor", 200, { ...base, articles: [], events: [event], alerts: [], meta: { analysis: "ok" } }).reason, "no article matched");
+  assert.equal(checkResponse("monitor", 200, { ...base, articles: [article], events: [], alerts: [], meta: { analysis: "ok" } }).reason, "no event grouped");
+  assert.equal(
+    checkResponse("monitor", 200, { ...base, articles: [article], events: [{ ...event, sources: [] }], alerts: [], meta: { analysis: "ok" } }).reason,
+    "event without source",
+  );
+  assert.equal(
+    checkResponse("monitor", 200, { ...base, articles: [article], events: [{ ...event, versions: { coverage: "certain" } }], alerts: [], meta: { analysis: "ok" } }).ok,
+    false,
+  );
+});
+
 test("rehearsal rows match the log table of docs/demo.md", () => {
   const row = rehearsalRow({ date: "2026-11-03", scenario: "1", run: 2, result: { ok: true, globalIndex: 58, replayed: false }, durationMs: 14_230 });
   assert.equal(row, "| 2026-11-03 | 1 | 2 | OK | 58/100 | 14.2 s |  |");

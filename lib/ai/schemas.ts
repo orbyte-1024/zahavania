@@ -119,6 +119,38 @@ export const anglesOutputSchema = z.object({
   limitations: stringListSchema,
 });
 
+export const monitorDivergenceStatusSchema = z.enum(["contradicted", "needs_verification", "insufficient"]);
+
+export const monitorPositionOutputSchema = z.object({
+  articleId: z.string().min(1).max(200),
+  position: z.string().min(1).max(600),
+});
+
+export const monitorEventAnalysisSchema = z.object({
+  eventId: z.string().min(1).max(120),
+  summary: z.string().max(1_200).default(""),
+  sharedFacts: z.array(z.string().max(600)).max(8).default([]),
+  divergences: z
+    .array(
+      z.object({
+        point: z.string().min(1).max(600),
+        status: monitorDivergenceStatusSchema,
+        positions: z.array(monitorPositionOutputSchema).min(2).max(6),
+      }),
+    )
+    .max(5)
+    .default([]),
+  limitations: z.array(z.string().max(600)).max(6).default([]),
+});
+
+export const monitorAnalysisSchema = z.object({
+  events: z.array(monitorEventAnalysisSchema).max(10),
+});
+
+export type MonitorDivergenceStatusOutput = z.infer<typeof monitorDivergenceStatusSchema>;
+export type MonitorAnalysis = z.infer<typeof monitorAnalysisSchema>;
+export type MonitorEventAnalysisOutput = z.infer<typeof monitorEventAnalysisSchema>;
+
 export type AngleClaimRef = z.infer<typeof angleClaimRefSchema>;
 export type AnglesInput = z.infer<typeof anglesInputSchema>;
 export type AngleFormat = z.infer<typeof angleFormatSchema>;
