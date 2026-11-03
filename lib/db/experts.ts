@@ -70,6 +70,10 @@ const EXPERT_COLUMNS = [
   "is_fictional",
 ].join(", ");
 
+export function includesFictionalExperts(): boolean {
+  return process.env.EXPERTS_INCLUDE_FICTIONAL === "true";
+}
+
 function isConsented(status: string): boolean {
   return (CONSENTED_STATUSES as readonly string[]).includes(status);
 }
@@ -92,6 +96,9 @@ async function queryExperts(
   }
   if (search.languages?.length) {
     query = query.overlaps("languages", [...search.languages]);
+  }
+  if (!includesFictionalExperts()) {
+    query = query.eq("is_fictional", false);
   }
 
   const { data, error } = await query;
