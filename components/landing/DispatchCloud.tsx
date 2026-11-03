@@ -26,7 +26,7 @@ function cssColor(styles: CSSStyleDeclaration, name: string, fallback: string): 
 function readPalette(): Palette {
   const styles = getComputedStyle(document.documentElement);
   return {
-    background: cssColor(styles, "--bone", "#170f0a"),
+    background: cssColor(styles, "--bone", "#15130f"),
     fog: cssColor(styles, "--scene-fog", "#c9bba8"),
     paper: new THREE.Color(cssColor(styles, "--scene-paper", "#f3ebdf")),
     dim: new THREE.Color(cssColor(styles, "--scene-dim", "#ddd0be")),

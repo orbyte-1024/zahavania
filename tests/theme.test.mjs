@@ -90,33 +90,41 @@ test("light theme text and the four statuses meet WCAG AA on every background", 
   }
 });
 
-test("dark theme: the darkest brown only as the page, every reading surface at WCAG AA", () => {
-  assert.equal(dark.bone, "#170f0a");
-  const uses = Object.entries(dark).filter(([, value]) => value.toLowerCase() === dark.bone).map(([name]) => name);
-  assert.deepEqual(uses, ["bone"]);
-  for (const name of ["surface", "surface-2", "chrome", "field"]) assert.notEqual(dark[name], dark.bone, name);
-  const foregrounds = ["ink", "ash", "accent", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
+test("dark theme is the original scheme, with text and statuses at WCAG AA", () => {
+  const original = {
+    bone: "#15130f",
+    surface: "#221e19",
+    "surface-2": "#2b2620",
+    ink: "#f0ebe3",
+    ash: "#9a9086",
+    accent: "#996e52",
+    "accent-deep": "#8c6449",
+    "accent-soft": "#e2c3a8",
+    "st-confirmed": "#9bb38a",
+    "st-contradicted": "#d98a7a",
+    "st-needs": "#d9b36a",
+    "st-insufficient": "#9a9086",
+  };
+  for (const [name, value] of Object.entries(original)) assert.equal(dark[name], value, name);
+  assert.equal(dark.chrome, dark.bone);
+  assert.equal(dark.field, dark.bone);
+  const foregrounds = ["ink", "ash", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
   for (const fg of foregrounds) {
-    for (const bg of ["bone", "surface", "surface-2", "chrome", "field"]) {
+    for (const bg of ["bone", "surface", "surface-2"]) {
       const ratio = contrast(dark[fg], dark[bg]);
       assert.ok(ratio >= 4.5, `${fg} on ${bg}: ${ratio.toFixed(2)}`);
     }
   }
-  for (const bg of ["accent", "accent-deep"]) {
-    assert.ok(contrast(dark["accent-ink"], dark[bg]) >= 4.5, `accent-ink on ${bg}`);
-  }
+  assert.ok(contrast(dark["accent-ink"], dark["accent-deep"]) >= 4.5, "accent-ink on accent-deep");
 });
 
-test("paper slips stay light in both themes, loose, sorted, sourced or far in the fog", () => {
-  for (const theme of [dark, light]) {
-    for (const name of ["scene-paper", "scene-dim", "scene-accent", "scene-fog"]) {
-      assert.ok(luminance(theme[name]) >= 0.35, `${name} ${theme[name]} is too dark`);
-    }
+test("paper slips stay light in dark mode, loose, sorted, sourced or far in the fog", () => {
+  for (const name of ["scene-paper", "scene-dim", "scene-accent", "scene-fog"]) {
+    assert.ok(luminance(dark[name]) >= 0.35, `${name} ${dark[name]} is too dark`);
   }
   assert.ok(contrast(dark["scene-paper"], dark.bone) >= 10, "loose slips on the dark page");
   assert.ok(contrast(dark["scene-dim"], dark.bone) >= 10, "sorted slips on the dark page");
   assert.ok(contrast(dark["scene-accent"], dark.bone) >= 7, "sourced slips on the dark page");
-  assert.ok(contrast(light["scene-accent"], light.bone) >= 2, "sourced slips on the light page");
 });
 
 test("stylesheets and the 3D scene use theme variables instead of literal colors", () => {

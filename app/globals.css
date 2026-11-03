@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --ink-rgb: 244, 236, 225;
-  --bone-rgb: 23, 15, 10;
-  --surface-rgb: 51, 37, 28;
-  --bone: #170f0a;
-  --surface: #33251c;
-  --surface-2: #3e2d22;
-  --chrome: #2b1f17;
-  --field: #281c14;
-  --ink: #f4ece1;
-  --ash: #c9b9a8;
+  --ink-rgb: 240, 235, 227;
+  --bone-rgb: 21, 19, 15;
+  --surface-rgb: 34, 30, 25;
+  --bone: #15130f;
+  --surface: #221e19;
+  --surface-2: #2b2620;
+  --chrome: #15130f;
+  --field: #15130f;
+  --ink: #f0ebe3;
+  --ash: #9a9086;
   --ink-faint: rgba(var(--ink-rgb), 0.16);
   --ink-hair: rgba(var(--ink-rgb), 0.09);
 
-  --accent: #d29a72;
-  --accent-rgb: 210, 154, 114;
-  --accent-deep: #c08661;
-  --accent-soft: #ecc9ad;
-  --accent-ink: #2b1f17;
+  --accent: #996e52;
+  --accent-rgb: 153, 110, 82;
+  --accent-deep: #8c6449;
+  --accent-soft: #e2c3a8;
+  --accent-ink: #ffffff;
 
-  --st-confirmed: #b5cfa2;
-  --st-contradicted: #f0a594;
-  --st-contradicted-rgb: 240, 165, 148;
-  --st-needs: #e8c57c;
-  --st-needs-rgb: 232, 197, 124;
-  --st-insufficient: #c2b4a4;
+  --st-confirmed: #9bb38a;
+  --st-contradicted: #d98a7a;
+  --st-contradicted-rgb: 217, 138, 122;
+  --st-needs: #d9b36a;
+  --st-needs-rgb: 217, 179, 106;
+  --st-insufficient: #9a9086;
 
   --scene-paper: #f3ebdf;
   --scene-dim: #ddd0be;
@@ -72,7 +72,7 @@
 
   --scene-paper: #fffdf8;
   --scene-dim: #e2d8c6;
-  --scene-accent: #dc9a69;
+  --scene-accent: #7f4d2e;
   --scene-fog: #f6f1e7;
 
   color-scheme: light;

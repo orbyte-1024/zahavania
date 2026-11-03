@@ -142,11 +142,10 @@ messages/{mg,fr,en}.json
 Direction "Site Immersif" (voir le skill du même nom) : sombre "latérite", typographique, animé.
 - Tokens dans `app/globals.css` : `--bone`, `--surface`, `--ink`, `--ash`, `--accent` (cuivre, seul accent),
   `--accent-deep` (petits boutons), statuts `--st-*`. Polices : Bricolage Grotesque + DM Mono.
-- Thème sombre : brun très sombre `#170f0a` uniquement pour le fond de page (`--bone`). Barre latérale et menus (`--chrome`),
-  panneaux (`--surface`, `--surface-2`) et champs (`--field`) ont chacun leur brun ; texte crème, accent cuivre
-  clair, et `#996E52` réservé aux éléments décoratifs (jamais au texte). Thème clair crème avec encre marron.
-  Chaque couleur est un token redéfini sous `:root[data-theme="light"]` ; `tests/theme.test.mjs` vérifie le
-  niveau AA partout et que cette teinte n'est utilisée que pour la page.
+- Thème sombre : le schéma d'origine (`--bone: #15130f`, surfaces `#221e19` et `#2b2620`, accent `#996e52`) ;
+  la barre latérale (`--chrome`) et les champs (`--field`) reprennent le fond de page. Les feuilles de la scène 3D
+  restent claires dans les deux thèmes. Thème clair crème avec encre marron. Chaque couleur est un token
+  redéfini sous `:root[data-theme="light"]` ; `tests/theme.test.mjs` vérifie le niveau AA du texte et des statuts.
 - Logo source : `assets/zahavania.png`. Les icônes (favicon, PWA, Apple) en sont dérivées par
   `node scripts/generate-icons.mjs` ; ne pas les retoucher à la main.
 - Filets fins plutôt que cartes ombrées. Pas de dégradé décoratif, pas de glassmorphism, pas d'emoji.
