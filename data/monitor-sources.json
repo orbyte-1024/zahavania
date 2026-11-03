@@ -1,0 +1,78 @@
+{
+  "auditedAt": "2026-11-03",
+  "policy": "Only public RSS feeds. Stored and displayed fields are limited to title, link, short excerpt, source and publication date. Full articles are never archived, rewritten or republished.",
+  "sources": [
+    {
+      "id": "midi-madagasikara",
+      "name": "Midi Madagasikara",
+      "homepage": "https://www.midi-madagasikara.mg/",
+      "feedUrl": "https://www.midi-madagasikara.mg/feed/",
+      "lang": "fr",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "madagascar-tribune",
+      "name": "Madagascar-Tribune",
+      "homepage": "https://www.madagascar-tribune.com/",
+      "feedUrl": "https://www.madagascar-tribune.com/spip.php?page=backend",
+      "lang": "fr",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "newsmada",
+      "name": "Newsmada",
+      "homepage": "https://newsmada.com/",
+      "feedUrl": "https://newsmada.com/feed/",
+      "lang": "mg",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "2424",
+      "name": "2424.mg",
+      "homepage": "https://2424.mg/",
+      "feedUrl": "https://2424.mg/feed/",
+      "lang": "fr",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "taniko-madagascar",
+      "name": "Taniko Madagascar",
+      "homepage": "https://tanikomadagascar.com/",
+      "feedUrl": "https://tanikomadagascar.com/feed/",
+      "lang": "fr",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "allafrica-madagascar",
+      "name": "AllAfrica — Madagascar",
+      "homepage": "https://allafrica.com/madagascar/",
+      "feedUrl": "https://allafrica.com/tools/headlines/rdf/madagascar/headlines.rdf",
+      "lang": "en",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true,
+      "requireTerms": ["madagascar", "malagasy", "malgache"]
+    },
+    {
+      "id": "rfi-afrique",
+      "name": "RFI Afrique",
+      "homepage": "https://www.rfi.fr/fr/afrique/",
+      "feedUrl": "https://www.rfi.fr/fr/afrique/rss",
+      "lang": "fr",
+      "scope": "international",
+      "checkedAt": "2026-11-03",
+      "enabled": true,
+      "requireTerms": ["madagascar", "malgache", "malagasy", "antananarivo"]
+    }
+  ]
+}
