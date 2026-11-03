@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
+import { BRAND_NAME, BRAND_NAME_UPPER } from "@/lib/brand";
 
 export function Footer() {
   const t = useTranslations("landing.footer");
   const tc = useTranslations("credits");
   const nameRef = useRef<HTMLHeadingElement>(null);
-  const name = "Checkeko";
+  const name = BRAND_NAME;
 
   useEffect(() => {
     const el = nameRef.current;
@@ -30,7 +31,7 @@ export function Footer() {
     <footer className="footer" id="contact">
       <p className="footer-kicker mono ash">{t("kicker")}</p>
       <Link className="footer-cta" href="/app">
-        <span className="footer-cta-text">{t("cta")}</span> <span aria-hidden="true">→</span>
+        <span className="footer-cta-text">{t("cta", { brand: BRAND_NAME })}</span> <span aria-hidden="true">→</span>
       </Link>
       <p className="footer-reassurance mono ash">{t("reassurance")}</p>
       <h2 ref={nameRef} className="footer-name" aria-label={name}>
@@ -44,7 +45,7 @@ export function Footer() {
       </h2>
       <div className="footer-bottom">
         <p className="mono ash">
-          {t("left")} ·{" "}
+          {t("left", { brand: BRAND_NAME_UPPER })} ·{" "}
           <Link className="footer-credits" href="/credits">
             {tc("link")}
           </Link>

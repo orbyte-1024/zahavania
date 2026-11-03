@@ -6,6 +6,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { LocaleSync } from "@/components/LocaleSync";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
+import { BRAND_NAME } from "@/lib/brand";
 
 const display = Bricolage_Grotesque({
   variable: "--font-display",
@@ -22,7 +23,7 @@ const mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Checkeko",
+  title: BRAND_NAME,
   description: "Vérification pour les rédactions de Madagascar, en malagasy, en français et en anglais.",
 };
 

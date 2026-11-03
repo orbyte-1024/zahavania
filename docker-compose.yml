@@ -16,7 +16,7 @@ services:
       NODE_ENV: production
       PORT: 3000
       HOSTNAME: 0.0.0.0
-      DATABASE_URL: postgresql://${POSTGRES_USER:-checkeko}:${POSTGRES_PASSWORD:-checkeko}@db:5432/${POSTGRES_DB:-checkeko}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-zahavania}:${POSTGRES_PASSWORD:-zahavania}@db:5432/${POSTGRES_DB:-zahavania}
     depends_on:
       db:
         condition: service_healthy
@@ -25,9 +25,9 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-checkeko}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-checkeko}
-      POSTGRES_DB: ${POSTGRES_DB:-checkeko}
+      POSTGRES_USER: ${POSTGRES_USER:-zahavania}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zahavania}
+      POSTGRES_DB: ${POSTGRES_DB:-zahavania}
     # Not published by default: the app reaches the DB as `db:5432` on the
     # compose network, and publishing 5432 clashes with a local PostgreSQL.
     # Uncomment to connect with psql / a GUI client from the host:
@@ -37,7 +37,7 @@ services:
       - db-data:/var/lib/postgresql/data
     healthcheck:
       test:
-        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-checkeko} -d ${POSTGRES_DB:-checkeko}"]
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-zahavania} -d ${POSTGRES_DB:-zahavania}"]
       interval: 5s
       timeout: 5s
       retries: 10

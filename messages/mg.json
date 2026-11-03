@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Checkeko — fanamarinana ho an'ny mpanao gazety eto Madagasikara",
+    "title": "{brand} — fanamarinana ho an'ny mpanao gazety eto Madagasikara",
     "description": "Hamarino ny vaovao, tadiavo ny loharanony sy ny manam-pahaizana mety, amin'ny teny malagasy, frantsay ary anglisy."
   },
   "nav": {
@@ -72,7 +72,7 @@
     }
   },
   "landing": {
-    "kicker": "CHECKEKO — FANAMARINANA HO AN'NY MPANAO GAZETY ETO MADAGASIKARA",
+    "kicker": "{brand} — FANAMARINANA HO AN'NY MPANAO GAZETY ETO MADAGASIKARA",
     "line1": "Misy vaovao miely,",
     "line2a": "hamarinintsika",
     "line2b": "izany.",
@@ -90,7 +90,7 @@
       "LAKANA MPANJONO · MADAGASIKARA"
     ],
     "manifesto": {
-      "before": "Tsy milaza mihitsy i Checkeko hoe marina na diso. Asehony ny loharano, refesiny ny maha-matoky azy, ary lazainy izay tsy ampy. Amin'ny farany,",
+      "before": "Tsy milaza mihitsy i {brand} hoe marina na diso. Asehony ny loharano, refesiny ny maha-matoky azy, ary lazainy izay tsy ampy. Amin'ny farany,",
       "boxed": "ny mpanao gazety",
       "after": "no manapaka."
     },
@@ -146,7 +146,7 @@
       "figure": "100",
       "unit": "%",
       "text": "Tsy aseho mihitsy ny loharano tsy naverin'ny fikarohana natao tamin'ilay fangatahana. Miverina ho « tsy ampy » ilay filazana.",
-      "author": "FITSIPIKA VOALOHANY AN'I CHECKEKO"
+      "author": "FITSIPIKA VOALOHANY AN'I {brand}"
     },
     "objections": {
       "items": [
@@ -159,9 +159,9 @@
     },
     "footer": {
       "kicker": "MISY VAOVAO HOHAMARININA ?",
-      "cta": "Sokafy i Checkeko",
+      "cta": "Sokafy i {brand}",
       "reassurance": "TSY MILA KAONTY — MALAGASY, FRANTSAY, ANGLISY",
-      "left": "© 2026 — CHECKEKO",
+      "left": "© 2026 — {brand}",
       "middle": "MG · FR · EN",
       "right": "NATAO HO AN'NY TRANOM-GAZETY ETO MADAGASIKARA"
     }
@@ -222,7 +222,7 @@
   },
   "verify": {
     "title": "Hamarino vaovao",
-    "lead": "Apetaho lahatsoratra na rohy. Sarahan'i Checkeko ireo filazana azo hamarinina ary tadiaviny ny loharanony.",
+    "lead": "Apetaho lahatsoratra na rohy. Sarahan'i {brand} ireo filazana azo hamarinina ary tadiaviny ny loharanony.",
     "modeText": "Lahatsoratra",
     "modeUrl": "Rohy",
     "placeholderText": "Apetaho eto ny hafatra, lahatsoratra na fanambarana hohamarinina…",

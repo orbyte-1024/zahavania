@@ -16,6 +16,7 @@ import {
   type Decision,
   type SavedReport,
 } from "@/lib/dossiers";
+import { BRAND_SLUG } from "@/lib/brand";
 
 const serverSnapshot = () => null;
 
@@ -39,7 +40,7 @@ function ReportRow({ report }: { report: SavedReport }) {
 
   const exportText = () =>
     download(
-      `checkeko-${report.savedAt.slice(0, 10)}.txt`,
+      `${BRAND_SLUG}-${report.savedAt.slice(0, 10)}.txt`,
       reportToText(report, {
         status: (s) => ts(s),
         decision: (d) => tv(d),

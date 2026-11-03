@@ -6,13 +6,14 @@ import { useTranslations } from "next-intl";
 import { ModuleGlyph } from "@/components/ModuleGlyph";
 import { ScreenHeader, rise, stagger } from "@/components/workspace/ui";
 import { LIVE_MODULES, MODULE_IDS, modulePath } from "@/lib/modules";
+import { BRAND_NAME_UPPER } from "@/lib/brand";
 
 export function Overview() {
   const t = useTranslations();
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need="CHECKEKO" title={t("workspace.overviewTitle")} lead={t("workspace.overviewLead")} />
+      <ScreenHeader need={BRAND_NAME_UPPER} title={t("workspace.overviewTitle")} lead={t("workspace.overviewLead")} />
       <motion.ol className="overview" variants={stagger} initial="hidden" animate="show">
         {MODULE_IDS.map((id) => (
           <motion.li key={id} variants={rise}>

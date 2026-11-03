@@ -6,6 +6,7 @@ import { HandOval } from "@/components/HandOval";
 import { useScene, type SceneFactory } from "@/components/landing/engine";
 import { createDraw } from "@/lib/motion/draw";
 import { pinnedProgress, seg } from "@/lib/motion/scroll";
+import { BRAND_NAME } from "@/lib/brand";
 
 function Chars({ text }: { text: string }) {
   const words = text.split(/\s+/).filter(Boolean);
@@ -60,7 +61,7 @@ export function Manifesto() {
     <section ref={sectionRef} className="scene s-fill" style={{ "--pin": 3.5 } as React.CSSProperties}>
       <div className="pin">
         <p className="fill-text" data-fill>
-          <Chars text={t("before")} />
+          <Chars text={t("before", { brand: BRAND_NAME })} />
           <span className="boxed" data-box>
             <Chars text={t("boxed")} />
             <HandOval className="hand-oval box-svg" />
