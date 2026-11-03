@@ -44,7 +44,7 @@
       "name": "Veille nationale",
       "short": "Veille",
       "desc": "Les flux RSS des médias malgaches, filtrés par source, langue et sujet. Titre, lien et extrait seulement.",
-      "state": "EN PRÉPARATION",
+      "state": "EN SERVICE",
       "rail": "Veille des médias"
     },
     "translate": {
@@ -431,14 +431,89 @@
   },
   "monitor": {
     "title": "Veille nationale",
-    "lead": "Cet écran affichera les flux RSS des médias malgaches. Il est en préparation : rien n'est affiché tant que les flux n'ont pas été audités.",
-    "rulesTitle": "Ce que la veille montrera",
-    "rules": [
-      "Le titre, le lien et un court extrait, jamais l'article entier.",
-      "La source, la langue et la date de publication.",
-      "Un bouton pour proposer des angles à partir d'un sujet."
-    ],
-    "next": "Prochaine étape : lister les médias qui publient un flux RSS utilisable, avec la date de l'audit."
+    "lead": "Les flux RSS publics des médias malgaches, regroupés en événements. Titre, lien et court extrait seulement : ouvrez l'article chez le média.",
+    "query": "Mot-clé",
+    "queryPlaceholder": "riz, délestage, CENI…",
+    "themeLabel": "Thème",
+    "anyTheme": "Tous les thèmes",
+    "region": "Région",
+    "anyRegion": "Tout le pays",
+    "district": "District",
+    "anyDistrict": "Tous les districts",
+    "period": "Période",
+    "periods": {
+      "24": "24 h",
+      "72": "3 jours",
+      "168": "7 jours"
+    },
+    "submit": "Actualiser la veille",
+    "loading": "Lecture des flux de {count} médias…",
+    "empty": "Aucun article ne correspond à ces filtres sur la période. Élargissez la période ou retirez un filtre.",
+    "showAll": "Voir les {count} événements",
+    "showLess": "Voir moins",
+    "coverageLine": "{matched} articles retenus sur {fetched} lus, venant de {sources} médias sur {configured}.",
+    "window": "Du {from} au {to}",
+    "audited": "flux audités le {date}",
+    "failedSources": "Flux indisponibles cette fois : {names}.",
+    "truncated": "Trop d'articles : seuls les plus récents sont affichés.",
+    "analysisUnavailable": "Comparaison des versions indisponible",
+    "alerts": "Alertes",
+    "severity": {
+      "info": "Info",
+      "attention": "Attention",
+      "urgent": "Urgent"
+    },
+    "alertKind": {
+      "new_event": "nouvel événement",
+      "rising_event": "sujet qui monte",
+      "contradictory_versions": "versions contradictoires"
+    },
+    "eventFacts": "{articles, plural, one {# article} other {# articles}}, {sources, plural, one {# média} other {# médias}}",
+    "lastSeen": "dernier le {date}",
+    "momentum": {
+      "steady": "Stable",
+      "rising": "En hausse",
+      "surge": "Forte hausse"
+    },
+    "theme": {
+      "politics": "Politique",
+      "economy": "Économie",
+      "agriculture": "Agriculture",
+      "health": "Santé",
+      "education": "Éducation",
+      "environment": "Environnement",
+      "security_justice": "Sécurité et justice",
+      "infrastructure": "Infrastructures",
+      "energy_mining": "Énergie et mines",
+      "society": "Société",
+      "sport": "Sport",
+      "general": "Général"
+    },
+    "coverage": {
+      "divergent": "Les médias ne racontent pas la même chose",
+      "no_divergence_found": "Aucune divergence relevée entre les médias",
+      "single_source": "Un seul média",
+      "not_analysed": "Versions non comparées"
+    },
+    "sharedFacts": "Points communs",
+    "verifyArticle": "Vérifier cet article",
+    "toAngles": "Proposer des angles",
+    "limitsTitle": "Limites",
+    "limits": {
+      "headlines_and_excerpts_only": "Seuls le titre et un court extrait sont lus : l'article complet reste chez le média.",
+      "lexical_event_grouping": "Les articles sont regroupés par mots communs : deux sujets proches peuvent être réunis ou séparés à tort.",
+      "location_inferred_from_text": "La région et le district sont déduits du texte : ils peuvent manquer ou être faux.",
+      "ai_summary_from_headlines": "Les résumés et les divergences sont rédigés par l'IA à partir des titres et extraits seulement : à vérifier dans les articles.",
+      "ai_analysis_unavailable": "La comparaison des versions par l'IA est indisponible : les événements sont affichés sans elle.",
+      "ai_analysis_skipped": "La comparaison des versions n'a pas été lancée pour cette recherche.",
+      "ai_references_filtered": "Des références de l'IA à des articles absents des flux ont été retirées.",
+      "feed_failures": "Certains flux n'ont pas répondu : la veille est incomplète.",
+      "articles_truncated": "Le nombre d'articles a été limité : les plus anciens ne sont pas affichés.",
+      "no_matching_articles": "Aucun article ne correspond aux filtres.",
+      "mock_demo_data": "Données de démonstration : ce ne sont pas de vrais articles."
+    },
+    "sourcesTitle": "Médias suivis ({count})",
+    "policy": "Flux RSS publics uniquement. Aucun article n'est copié : titre, lien, court extrait, source et date."
   },
   "stats": {
     "title": "Chiffres clés",
