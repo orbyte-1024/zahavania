@@ -217,7 +217,11 @@
       "image_missing": "Aucune image n'a été reçue.",
       "image_too_large": "L'image est trop lourde.",
       "unsupported_media": "Seules les images JPEG, PNG et WebP sont acceptées.",
-      "invalid_image": "L'image est illisible ou endommagée."
+      "invalid_image": "L'image est illisible ou endommagée.",
+      "video_decode_failed": "Ce navigateur ne sait pas lire cette vidéo (souvent .mov ou HEVC). Exportez-la en MP4 (H.264) et réessayez.",
+      "video_too_long": "La vidéo est trop longue (4 heures au maximum).",
+      "frames_missing": "Aucune image clé n'a été reçue.",
+      "frames_too_large": "Les images clés sont trop volumineuses."
     }
   },
   "status": {
@@ -323,12 +327,12 @@
   },
   "image": {
     "title": "Authentifier une image",
-    "lead": "Déposez une photo JPEG, PNG ou WebP. Elle est réduite sur votre appareil avant l'envoi, et ses coordonnées GPS ne quittent jamais le téléphone.",
-    "drop": "Déposez une image ici",
+    "lead": "Déposez une photo JPEG, PNG ou WebP, ou une vidéo MP4 ou WebM. Les photos sont réduites et les vidéos ramenées à 6 images clés sur votre appareil : seules ces images sont envoyées, et les coordonnées GPS ne quittent jamais le téléphone.",
+    "drop": "Déposez une image ou une vidéo ici",
     "or": "ou",
     "browse": "choisissez un fichier",
     "submit": "Analyser",
-    "change": "Changer d'image",
+    "change": "Changer de fichier",
     "summary": "Synthèse",
     "supporting": "Indices concordants",
     "contradictory": "Indices contradictoires",
@@ -357,6 +361,20 @@
       "file": "lues dans le fichier",
       "device": "lues sur l'appareil avant compression",
       "none": "aucune"
+    },
+    "video": {
+      "extracting": "Extraction de l'image clé {done} sur {total} sur l'appareil…",
+      "analysing": "Analyse de {count} images clés…",
+      "frames": "Images clés",
+      "counts": "{analysed} images analysées sur {total}, {failed} en échec",
+      "at": "À {time}",
+      "analysed": "Analysée",
+      "failed": "L'analyse de cette image a échoué",
+      "seenAt": "vu à {times}",
+      "inconsistencies": "Incohérences visuelles possibles",
+      "aiIndicators": "Indices possibles de génération par IA",
+      "locationClues": "Indices sur le lieu",
+      "note": "Seules 6 images fixes ont été examinées : le son, le montage et le reste de la vidéo n'ont pas été analysés."
     }
   },
   "translate": {

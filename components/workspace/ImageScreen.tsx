@@ -4,13 +4,26 @@ import { AnimatePresence, motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { callForm, type Phase } from "@/components/workspace/requests";
-import type { ImageEvidence, VerifyImageSuccess } from "@/lib/api/contract";
+import type { ImageEvidence, VerifyImageSuccess, VerifyVideoSuccess } from "@/lib/api/contract";
 import { compressImage, ImageDecodeError, readDeviceExif, SOURCE_MAX_BYTES } from "@/lib/browser/image-prep";
+import { extractKeyframes, VIDEO_SOURCE_MAX_BYTES, VideoTooLongError } from "@/lib/browser/video-prep";
+import { VideoFindings } from "@/components/workspace/VideoFindings";
 import { Badge, ErrorNote, ScreenHeader, SubmitButton, rise, stagger } from "@/components/workspace/ui";
 
 type Evidence = ImageEvidence;
 
-const ACCEPT = ["image/jpeg", "image/png", "image/webp"];
+type Report = { kind: "image"; data: VerifyImageSuccess } | { kind: "video"; data: VerifyVideoSuccess };
+
+type Progress = { stage: "preparing" } | { stage: "extracting"; done: number; total: number } | { stage: "analysing"; frames: number | null };
+
+const IMAGE_ACCEPT = ["image/jpeg", "image/png", "image/webp"];
+const VIDEO_ACCEPT = ["video/mp4", "video/webm", "video/quicktime"];
+const ACCEPT = [...IMAGE_ACCEPT, ...VIDEO_ACCEPT];
+
+function videoErrorCode(error: unknown): string {
+  if (error instanceof VideoTooLongError) return "video_too_long";
+  return "video_decode_failed";
+}
 
 function EvidenceList({ title, items }: { title: string; items: Evidence[] }) {
   const t = useTranslations("image.provenance");
@@ -36,8 +49,8 @@ export function ImageScreen() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [phase, setPhase] = useState<Phase<VerifyImageSuccess>>({ kind: "idle" });
-  const [preparing, setPreparing] = useState(false);
+  const [phase, setPhase] = useState<Phase<Report>>({ kind: "idle" });
+  const [progress, setProgress] = useState<Progress>({ stage: "preparing" });
   const locale = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -53,7 +66,8 @@ export function ImageScreen() {
       setPhase({ kind: "error", code: "unsupported_media", retryAfter: null });
       return;
     }
-    if (candidate.size > SOURCE_MAX_BYTES) {
+    const isVideo = VIDEO_ACCEPT.includes(candidate.type);
+    if (candidate.size > (isVideo ? VIDEO_SOURCE_MAX_BYTES : SOURCE_MAX_BYTES)) {
       setPhase({ kind: "error", code: "image_too_large", retryAfter: null });
       return;
     }
@@ -68,11 +82,34 @@ export function ImageScreen() {
     pick(event.dataTransfer.files[0]);
   };
 
+  const submitVideo = async (video: File) => {
+    setProgress({ stage: "extracting", done: 0, total: 0 });
+    const form = new FormData();
+    try {
+      const extracted = await extractKeyframes(video, (done, total) => setProgress({ stage: "extracting", done, total }));
+      extracted.frames.forEach((frame, i) => form.append("frame", frame, `frame-${i}.jpg`));
+      form.append("duration", String(extracted.duration));
+      form.append("timestamps", JSON.stringify(extracted.timestamps));
+      form.append("lang", locale);
+      setProgress({ stage: "analysing", frames: extracted.frames.length });
+    } catch (error) {
+      setPhase({ kind: "error", code: videoErrorCode(error), retryAfter: null });
+      return;
+    }
+    const res = await callForm<VerifyVideoSuccess>("/api/verify/video", form);
+    if (res.ok) setPhase({ kind: "done", data: { kind: "video", data: res.data } });
+    else setPhase({ kind: "error", code: res.code, retryAfter: res.retryAfter });
+  };
+
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!file) return;
     setPhase({ kind: "loading" });
-    setPreparing(true);
+    if (VIDEO_ACCEPT.includes(file.type)) {
+      await submitVideo(file);
+      return;
+    }
+    setProgress({ stage: "preparing" });
     const form = new FormData();
     try {
       const exif = await readDeviceExif(file);
@@ -81,17 +118,26 @@ export function ImageScreen() {
       form.append("lang", locale);
       if (exif) form.append("exif", JSON.stringify(exif));
     } catch (error) {
-      setPreparing(false);
       setPhase({ kind: "error", code: error instanceof ImageDecodeError ? "image_decode_failed" : "invalid_image", retryAfter: null });
       return;
     }
-    setPreparing(false);
+    setProgress({ stage: "analysing", frames: null });
     const res = await callForm<VerifyImageSuccess>("/api/verify/image", form);
-    if (res.ok) setPhase({ kind: "done", data: res.data });
+    if (res.ok) setPhase({ kind: "done", data: { kind: "image", data: res.data } });
     else setPhase({ kind: "error", code: res.code, retryAfter: res.retryAfter });
   };
 
-  const report = phase.kind === "done" ? phase.data : null;
+  const result = phase.kind === "done" ? phase.data : null;
+  const report = result?.data ?? null;
+  const fileIsVideo = file !== null && VIDEO_ACCEPT.includes(file.type);
+  const progressText =
+    progress.stage === "preparing"
+      ? t("preparing")
+      : progress.stage === "extracting"
+        ? t("video.extracting", { done: progress.done, total: progress.total || 6 })
+        : progress.frames
+          ? t("video.analysing", { count: progress.frames })
+          : t("analysing");
 
   return (
     <div className="screen-grid">
@@ -110,13 +156,15 @@ export function ImageScreen() {
           onDrop={onDrop}
         >
           <input ref={inputRef} type="file" accept={ACCEPT.join(",")} className="sr-only" onChange={(e) => pick(e.target.files?.[0])} />
-          {preview ? (
+          {preview && fileIsVideo ? (
+            <video key={preview} src={preview} className="dropzone-preview" muted playsInline controls preload="metadata" />
+          ) : preview ? (
             <motion.img key={preview} src={preview} alt="" className="dropzone-preview" initial={{ opacity: 0, scale: 1.04 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }} />
           ) : (
             <span className="dropzone-text">
               <span className="dropzone-title">{t("drop")}</span>
               <span className="mono ash">
-                {t("or")} <u>{t("browse")}</u> · JPEG · PNG · WEBP
+                {t("or")} <u>{t("browse")}</u> · JPEG · PNG · WEBP · MP4 · WEBM
               </span>
             </span>
           )}
@@ -139,7 +187,7 @@ export function ImageScreen() {
         {phase.kind === "loading" && (
           <motion.div key="loading" className="panel skeletons" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <p className="mono ash" aria-live="polite">
-              {preparing ? t("preparing") : t("analysing")}
+              {progressText}
             </p>
             {[0, 1].map((i) => (
               <span key={i} className="skeleton" style={{ animationDelay: `${i * 120}ms` }} />
@@ -158,38 +206,42 @@ export function ImageScreen() {
             <EvidenceList title={t("supporting")} items={report.verification.supportingEvidence} />
             <EvidenceList title={t("contradictory")} items={report.verification.contradictoryEvidence} />
 
-            <motion.div className="claim-block" variants={rise}>
-              <p className="mono ash">
-                {t("metadata")} · {t(`metadataSource.${report.metadataSource}`)}
-              </p>
-              {report.metadata?.available ? (
-                <dl className="meta-table">
-                  {(
-                    [
-                      ["dateTaken", report.metadata.dateTaken],
-                      ["created", report.metadata.creationDate],
-                      ["camera", report.metadata.camera],
-                      ["software", report.metadata.software],
-                    ] as const
-                  ).map(([key, value]) =>
-                    value ? (
-                      <div key={key}>
-                        <dt className="mono ash">{t(key)}</dt>
-                        <dd>{value}</dd>
+            {result?.kind === "video" && <VideoFindings report={result.data} />}
+
+            {result?.kind === "image" && (
+              <motion.div className="claim-block" variants={rise}>
+                <p className="mono ash">
+                  {t("metadata")} · {t(`metadataSource.${result.data.metadataSource}`)}
+                </p>
+                {result.data.metadata.available ? (
+                  <dl className="meta-table">
+                    {(
+                      [
+                        ["dateTaken", result.data.metadata.dateTaken],
+                        ["created", result.data.metadata.creationDate],
+                        ["camera", result.data.metadata.camera],
+                        ["software", result.data.metadata.software],
+                      ] as const
+                    ).map(([key, value]) =>
+                      value ? (
+                        <div key={key}>
+                          <dt className="mono ash">{t(key)}</dt>
+                          <dd>{value}</dd>
+                        </div>
+                      ) : null,
+                    )}
+                    {result.data.metadata.hasGPS && (
+                      <div>
+                        <dt className="mono ash">GPS</dt>
+                        <dd>{t("gps")}</dd>
                       </div>
-                    ) : null,
-                  )}
-                  {report.metadata.hasGPS && (
-                    <div>
-                      <dt className="mono ash">GPS</dt>
-                      <dd>{t("gps")}</dd>
-                    </div>
-                  )}
-                </dl>
-              ) : (
-                <p className="ash">{t("noExif")}</p>
-              )}
-            </motion.div>
+                    )}
+                  </dl>
+                ) : (
+                  <p className="ash">{t("noExif")}</p>
+                )}
+              </motion.div>
+            )}
 
             <motion.div className="claim-block" variants={rise}>
               <p className="mono ash">{t("reverse")}</p>
@@ -213,7 +265,7 @@ export function ImageScreen() {
               </motion.div>
             )}
             <motion.div variants={rise}>
-              <Badge>{report.file.format.toUpperCase()}</Badge>
+              <Badge>{result?.kind === "image" ? result.data.file.format.toUpperCase() : `${result?.data.frames.length ?? 0} × JPEG`}</Badge>
             </motion.div>
           </motion.section>
         )}

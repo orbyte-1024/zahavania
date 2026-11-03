@@ -217,7 +217,11 @@
       "image_missing": "No image was received.",
       "image_too_large": "The image is too large.",
       "unsupported_media": "Only JPEG, PNG and WebP images are accepted.",
-      "invalid_image": "The image is unreadable or damaged."
+      "invalid_image": "The image is unreadable or damaged.",
+      "video_decode_failed": "This browser cannot read this video (often .mov or HEVC). Export it as MP4 (H.264) and try again.",
+      "video_too_long": "The video is too long (4 hours maximum).",
+      "frames_missing": "No key frame was received.",
+      "frames_too_large": "The key frames are too large."
     }
   },
   "status": {
@@ -323,12 +327,12 @@
   },
   "image": {
     "title": "Authenticate an image",
-    "lead": "Drop a JPEG, PNG or WebP photo. It is reduced on your device before upload, and its GPS coordinates never leave the phone.",
-    "drop": "Drop an image here",
+    "lead": "Drop a JPEG, PNG or WebP photo, or an MP4 or WebM video. Photos are reduced and videos turned into 6 key frames on your device: only those images are sent, and GPS coordinates never leave the phone.",
+    "drop": "Drop an image or a video here",
     "or": "or",
     "browse": "choose a file",
     "submit": "Analyse",
-    "change": "Change image",
+    "change": "Change file",
     "summary": "Summary",
     "supporting": "Consistent hints",
     "contradictory": "Conflicting hints",
@@ -357,6 +361,20 @@
       "file": "read from the file",
       "device": "read on the device before compression",
       "none": "none"
+    },
+    "video": {
+      "extracting": "Extracting key frame {done} of {total} on your device…",
+      "analysing": "Analysing {count} key frames…",
+      "frames": "Key frames",
+      "counts": "{analysed} of {total} frames analysed, {failed} failed",
+      "at": "At {time}",
+      "analysed": "Analysed",
+      "failed": "Analysis failed for this frame",
+      "seenAt": "seen at {times}",
+      "inconsistencies": "Possible visual inconsistencies",
+      "aiIndicators": "Possible signs of AI generation",
+      "locationClues": "Clues about the place",
+      "note": "Only 6 still frames were checked: the sound, the editing and the rest of the video were not analysed."
     }
   },
   "translate": {
