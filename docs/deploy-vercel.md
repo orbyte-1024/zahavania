@@ -27,7 +27,8 @@ Set them in **Project → Settings → Environment Variables** for *Production* 
 | `URL_FETCH_TIMEOUT_MS` | no | timeout when reading a submitted link |
 | `NEXT_PUBLIC_SUPABASE_URL` | no (public by design) | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | no (public by design) | Supabase anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | **yes** | only needed by demo mode; leave it unset in production if possible |
+| `SUPABASE_SERVICE_ROLE_KEY` | **yes** | needed by shared rate limits (`RATE_LIMIT_STORE=supabase`) and demo mode; server-only, never `NEXT_PUBLIC_` |
+| `RATE_LIMIT_STORE` | no | `supabase` for limits shared by every instance (after the migration below), empty for in-memory limits |
 | `USE_MOCK` | no | **`false`**. It is ignored in production anyway |
 | `DEMO_MODE` | no | **`false`**. It skips sign-in and is ignored in production anyway |
 | `DEMO_RECORD` | no | **`false`**. The deployed file system is read-only |
@@ -41,7 +42,7 @@ Set them in **Project → Settings → Environment Variables** for *Production* 
 2. **Authentication → URL Configuration**:
    - set **Site URL** to the production domain (for example `https://zahavania.vercel.app`);
    - add the production domain to **Redirect URLs**, plus `https://*-<team>.vercel.app/**` if previews must sign in.
-3. **Database**: run `supabase/migrations/*.sql`, then `supabase/seed.sql` only for a demo directory. The seed profiles are fictional and marked as such.
+3. **Database**: run `supabase/migrations/*.sql` in order (SQL Editor or `supabase db push`), then `supabase/seed.sql` only for a demo directory. The seed profiles are fictional and marked as such. `20261103090000_create_rate_limits.sql` creates the shared rate limit counters: the table is hidden from `anon` and `authenticated`, and only `service_role` can call `consume_rate_limit`.
 4. **Rate limits**: under Authentication → Rate Limits, raise the anonymous sign-in limit if a whole room will open the app at once.
 
 ## 4. Limits that behave differently on Vercel
@@ -53,11 +54,12 @@ Set them in **Project → Settings → Environment Variables** for *Production* 
 
   `tests/deploy-limits.test.mjs` checks these values.
 - **No ffmpeg**: video frames are extracted in the browser.
-- **The rate limiters and the response cache live in memory, per instance.**
-  - Each serverless instance has its own counters and its own cache.
-  - Under load, Vercel starts several instances, so the real limit is "N requests per instance", and a cold start resets them.
-  - The daily AI quota is therefore a soft limit. Keep a spending limit on the OpenRouter key as the hard limit.
-  - For strict limits, move the counters to a shared store (a Supabase table with an atomic increment, or a hosted Redis).
+- **Rate limits are shared when `RATE_LIMIT_STORE=supabase`.**
+  - Every limiter then counts in Supabase through `consume_rate_limit`, an atomic upsert per key and time window, so the per-minute and daily limits hold across all instances and cold starts.
+  - Keys are SHA-256 hashes of the limiter name and the IP or user id: no address or id is stored in clear.
+  - If Supabase does not answer within 2 s, the limiter falls back to its in-memory counter for that request and logs `{"scope":"ratelimit","fallback":"memory"}`.
+  - Without the variable, limits stay in memory, per instance. Keep a spending limit on the OpenRouter key as the hard limit in every case.
+- **The response cache lives in memory, per instance.** A repeated request on another instance calls the model again; this only costs quota, never correctness.
 - **Demo recordings**:
   - `DEMO_FALLBACK` can only replay the files committed in `data/demo/` (bundled through `outputFileTracingIncludes`);
   - recording (`DEMO_RECORD`) only works locally.

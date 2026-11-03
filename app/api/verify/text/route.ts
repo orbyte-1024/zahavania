@@ -17,9 +17,10 @@ const MAX_BODY_BYTES = 32 * 1024;
 const MINUTE_MS = 60_000;
 const DAY_MS = 24 * 60 * MINUTE_MS;
 
-const ipLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
-const userLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
+const ipLimiter = createRateLimiter({ name: "verify-text:ip", limit: 10, windowMs: MINUTE_MS });
+const userLimiter = createRateLimiter({ name: "verify-text:user", limit: 10, windowMs: MINUTE_MS });
 const dailyLimiter = createRateLimiter({
+  name: "verify-text:daily",
   limit: readIntEnv("AI_DAILY_LIMIT_PER_USER", 50, 1, 10_000),
   windowMs: DAY_MS,
 });
@@ -105,7 +106,7 @@ function mapError(error: unknown): { status: number; code: string; message: stri
 export async function POST(req: NextRequest) {
   const elapsed = startTimer();
 
-  const ipCheck = ipLimiter.check(clientIp(req));
+  const ipCheck = await ipLimiter.check(clientIp(req));
   if (!ipCheck.allowed) {
     logRequest({ userId: null, durationMs: elapsed(), status: 429, code: "ip_rate_limited" });
     return tooManyRequests(ipCheck.retryAfterSeconds);
@@ -121,7 +122,7 @@ export async function POST(req: NextRequest) {
     return errorResponse(401, "unauthorized", "You must be signed in to use this feature.");
   }
 
-  const userCheck = userLimiter.check(auth.userId);
+  const userCheck = await userLimiter.check(auth.userId);
   if (!userCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "user_rate_limited" });
     return tooManyRequests(userCheck.retryAfterSeconds);
@@ -164,7 +165,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const dailyCheck = dailyLimiter.check(auth.userId);
+  const dailyCheck = await dailyLimiter.check(auth.userId);
   if (!dailyCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
     return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
