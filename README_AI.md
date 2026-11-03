@@ -11,7 +11,8 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 | `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, key and model. Server-only, never prefixed `NEXT_PUBLIC_`. |
 | `USE_MOCK` | `false` by default. `true` returns deterministic demo data with `mock: true` and never calls the model, in development only: it is ignored when `NODE_ENV=production`. |
 | `AI_REASONING_TOKENS` | Extra token budget for models that reason before answering (default 2000). Reasoning shares the output budget, so without it a long reasoning cuts the JSON answer. |
-| `AI_FALLBACK_MODEL` | Optional second model. When the main model hits a rate limit, a provider error or invalid output, the request is retried once with it. |
+| `AI_FALLBACK_MODELS` | Optional comma-separated list of fallback models, tried in order (see "Model rotation"). |
+| `AI_FALLBACK_MODEL` | Optional single fallback, added at the end of `AI_FALLBACK_MODELS`. |
 | `URL_FETCH_TIMEOUT_MS` | Time allowed to fetch a page for link verification (default 12000, between 3000 and 20000). |
 | `AI_MAX_TOKENS`, `AI_WEB_MAX_RESULTS`, `AI_DAILY_LIMIT_PER_USER` | Cost caps: output tokens, web results per verification, calls per user per day and per route. |
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project. The anon key is public by design. |
@@ -25,7 +26,25 @@ Requests are authenticated with `Authorization: Bearer <supabase access token>` 
 
 ## Model per task
 
-Each AI feature reads its own model variable and falls back to `AI_MODEL` when it is empty (`lib/ai/models.ts`). `AI_FALLBACK_MODEL` is shared: when a task's model fails (rate limit, provider error, invalid output), the request is retried once with it, unless it is the same model.
+Each AI feature reads its own model variable and falls back to `AI_MODEL` when it is empty (`lib/ai/models.ts`). The fallbacks are shared by every task.
+
+### Model rotation
+
+When a model fails with a rate limit, a provider error (5xx, 404 "no endpoints", network), invalid output or a
+timeout, the call moves to the next model of `AI_FALLBACK_MODELS` then `AI_FALLBACK_MODEL` (`lib/ai/client.ts`,
+`lib/ai/rotation.ts`):
+
+- A failing model is skipped by the following requests for a while: 30 s after a 429, 60 s after a 5xx or a
+  timeout, 5 min after a 404. Invalid output does not count as "down".
+- OpenRouter's `free-models-per-day` 429 is shared by every `:free` model: all of them are skipped for 15 min, and the
+  call goes straight to the first non-free model of the list, if any.
+- When a model has a successor, it gets at most 60 % of the call's time budget (`timeoutMs`), and at least 4 s are left
+  for the next one, so a model that hangs no longer uses up the whole request.
+- When every model is cooling down, the main model is tried again rather than failing without a request.
+- Each failure is logged as `{"scope":"ai","event":"model_failed",...}` with the model, code, provider status and
+  cooldown, never the content.
+
+Cooldowns live in the memory of each server instance.
 
 The team uses free models only. Tasks are spread across providers so that one saturated provider does not stop every feature, and the fallback comes from another provider.
 

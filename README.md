@@ -60,7 +60,8 @@ All variables are documented in `.env.example`. The primary ones are:
 | --- | --- |
 | `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, API key, and default model |
 | `AI_MODEL_VERIFY`, `_TRANSLATE`, `_VISION`, `_EXPERTS`, `_ANGLES` | Per-task models (optional, falls back to `AI_MODEL`) |
-| `AI_FALLBACK_MODEL` | Secondary model tried once in case of failure |
+| `AI_FALLBACK_MODELS` | Comma-separated fallback models, tried in order when a model fails (see `README_AI.md`) |
+| `AI_FALLBACK_MODEL` | Single fallback model, added at the end of the list |
 | `AI_DAILY_LIMIT_PER_USER` | Daily quota per user and per route |
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project credentials (public key by design) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only: local seeding, shared rate-limiters |

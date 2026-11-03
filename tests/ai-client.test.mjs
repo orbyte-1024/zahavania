@@ -1,4 +1,4 @@
-import test from "node:test";
+import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { z } from "zod";
 
@@ -39,10 +39,13 @@ function reply(content, { status = 200, finish = "stop" } = {}) {
 globalThis.fetch = async (url, init) => {
   const body = JSON.parse(init.body);
   requests.push({ url: String(url), body });
-  return respond(body, requests.length);
+  return respond(body, requests.length, init);
 };
 
 const { AiError, askJson, askText, buildChatParams } = await import("../lib/ai/client.ts");
+const { resetCooldowns } = await import("../lib/ai/rotation.ts");
+
+beforeEach(() => resetCooldowns());
 
 const schema = z.object({ ok: z.boolean() });
 
@@ -191,3 +194,80 @@ test("timeoutMs is the budget for the whole call: a retry never starts without t
   assert.equal(requests.length, 1);
   assert.ok(Date.now() - started < 2_000);
 });
+
+function withChain(models, run) {
+  const saved = { list: process.env.AI_FALLBACK_MODELS, single: process.env.AI_FALLBACK_MODEL };
+  process.env.AI_FALLBACK_MODELS = models;
+  delete process.env.AI_FALLBACK_MODEL;
+  return run().finally(() => {
+    if (saved.list === undefined) delete process.env.AI_FALLBACK_MODELS;
+    else process.env.AI_FALLBACK_MODELS = saved.list;
+    process.env.AI_FALLBACK_MODEL = saved.single;
+  });
+}
+
+test("rotation walks the fallback list and remembers models that are down", () =>
+  withChain("b/one, c/two", async () => {
+    requests.length = 0;
+    respond = (body) => (body.model === "c/two" ? reply({ ok: true }) : reply(null, { status: 503 }));
+    const first = await askJson({ task: "verify", system: "s", user: "u", schema });
+    assert.equal(first.model, "c/two");
+    assert.deepEqual(requests.map((r) => r.body.model), ["verify/model", "b/one", "c/two"]);
+
+    requests.length = 0;
+    const second = await askJson({ task: "verify", system: "s", user: "u", schema });
+    assert.equal(second.model, "c/two");
+    assert.deepEqual(requests.map((r) => r.body.model), ["c/two"]);
+  }));
+
+test("when every model is cooling down, the primary is probed again instead of failing blind", () =>
+  withChain("b/one", async () => {
+    respond = () => reply(null, { status: 503 });
+    await assert.rejects(askJson({ task: "verify", system: "s", user: "u", schema }), (error) => error.providerStatus === 503);
+    requests.length = 0;
+    respond = () => reply({ ok: true });
+    const result = await askJson({ task: "verify", system: "s", user: "u", schema });
+    assert.equal(result.model, "verify/model");
+    assert.deepEqual(requests.map((r) => r.body.model), ["verify/model"]);
+  }));
+
+test("a model that hangs keeps only part of the budget, so the next one still answers", () =>
+  withChain("b/one", async () => {
+    requests.length = 0;
+    respond = (body, _n, init) =>
+      body.model === "verify/model"
+        ? new Promise((_, reject) => init.signal.addEventListener("abort", () => reject(init.signal.reason ?? new Error("aborted"))))
+        : reply({ ok: true });
+    const started = Date.now();
+    const result = await askJson({ task: "verify", system: "s", user: "u", schema, timeoutMs: 8_000 });
+    assert.equal(result.model, "b/one");
+    assert.ok(Date.now() - started < 6_000);
+  }));
+
+test("the shared free quota skips every free model and goes straight to a paid one next time", () => {
+  const savedModel = process.env.AI_MODEL_VERIFY;
+  process.env.AI_MODEL_VERIFY = "a/primary:free";
+  return withChain("b/other:free, c/paid", async () => {
+    requests.length = 0;
+    respond = (body) => (body.model === "c/paid" ? reply({ ok: true }) : quotaReply());
+    const first = await askJson({ task: "verify", system: "s", user: "u", schema });
+    assert.equal(first.model, "c/paid");
+    assert.deepEqual(requests.map((r) => r.body.model), ["a/primary:free", "c/paid"]);
+    requests.length = 0;
+    await askJson({ task: "verify", system: "s", user: "u", schema });
+    assert.deepEqual(requests.map((r) => r.body.model), ["c/paid"]);
+  }).finally(() => {
+    process.env.AI_MODEL_VERIFY = savedModel;
+  });
+});
+
+test("invalid output switches model for this call but does not mark the model as down", () =>
+  withChain("b/one", async () => {
+    requests.length = 0;
+    respond = (body) => (body.model === "verify/model" ? reply({ wrong: 1 }) : reply({ ok: true }));
+    await askJson({ task: "verify", system: "s", user: "u", schema });
+    requests.length = 0;
+    respond = () => reply({ ok: true });
+    const again = await askJson({ task: "verify", system: "s", user: "u", schema });
+    assert.equal(again.model, "verify/model");
+  }));
