@@ -23,6 +23,23 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 
 Requests are authenticated with `Authorization: Bearer <supabase access token>` or the Supabase session cookie. Anonymous Supabase sessions (`signInAnonymously`) count as authenticated users.
 
+## Model per task
+
+Each AI feature reads its own model variable and falls back to `AI_MODEL` when it is empty (`lib/ai/models.ts`). `AI_FALLBACK_MODEL` is shared: when a task's model fails (rate limit, provider error, invalid output), the request is retried once with it, unless it is the same model.
+
+| Task | Variable | Recommended ID to test |
+|---|---|---|
+| Claim verification | `AI_MODEL_VERIFY` | `google/gemini-3.5-flash` |
+| Translation | `AI_MODEL_TRANSLATE` | `google/gemini-3.5-flash` |
+| Story angles | `AI_MODEL_ANGLES` | `google/gemini-3.5-flash` |
+| Image and video analysis | `AI_MODEL_VISION` | `google/gemini-3.5-flash-lite` |
+| Expert classification and ranking | `AI_MODEL_EXPERTS` | `google/gemini-3.5-flash-lite` |
+| Shared fallback | `AI_FALLBACK_MODEL` | a free model (`…:free`) |
+
+These IDs were listed in the OpenRouter catalog with image input and JSON mode support; newer Gemini Flash versions also exist there. Set the values in `.env.local` only.
+
+Free models are a fallback, not a default. Some free providers may log prompts or use them for training, so never route confidential material to them: a journalist's unpublished document must only reach a paid model whose provider does not train on prompts.
+
 ## Cache and demo fallback
 
 - Identical requests from the same user are answered from an in-memory cache for `AI_CACHE_TTL_SECONDS`, without calling the model or using the daily quota (`meta.cached: true`). Keys are SHA-256 hashes that include the user ID, so one user can never learn what another submitted. Entries are kept in memory only and expire after the TTL.
