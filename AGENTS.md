@@ -41,7 +41,7 @@ Un parcours qui marche de bout en bout vaut mieux que 8 écrans simulés.
 - i18n : `next-intl`, langue par cookie `NEXT_LOCALE` (`mg` | `fr` | `en`, défaut `mg`), messages **imbriqués** (jamais de clé contenant un point).
 - IA : SDK `openai` pointé sur OpenRouter. Recherche web : plugin `web` d'OpenRouter (`webSearch` dans `askJson`). Validation : `zod`.
 - Données : Supabase (auth anonyme + annuaire `experts` avec RLS), `data/stats.json` (Banque mondiale), `localStorage` pour "Mes dossiers".
-- Images : `exifr` (EXIF), `image-size`. Vidéo : extraction d'images clés.
+- Images : `sharp` (orientation, réduction, sans métadonnées), `exifr` (EXIF, aussi lu dans le navigateur), `image-size`. Vidéo : 6 images clés extraites **dans le navigateur** (pas de ffmpeg côté serveur).
 - Animations : `three` + `@react-three/fiber` (scène 3D de la landing), `gsap` + `lenis` (scènes scrubées), `motion` (transitions de l'application).
 - Tests : `vitest` (`tests/api/*.test.ts`) et `node --test` (`tests/*.test.mjs`). CI : `.github/workflows/ci.yml`.
 
@@ -72,10 +72,15 @@ components/workspace/           # écrans de l'application
 lib/ai/client.ts                # SEUL point d'appel au modèle (askJson, askText, isMockMode, AiError)
 lib/ai/models.ts                # tâche → modèle (AI_MODEL_<TASK>, sinon AI_MODEL ; AI_FALLBACK_MODEL partagé)
 lib/ai/prompts/                 # tous les prompts
-lib/ai/{verify,angles,translate,schemas}.ts
+lib/ai/{verify,angles,translate,schemas,glossary}.ts
+lib/translation-checks.ts       # contrôle des traductions (langue, sortie inchangée, découpage)
+lib/vision-analyzer.ts          # image → modèle de vision (tâche vision)
+lib/image-intake.ts             # réception des images et des images clés vidéo
+lib/video-frames.ts             # instants des images clés, regroupement par instant
+lib/browser/                    # préparation côté navigateur (compression, images clés)
 lib/score.ts                    # indice de confiance calculé par le code
-lib/security/                   # auth, safe-fetch (SSRF), request (headers, body)
-lib/ratelimit.ts, lib/cache.ts, lib/demo/replay.ts
+lib/security/                   # auth, ratelimit, safe-fetch (SSRF), request (headers, body, erreurs)
+lib/cache.ts, lib/demo/replay.ts
 lib/api/{contract,fetcher}.ts   # types partagés avec le frontend
 lib/experts/, lib/db/experts.ts # annuaire
 lib/dossiers.ts, lib/stats.ts
@@ -109,7 +114,7 @@ messages/{mg,fr,en}.json
   affiche un badge "Démonstration".
 - Le **score est calculé par le code** (`lib/score.ts`), jamais "décidé" par le modèle : type de source,
   sens, domaines distincts, date, contradictions. Le nombre de sources seul ne suffit pas.
-- Quota limité : cache par utilisateur (`lib/cache.ts`), limites IP + utilisateur + jour (`lib/ratelimit.ts`).
+- Quota limité : cache par utilisateur (`lib/cache.ts`), limites IP + utilisateur + jour (`lib/security/ratelimit.ts`).
 - L'assistant éditorial ne part que des affirmations `confirmed`. Il propose des **profils**, jamais des noms.
 - Le malagasy est moins bien géré par les modèles : ne pas promettre plus que ce qui a été testé.
 

@@ -14,11 +14,11 @@ if (result.ok) {
 }
 ```
 
-`postApi` never throws for HTTP or network errors (only when its `signal` is aborted). It returns either the success body plus `status`, or `{ ok: false, status, error: { code, message, fields? }, retryAfterSeconds }`. Client-side codes: `network_error` (status 0), `unexpected_response`, and `request_failed` (legacy routes).
+`postApi` never throws for HTTP or network errors (only when its `signal` is aborted). It returns either the success body plus `status`, or `{ ok: false, status, error: { code, message, fields? }, retryAfterSeconds }`. Client-side codes: `network_error` (status 0) and `unexpected_response`.
 
 ## Common rules
 
-- All routes are `POST` with `Content-Type: application/json`. Other methods return 405.
+- All routes are `POST`. Text routes take `Content-Type: application/json`; `/api/verify/image` and `/api/verify/video` take `multipart/form-data`. Other methods return 405.
 - Authentication: Supabase session cookie, or `Authorization: Bearer <access token>`. Anonymous Supabase sessions are accepted. `DEMO_MODE=true` skips this check outside production.
 - Responses carry `Cache-Control: no-store` and no CORS headers: call the API from the same origin.
 - Every response with `mock: true` is demonstration data and must be shown with a "Demonstration" badge.
@@ -128,9 +128,11 @@ Mock mode: topic domains are detected by keywords and the ranking is determinist
 
 Request (`TranslateRequest`), max body 24 KB, unknown keys rejected: `{ "sourceLang": "mg" | "fr" | "en", "targetLang": "mg" | "fr" | "en", "text": string }`. The two languages must differ; `text` is 1 to 5,000 characters.
 
-Success (`TranslateSuccess`): `{ ok: true, mock, translatedText, sourceLang, targetLang, needsReview }`. `needsReview` is true when the target is Malagasy: show "to be reviewed by a speaker".
+Success (`TranslateSuccess`): `{ ok: true, mock, translatedText, sourceLang, targetLang, needsReview }`. `needsReview` is true when Malagasy is the source or the target: show "to be reviewed by a speaker".
 
-Errors: the common codes above. Provider details are never returned.
+Long texts are translated paragraph by paragraph. Each output is checked by code: an output equal to the input, or detected as another language than the target, is retried once.
+
+Errors: the common codes above, plus `translation_unreliable` (502) when the output still fails the check. Provider details are never returned.
 
 ## POST /api/editorial/angles
 
@@ -138,8 +140,31 @@ Request (`EditorialAnglesRequest`): `{ "subject"?: string, "verificationId"?: st
 
 Success (`EditorialAnglesSuccess`): `{ ok: true, mock, verificationId, lang, angles: [{ title, premise, interviewQuestions, actorTypes, dataToFind, format, basedOn, toVerifyFirst }], limitations, usage, attempts }`.
 
-This route still uses the legacy error body `{ "ok": false, "erreur": string }` (French message, no code) and only an IP rate limit, without session check or daily quota. `postApi` maps these errors to `request_failed`.
+Max body 128 KB. Same chain as the other routes: IP limit, session, per-user limit, Zod, daily quota. Errors: the common codes above.
 
-## GET /api/ping-ai
+## POST /api/verify/image
 
-Health check of the model connection: `{ "ok": true, "mock": boolean, "reponse": string }` or the legacy error body.
+Multipart fields:
+
+- `image`: one JPEG, PNG or WebP file, 4 MB max. The app compresses photos in the browser first.
+- `lang`: `mg`, `fr` or `en`.
+- `exif`, optional: a JSON string `{ dateTaken?, creationDate?, camera?, software?, hasGPS? }` read on the device before compression. Coordinates are refused.
+
+Success (`VerifyImageSuccess`): `{ ok: true, mock, file, metadata, metadataSource: "file" | "device" | "none", warnings, reverseSearch, analysis, verification, meta }`. `verification.status` is always one of the hint statuses, never a true/false verdict.
+
+Extra error codes: `image_missing`, `image_too_large` (413), `unsupported_media` (415), `invalid_image`. Error bodies also carry `reverseSearch`.
+
+## POST /api/verify/video
+
+The browser extracts the key frames; the video itself is never uploaded.
+
+Multipart fields:
+
+- `frame`: 1 to 6 JPEG files, 900 KB each and 3.8 MB in total.
+- `timestamps`: a JSON array, one increasing number of seconds per frame.
+- `duration`: in seconds, 4 hours max.
+- `lang`.
+
+Success (`VerifyVideoSuccess`): `{ ok: true, mock, video, frames: [{ timestamp, status: "analysed" | "failed", analysis }], analysedCount, failedCount, observations, warnings, reverseSearch, verification, meta }`. Each entry of `observations` lists the `timestamps` where it was seen.
+
+Extra error codes: `frames_missing`, `frames_too_large` (413), `unsupported_media` (415), `invalid_image`.

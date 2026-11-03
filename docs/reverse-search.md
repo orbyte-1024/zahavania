@@ -17,4 +17,4 @@ Checkeko ne fait **aucun scraping** sur TinEye, Google Lens ou Yandex. La route 
 
 ## Code
 
-Le wrapper est dans `lib/image/links.ts` (`getImageSearchLinks`). Il utilise `reverseSearchLinks()` (`lib/reverse-search.ts`) et ne fait aucun `fetch` ni `curl`.
+Les liens viennent de `reverseSearchLinks()` (`lib/reverse-search.ts`), qui renvoie une liste fermée d'adresses fixes et ne fait aucun `fetch` ni `curl`.
