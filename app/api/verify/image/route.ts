@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
       detectAiGeneration(intake.bytes, fields.data.lang),
     ]);
     const aiDetection = detector.detection;
-    const verification = buildVerification(metadata, exifWarnings, vision.analysis, vision.warnings as VisionWarning[], reverseSearch, aiDetection);
+    const verification = buildVerification(metadata, exifWarnings, vision.analysis, vision.warnings as VisionWarning[], reverseSearch, aiDetection, fields.data.lang);
     const aiDetectionLog = aiDetection.status === "ok" ? "ok" : aiDetection.reason;
 
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, metadataSource, analysis: vision.analysis !== null, aiDetection: aiDetectionLog });

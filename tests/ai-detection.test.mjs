@@ -115,3 +115,28 @@ test("a high index stays a hint: the image status remains inconclusive and the l
   assert.doesNotMatch(down.summary, /\/100/);
   assert.ok(down.limitations.some((l) => /indisponible/.test(l)));
 });
+
+test("the image report is written in the language of the request", () => {
+  const metadata = { available: true, dateTaken: "2026:10:01", creationDate: null, camera: "TestCam", software: null, hasGPS: true };
+  const vision = {
+    description: { text: "Street", confidence: "low" },
+    visualInconsistencies: [],
+    possibleAIGenerationIndicators: [{ text: "Smooth skin", confidence: "low" }],
+    locationClues: [],
+    limitations: { text: "Small image", confidence: "low" },
+  };
+  const french = /métadonnées|l'image|indice|analyse visuelle|non concluante/i;
+  const reports = Object.fromEntries(
+    ["fr", "en", "mg"].map((lang) => [lang, buildVerification(metadata, [], vision, [], links, detectionFromScore(0.4), lang)]),
+  );
+  for (const lang of ["en", "mg"]) {
+    const report = reports[lang];
+    const text = [report.summary, ...report.limitations, ...report.supportingEvidence.map((e) => e.content)].join(" ");
+    assert.doesNotMatch(text, french, lang);
+    assert.match(report.summary, /40\/100/);
+    assert.equal(report.limitations.length, reports.fr.limitations.length);
+    assert.equal(report.status, "non concluant");
+  }
+  assert.match(reports.en.summary, /uncertain signal/);
+  assert.match(reports.mg.summary, /famantarana tsy azo antoka/);
+});
