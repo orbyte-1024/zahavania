@@ -423,11 +423,15 @@
     "lead": "Ireo isa farany navoakan'ny Banky Iraisam-pirenena momba an'i Madagasikara. Samy manondro ny taonany, ny loharanony ary ny daty nanavaozana azy ny isa tsirairay.",
     "retrieved": "Angona nalaina tamin'ny {date}",
     "period": "TAONA IRESAHANA : {year}",
-    "range": "FIOVANA {from} → {to}",
     "updated": "Nohavaozin'ny loharano tamin'ny {date}",
     "stale": "ISA TAMIN'NY {year}",
     "agendaTitle": "Fandaharana",
-    "agendaEmpty": "Tsy mbola misy famoahana na valan-dresaka ho an'ny mpanao gazety voasoratra. Tsy maintsy manondro ny loharanony ny daty rehetra ampidirina."
+    "agendaEmpty": "Tsy mbola nisy daty ho avy nambaran'ny loharano ofisialy. Tsy ampiana daty raha tsy ny loharano mihitsy no namoaka azy.",
+    "chartCaption": "{label}, nanomboka {from} ka hatramin'ny {to}",
+    "year": "Taona",
+    "value": "Sanda",
+    "agendaChecked": "Nohamarinina ny {date} ny fandaharana",
+    "watchTitle": "Loharano ofisialy arahina maso"
   },
   "locale": {
     "mg": "Malagasy",

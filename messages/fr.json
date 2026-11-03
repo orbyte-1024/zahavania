@@ -423,11 +423,15 @@
     "lead": "Les derniers chiffres publiés pour Madagascar par la Banque mondiale. Chaque valeur indique son année, sa source et sa date de mise à jour.",
     "retrieved": "Données récupérées le {date}",
     "period": "ANNÉE DE RÉFÉRENCE : {year}",
-    "range": "ÉVOLUTION {from} → {to}",
     "updated": "Mis à jour par la source le {date}",
     "stale": "CHIFFRE DE {year}",
     "agendaTitle": "Agenda",
-    "agendaEmpty": "Aucune publication ni conférence de presse saisie pour l'instant. Chaque date ajoutée devra citer sa source."
+    "agendaEmpty": "Aucune date à venir n'a été annoncée par une source officielle. Une date n'est ajoutée que lorsque la source elle-même la publie.",
+    "chartCaption": "{label}, de {from} à {to}",
+    "year": "Année",
+    "value": "Valeur",
+    "agendaChecked": "Agenda vérifié le {date}",
+    "watchTitle": "Sources officielles à suivre"
   },
   "locale": {
     "mg": "Malagasy",

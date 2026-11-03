@@ -1317,7 +1317,7 @@
 
 .sparkline {
   width: 100%;
-  height: 56px;
+  height: 64px;
   overflow: visible;
 }
 
@@ -1335,6 +1335,38 @@
 
 .sparkline-end {
   fill: var(--ink);
+}
+
+.sparkline-point {
+  fill: var(--accent);
+}
+
+.trend {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.trend-plot {
+  display: grid;
+  gap: 2px;
+}
+
+.trend-max,
+.trend-min,
+.trend-axis {
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.trend-min {
+  padding-top: 2px;
+}
+
+.trend-axis {
+  display: flex;
+  justify-content: space-between;
 }
 
 .indicator-foot {
