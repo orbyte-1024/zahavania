@@ -460,5 +460,12 @@
     "license": "Licence",
     "source": "Voir sur Wikimedia Commons ↗",
     "back": "← Retour à l'accueil"
+  },
+  "offline": {
+    "kicker": "PAS DE CONNEXION",
+    "title": "Vous êtes hors ligne",
+    "lead": "Vérifier une affirmation demande le réseau : les sources sont cherchées en direct, et rien n'est inventé sans elles.",
+    "files": "Vos dossiers enregistrés restent sur cet appareil. Ils réapparaîtront dès que la connexion reviendra.",
+    "retry": "Réessayer"
   }
 }

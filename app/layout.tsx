@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { LocaleSync } from "@/components/LocaleSync";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { ThemeSync } from "@/components/ThemeSync";
 import { routing } from "@/i18n/routing";
 import { themeInitScript } from "@/lib/theme";
@@ -26,6 +27,9 @@ const mono = DM_Mono({
 
 export const metadata: Metadata = {
   title: BRAND_NAME,
+  applicationName: BRAND_NAME,
+  appleWebApp: { capable: true, title: BRAND_NAME, statusBarStyle: "black-translucent" },
+  icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },
   description: "Vérification pour les rédactions de Madagascar, en malagasy, en français et en anglais.",
 };
 
@@ -59,6 +63,7 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeSync />
+        <ServiceWorkerRegister />
         <Suspense>
           <IntlProvider>{children}</IntlProvider>
         </Suspense>
