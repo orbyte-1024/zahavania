@@ -1,4 +1,4 @@
-# Deploying Zahavan'Ia on Vercel
+# Deploying Zahavan'ia on Vercel
 
 This guide prepares a production deployment. Nothing here deploys automatically: an owner of the Vercel project runs the import and fills in the values.
 
