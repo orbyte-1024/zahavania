@@ -1,185 +1,148 @@
 # Zahavan'Ia
- 
-**Assistant d'investigation journalistique pour Madagascar.** Zahavan'Ia aide un
-journaliste à passer d'une information reçue à une information vérifiée : vérifier
-un texte ou un lien, analyser une image ou une vidéo, retrouver des chiffres
-sourcés, identifier des experts consentants et dégager des angles de reportage.
- 
-Interface en malagasy, français et anglais. Projet de hackathon, construit avec
-Next.js 16.
- 
-## Fonctionnalités
- 
-- **Vérifier un texte ou un lien** : les affirmations sont isolées, confrontées à
-  une recherche web, et chaque conclusion renvoie à des sources cliquables.
-- **Analyser une image ou une vidéo** : métadonnées EXIF, indices visuels,
-  anomalies et liens de recherche inversée. Une vidéo est réduite à 6 images
-  clés extraites dans le navigateur.
-- **Traduire** entre malagasy, français et anglais, avec un contrôle automatique
-  de la sortie et un signalement « à relire » pour le malagasy.
-- **Trouver un expert** dans un annuaire de profils consentants, filtré par
-  domaine, région et langue.
-- **Consulter des statistiques** de la Banque mondiale sur Madagascar, avec
-  année, source et date de mise à jour.
-- **Proposer des angles** de reportage à partir des seules affirmations confirmées.
-- **Enregistrer un dossier** localement, dans le navigateur du journaliste.
- 
-La veille (`/app/monitor`) est prévue mais désactivée.
- 
-## Principes
- 
-- Aucun verdict « vrai / faux » : les statuts sont `confirmed`, `contradicted`,
-  `insufficient` ou `needs_verification`.
-- L'indice de confiance (0–100) est calculé par le code, avec un détail
-  explicable. Il mesure la qualité des preuves trouvées, pas la vérité du fait.
-- Une affirmation sans source exploitable est `insufficient`.
-- L'IA n'invente ni source, ni citation, ni expert : les URL non renvoyées par
-  la recherche web sont retirées, et les experts viennent uniquement de
-  l'annuaire.
-- Une image sans anomalie n'est pas « authentique » : l'analyse reste un indice.
-- Le journaliste décide : chaque rapport peut être validé, complété ou rejeté.
- 
+
+**Journalistic investigation assistant for Madagascar.**
+
+Zahavan'Ia helps journalists transition from receiving raw information to producing verified content. It enables them to check text or links, analyze images or videos, find sourced statistics, identify consenting experts, and identify unique angles for news coverage. The interface is available in Malagasy, French, and English. This is a hackathon project built with Next.js 16.
+
+## Features
+
+- **Verify text or links**: Claims are isolated and cross-checked against web searches. Every conclusion links back to clickable sources.
+- **Analyze an image or a video**: Extracts EXIF metadata, visual clues, and anomalies, and provides reverse image search links. Videos are reduced to 6 keyframes extracted directly within the browser.
+- **Translate**: Translates between Malagasy, French, and English, with automatic output quality checks and a "needs review" flag triggered for Malagasy.
+- **Find an expert**: Search a directory of consenting profiles, filtered by field of expertise, region, and language.
+- **Consult statistics**: Access World Bank statistics on Madagascar, complete with the relevant year, source, and last update date.
+- **Suggest reporting angles**: Generates news coverage angles based exclusively on confirmed claims.
+- **Save a case**: Saves folders locally in the journalist's browser. The monitoring feature (`/app/monitor`) is planned but currently disabled.
+
+## Principles
+
+- **No "true / false" verdicts**: Statuses are strictly limited to `confirmed`, `contradicted`, `insufficient`, or `needs_verification`.
+- **Confidence score**: A score (0–100) is computed programmatically with an explainable breakdown. It measures the quality of the evidence found, not the ultimate truth of the fact.
+- **Insufficient status**: Any claim without a usable, verifiable source is classified as `insufficient`.
+- **No AI hallucinations**: The AI does not invent sources, quotes, or experts. URLs not returned by the web search are discarded, and experts are drawn exclusively from the directory.
+- **No absolute authenticity**: An image with no detected anomalies is not certified as "authentic"; the analysis remains an indicator.
+- **The journalist decides**: Every report can be validated, completed, or rejected by the user.
+
 ## Stack
- 
-Next.js 16 (App Router), React 19, TypeScript strict, Tailwind CSS v4,
-`next-intl`, Supabase (auth anonyme, annuaire, limiteurs partagés), SDK `openai`
-pointé sur OpenRouter, `zod`, `sharp` / `exifr`, `three`, `gsap`, `motion`.
-Tests avec Vitest et `node --test`.
- 
-## Démarrage
- 
-Prérequis : Node.js 24 et npm.
- 
+
+Next.js 16 (App Router), React 19, strict TypeScript, Tailwind CSS v4, `next-intl`, Supabase (anonymous auth, expert directory, shared rate-limiters), `openai` SDK pointing to OpenRouter, `zod`, `sharp` / `exifr`, `three`, `gsap`, `motion`. Tested with Vitest and `node --test`.
+
+## Getting Started
+
+Prerequisites: Node.js 24 and npm.
+
 ```bash
-cp .env.example .env.local   # renseigner au minimum la clé OpenRouter et Supabase
+cp .env.example .env.local # at a minimum, fill in the OpenRouter and Supabase keys
 npm install
 npm run dev
 ```
- 
-L'application est disponible sur <http://localhost:3000>.
- 
-### Base de données locale (optionnel)
- 
+
+The application will be available at <http://localhost:3000>.
+
+### Local Database (Optional)
+
 ```bash
 npx supabase start
-npx supabase db reset        # applique les migrations et le seed de démonstration
+npx supabase db reset # applies migrations and the demonstration seed data
 ```
- 
-Les 16 profils du seed sont **fictifs** et marqués comme tels.
- 
-### Sans clé d'IA
- 
-`USE_MOCK=true` renvoie des réponses déterministes marquées `mock: true`, à des
-fins de développement uniquement. Le mode est ignoré en production.
- 
+
+The 16 profiles included in the seed data are **fictional** and explicitly marked as such.
+
+### Without an AI Key
+
+Setting `USE_MOCK=true` returns deterministic responses marked with `mock: true` for development purposes only. This mode is ignored in production.
+
 ## Configuration
- 
-Toutes les variables sont documentées dans `.env.example`. Les principales :
- 
-| Variable | Rôle |
+
+All variables are documented in `.env.example`. The primary ones are:
+
+| Variable | Role |
 | --- | --- |
-| `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | Point d'accès OpenRouter, clé et modèle par défaut |
-| `AI_MODEL_VERIFY`, `_TRANSLATE`, `_VISION`, `_EXPERTS`, `_ANGLES` | Modèle par tâche (facultatif, retombe sur `AI_MODEL`) |
-| `AI_FALLBACK_MODEL` | Second modèle essayé une fois en cas d'échec |
-| `AI_DAILY_LIMIT_PER_USER` | Quota quotidien par utilisateur et par route |
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Projet Supabase (clé publique par conception) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Serveur uniquement : seed local, limiteurs partagés |
-| `RATE_LIMIT_STORE=supabase` | Limites partagées entre instances au lieu de la mémoire |
-| `DEMO_MODE` | Ignore l'authentification en développement uniquement |
-| `USE_MOCK` | Données de démonstration en développement uniquement |
- 
-Aucune clé ne doit être préfixée `NEXT_PUBLIC_` en dehors de la clé anonyme
-Supabase.
- 
+| `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, API key, and default model |
+| `AI_MODEL_VERIFY`, `_TRANSLATE`, `_VISION`, `_EXPERTS`, `_ANGLES` | Per-task models (optional, falls back to `AI_MODEL`) |
+| `AI_FALLBACK_MODEL` | Secondary model tried once in case of failure |
+| `AI_DAILY_LIMIT_PER_USER` | Daily quota per user and per route |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project credentials (public key by design) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only: local seeding, shared rate-limiters |
+| `RATE_LIMIT_STORE=supabase` | Share rate limits between instances instead of using memory |
+| `DEMO_MODE` | Bypasses authentication in development mode only |
+| `USE_MOCK` | Serves mock demonstration data in development mode only |
+
+No key should be prefixed with `NEXT_PUBLIC_` except for the Supabase anonymous key.
+
 ## Scripts
- 
-| Commande | Effet |
+
+| Command | Effect |
 | --- | --- |
-| `npm run dev` | Serveur de développement |
-| `npm run build` / `npm start` | Build de production et serveur réel |
+| `npm run dev` | Development server |
+| `npm run build` / `npm start` | Production build and production server |
 | `npm run lint` | ESLint |
-| `npm test` | Tests Vitest puis `node --test` |
-| `npm run stats:update` | Rafraîchit `data/stats.json` depuis la Banque mondiale |
-| `npm run check:real` | Vérifie les routes IA sur un serveur réel (hors mock) |
- 
+| `npm test` | Runs Vitest tests followed by `node --test` |
+| `npm run stats:update` | Refreshes `data/stats.json` from the World Bank API |
+| `npm run check:real` | Verifies AI routes on a live server (bypassing mocks) |
+
 ## Architecture
- 
+
 ```text
 app/
-  page.tsx                  landing
-  app/                      écrans de l'application
-  api/                      routes backend (verify, sources, editorial, translate)
-components/landing/         scènes 3D et animations
-components/workspace/       écrans de travail
-lib/ai/                     client IA unique, prompts, schémas, modèles
-lib/security/               auth, rate limit, safe-fetch
-lib/score.ts                calcul de l'indice de confiance
-i18n/, messages/            traductions mg / fr / en
-data/                       statistiques, agenda, crédits photos
-supabase/                   migrations et seed
-tests/, docs/               tests et documentation
+  page.tsx             # landing page
+  app/                 # application core screens
+  api/                 # backend routes (verify, sources, editorial, translate)
+components/landing/     # 3D scenes and animations
+components/workspace/   # main workspace interfaces
+lib/ai/                # unified AI client, prompts, schemas, and models
+lib/security/          # auth, rate-limiting, and safe-fetch utilities
+lib/score.ts           # confidence score calculation logic
+i18n/, messages/       # mg / fr / en translation files
+data/                  # statistics, agenda, photo credits
+supabase/              # database migrations and seed data
+tests/, docs/          # test suites and documentation
 ```
- 
+
 ## API
- 
-Toutes les routes sont en `POST`, exigent une session Supabase (anonyme
-acceptée) et appliquent limites de débit, quota quotidien et validation Zod.
-Les erreurs sont génériques. Le contrat complet est décrit dans
-[`docs/api.md`](docs/api.md).
- 
-| Route | Rôle |
+
+All routes use the `POST` method, require an active Supabase session (anonymous sessions are accepted), and enforce rate limits, daily quotas, and Zod validation. Errors return generic messages. The complete contract is detailed in [`docs/api.md`](docs/api.md).
+
+| Route | Role |
 | --- | --- |
-| `/api/verify/text` | Vérifier un texte ou une URL |
-| `/api/verify/image` | Analyser une image et ses métadonnées |
-| `/api/verify/video` | Analyser les images clés d'une vidéo |
-| `/api/sources/suggest` | Proposer des experts de l'annuaire |
-| `/api/editorial/angles` | Proposer des angles à partir des faits confirmés |
-| `/api/translate` | Traduire un texte (5 000 caractères max) |
- 
-## Sécurité et vie privée
- 
-- Clés strictement côté serveur ; aucune clé dans le client, les logs ou les
-  messages d'erreur.
-- Les URL fournies passent par `lib/security/safe-fetch.ts` (HTTP/HTTPS, IP
-  publiques, ports standard, redirections revérifiées, taille et délai bornés).
-- Aucun contenu soumis n'est journalisé. Les dossiers restent dans le
-  `localStorage` du journaliste.
-- Limites de débit par IP et par utilisateur, partagées via Supabase si
-  `RATE_LIMIT_STORE=supabase`.
-- Le contenu utilisateur est traité comme une donnée, jamais comme une
-  instruction ; les sources inventées sont écartées par le code.
- 
-## Tests et CI
- 
-`npm test` exécute les tests d'API (Vitest) et les tests de logique
-(`node --test`). La CI GitHub Actions vérifie le typecheck, le lint, les tests
-et le build avec `USE_MOCK=true`.
- 
-## Déploiement
- 
-- **Vercel** : guide détaillé dans [`docs/deploy-vercel.md`](docs/deploy-vercel.md).
-  Les routes IA ont un `maxDuration` allant jusqu'à 300 s.
-- **Docker** : `docker compose up --build` construit l'image `standalone` et
-  expose l'application sur le port 3000.
- 
-## Limites connues
- 
-- Le malagasy est moins bien maîtrisé par les modèles : toute traduction vers ou
-  depuis cette langue est signalée « à relire ».
-- La recherche web d'OpenRouter est facturée séparément ; sans crédits, les
-  vérifications restent `insufficient`.
-- Le cache de réponses et les limiteurs sont en mémoire sauf configuration
-  Supabase.
-- Le mode hors ligne se limite à une page `/offline` ; les données ne sont pas
-  mises en cache.
- 
+| `/api/verify/text` | Verify a block of text or a URL |
+| `/api/verify/image` | Analyze an image and its metadata |
+| `/api/verify/video` | Analyze keyframes extracted from a video |
+| `/api/sources/suggest` | Suggest expert profiles from the directory |
+| `/api/editorial/angles` | Propose reporting angles from confirmed facts |
+| `/api/translate` | Translate text (5,000 characters maximum) |
+
+## Security and Privacy
+
+- Keys are strictly server-side; no keys are ever exposed to the client, logs, or error messages.
+- Provided URLs pass through `lib/security/safe-fetch.ts` (restricts to HTTP/HTTPS, public IPs, standard ports, re-verified redirects, and bounded size and timeouts).
+- No submitted content is logged. Folders and cases remain in the journalist's browser `localStorage`.
+- Rate limits are enforced per IP and per user, shared via Supabase if `RATE_LIMIT_STORE=supabase`.
+- User content is strictly treated as data, never as instructions; hallucinated or untrusted sources are stripped programmatically.
+
+## Tests and CI
+
+`npm test` executes API tests (Vitest) followed by core logic tests (`node --test`). The GitHub Actions CI workflow validates typechecking, linting, tests, and the production build using `USE_MOCK=true`.
+
+## Deployment
+
+- **Vercel**: Detailed guide available in [`docs/deploy-vercel.md`](docs/deploy-vercel.md). AI routes are configured with a `maxDuration` of up to 300 seconds.
+- **Docker**: `docker compose up --build` builds the standalone image and exposes the application on port 3000.
+
+## Known Limitations
+
+- Malagasy language proficiency varies across models; any translation to or from Malagasy is automatically flagged as "needs review".
+- OpenRouter web search features are billed separately; without active credits, verifications default to `insufficient`.
+- The response cache and rate-limit stores run in-memory unless a Supabase backend is configured.
+- Offline mode is currently restricted to a static `/offline` page; application data is not cached for offline access.
+
 ## Documentation
- 
-| Fichier | Contenu |
+
+| File | Content |
 | --- | --- |
-| [`AGENTS.md`](AGENTS.md) | Règles produit, techniques et de sécurité |
-| [`docs/api.md`](docs/api.md) | Contrat des routes API |
-| [`README_AI.md`](README_AI.md) | Configuration IA, modèles, cache et démo |
-| [`docs/demo.md`](docs/demo.md) | Script de démonstration (3 minutes) |
-| [`docs/deploy-vercel.md`](docs/deploy-vercel.md) | Déploiement sur Vercel |
-| [`docs/reverse-search.md`](docs/reverse-search.md) | Recherche inversée d'images |
+| [`AGENTS.md`](AGENTS.md) | Product, technical, and security guidelines |
+| [`docs/api.md`](docs/api.md) | API route specifications and contracts |
+| [`README_AI.md`](README_AI.md) | AI configuration, models, caching, and demo setups |
+| [`docs/demo.md`](docs/demo.md) | Standard 3-minute demonstration script |
+| [`docs/deploy-vercel.md`](docs/deploy-vercel.md) | Step-by-step Vercel deployment guide |
+| [`docs/reverse-search.md`](docs/reverse-search.md) | Reverse image search implementation details |
