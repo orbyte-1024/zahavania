@@ -34,4 +34,4 @@ export async function callForm<T>(path: string, form: FormData): Promise<FormRes
   return { ok: false, code: response.ok ? "unexpected_response" : "request_failed", retryAfter };
 }
 
-export const CLAIMS_HANDOFF_KEY = "checkeko:claims";
+export const CLAIMS_HANDOFF_KEY = "zahavania:claims";
