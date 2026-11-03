@@ -46,6 +46,7 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "#15130f" },
   ],
   colorScheme: "dark light",
+  viewportFit: "cover",
 };
 
 async function IntlProvider({ children }: { children: React.ReactNode }) {
