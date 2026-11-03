@@ -17,7 +17,7 @@ const dailyLimiter = createRateLimiter({
   windowMs: 24 * 60 * MINUTE_MS,
 });
 
-type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; detail?: string; usage?: AiUsage | null };
+type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; providerStatus?: number | null; usage?: AiUsage | null };
 
 function logRequest(entry: LogEntry) {
   const line = JSON.stringify({ route: "POST /api/translate", ...entry });
@@ -92,9 +92,13 @@ export async function POST(req: NextRequest) {
       logRequest({ userId: auth.userId, durationMs: elapsed(), status: 504, code: "ai_timeout" });
       return errorResponse(504, "ai_timeout", "The translation took too long. Please try again.");
     }
-    const code = error instanceof AiError ? error.code : "internal_error";
-    const detail = error instanceof Error ? `${error.name}: ${error.message}` : "unknown error";
-    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code, detail });
+    if (error instanceof AiError && error.code === "invalid_output") {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 502, code: "translation_unreliable", providerStatus: error.providerStatus });
+      return errorResponse(502, "translation_unreliable", "The translation could not be checked. Please try again or shorten the text.");
+    }
+    const code = error instanceof AiError ? error.code : error instanceof Error ? error.name : "internal_error";
+    const providerStatus = error instanceof AiError ? error.providerStatus : null;
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code, providerStatus });
     return errorResponse(503, "ai_unavailable", "Translation is temporarily unavailable.");
   }
 }

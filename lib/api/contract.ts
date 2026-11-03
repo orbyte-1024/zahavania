@@ -96,7 +96,7 @@ export type TranslateSuccess = {
   needsReview: boolean;
 };
 
-export type TranslateErrorCode = CommonErrorCode;
+export type TranslateErrorCode = CommonErrorCode | "translation_unreliable";
 
 export type TranslateResponse = TranslateSuccess | ApiErrorBody<TranslateErrorCode>;
 

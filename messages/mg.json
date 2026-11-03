@@ -221,7 +221,8 @@
       "video_decode_failed": "Tsy mahavaky ity horonan-tsary ity ity navigateur ity (matetika .mov na HEVC). Avadiho ho MP4 (H.264) dia andramo indray.",
       "video_too_long": "Lava loatra ny horonan-tsary (4 ora farafahabetsany).",
       "frames_missing": "Tsy nisy sary fototra voaray.",
-      "frames_too_large": "Lehibe loatra ny sary fototra."
+      "frames_too_large": "Lehibe loatra ny sary fototra.",
+      "translation_unreliable": "Tsy voamarina ny dikanteny (fiteny diso na tsy niova ny lahatsoratra). Andramo indray na fohezo ny lahatsoratra."
     }
   },
   "status": {
