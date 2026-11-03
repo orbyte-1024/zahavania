@@ -17,7 +17,8 @@ Set them in **Project → Settings → Environment Variables** for *Production* 
 | Name | Secret | Production value |
 | --- | --- | --- |
 | `LLM_BASE_URL` | no | `https://openrouter.ai/api/v1` |
-| `LLM_API_KEY` | **yes** | OpenRouter key with a spending limit |
+| `LLM_API_KEY` | **yes** | one key, or several separated by commas, tried in order (OpenRouter `sk-or-`, Groq `gsk_`, Ollama Cloud, ...); include an Ollama key so `/verify` can search the web when OpenRouter is out of quota |
+| `CLOUDFLARE_ACCOUNT_ID` | no | only with a Cloudflare Workers AI key |
 | `AI_MODEL` | no | default model for every task |
 | `AI_MODEL_VERIFY`, `AI_MODEL_TRANSLATE`, `AI_MODEL_VISION`, `AI_MODEL_EXPERTS`, `AI_MODEL_ANGLES` | no | optional, one model per task (see `README_AI.md`) |
 | `SIGHTENGINE_API_USER`, `SIGHTENGINE_API_SECRET` | no | AI-generated image index on `/app/image`; without them the screen says the detector is not configured. Server-only, never `NEXT_PUBLIC_` |

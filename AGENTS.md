@@ -39,7 +39,9 @@ Un parcours qui marche de bout en bout vaut mieux que 8 écrans simulés.
 
 - Next.js 16 (App Router, `cacheComponents`) + TypeScript strict + Tailwind CSS v4. **Un seul repo**, les routes `app/api/*` sont le backend.
 - i18n : `next-intl`, langue par cookie `NEXT_LOCALE` (`mg` | `fr` | `en`, défaut `mg`), messages **imbriqués** (jamais de clé contenant un point).
-- IA : SDK `openai` pointé sur OpenRouter. Recherche web : plugin `web` d'OpenRouter (`webSearch` dans `askJson`). Validation : `zod`.
+- IA : SDK `openai`, chaîne de fournisseurs compatibles OpenAI (`LLM_API_KEY` = clés séparées par des virgules : OpenRouter,
+  Groq, Ollama Cloud, OpenCode Zen, Cloudflare ; `lib/ai/providers.ts`). Recherche web : plugin `web` d'OpenRouter, sinon
+  API de recherche d'Ollama (`lib/ai/web-search.ts`) dont seuls les résultats comptent comme sources. Validation : `zod`.
 - Données : Supabase (auth anonyme + annuaire `experts` avec RLS), `data/stats.json` (Banque mondiale), `localStorage` pour "Mes dossiers".
 - Détection d'image générée par IA : API Sightengine (modèle `genai`, `lib/sightengine.ts`), appelée par `fetch` sans SDK ; l'image envoyée est réduite et sans métadonnées. Indice 0–100 indicatif (`lib/ai-detection.ts`), jamais une preuve.
 - Images : `sharp` (orientation, réduction, sans métadonnées), `exifr` (EXIF, aussi lu dans le navigateur), `image-size`. Vidéo : 6 images clés extraites **dans le navigateur** (pas de ffmpeg côté serveur).
@@ -73,6 +75,8 @@ components/workspace/           # écrans de l'application
 lib/ai/client.ts                # SEUL point d'appel au modèle (askJson, askText, isMockMode, AiError)
 lib/ai/models.ts                # tâche → modèle (AI_MODEL_<TASK>, sinon AI_MODEL ; AI_FALLBACK_MODELS puis AI_FALLBACK_MODEL partagés)
 lib/ai/rotation.ts              # rotation des modèles : mise à l'écart temporaire d'un modèle en panne
+lib/ai/providers.ts             # clés séparées par des virgules → fournisseurs, URL et modèle par tâche
+lib/ai/web-search.ts            # recherche web via Ollama pour les fournisseurs sans plugin web
 lib/ai/prompts/                 # tous les prompts
 lib/ai/{verify,angles,translate,schemas,glossary}.ts
 lib/translation-checks.ts       # contrôle des traductions (langue, sortie inchangée, découpage)
