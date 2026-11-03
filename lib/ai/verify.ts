@@ -113,7 +113,7 @@ export async function verifyContent(input: VerifyInput): Promise<VerifyResult> {
     maxTokens: readIntEnv("AI_MAX_TOKENS", 4_000, 500, 8_000),
     timeoutMs: VERIFY_TIMEOUT_MS,
     outputRetries: 1,
-    webSearch: { maxResults: readIntEnv("AI_WEB_MAX_RESULTS", 5, 1, 10) },
+    webSearch: { maxResults: readIntEnv("AI_WEB_MAX_RESULTS", 5, 1, 10), query: content },
   });
 
   const { output, droppedSources } = keepOnlySearchedSources(data, citedUrls);

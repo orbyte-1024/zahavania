@@ -8,7 +8,10 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 
 | Variable | Purpose |
 |---|---|
-| `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, key and model. Server-only, never prefixed `NEXT_PUBLIC_`. |
+| `LLM_API_KEY` | One key, or several separated by commas: the provider chain (see "Provider chain"). Server-only, never prefixed `NEXT_PUBLIC_`. |
+| `LLM_BASE_URL`, `AI_MODEL` | OpenRouter endpoint (optional) and default model. |
+| `GROQ_MODEL`, `OLLAMA_MODEL`, `OLLAMA_MODEL_VISION`, `OPENCODE_MODEL`, `OPENCODE_MODEL_VISION`, `CLOUDFLARE_MODEL`, `CLOUDFLARE_MODEL_VISION` | Optional model per provider; defaults in `lib/ai/providers.ts`. |
+| `CLOUDFLARE_ACCOUNT_ID` | Needed to use a Cloudflare Workers AI key. |
 | `USE_MOCK` | `false` by default. `true` returns deterministic demo data with `mock: true` and never calls the model, in development only: it is ignored when `NODE_ENV=production`. |
 | `AI_REASONING_TOKENS` | Extra token budget for models that reason before answering (default 2000). Reasoning shares the output budget, so without it a long reasoning cuts the JSON answer. |
 | `AI_FALLBACK_MODELS` | Optional comma-separated list of fallback models, tried in order (see "Model rotation"). |
@@ -27,6 +30,26 @@ Requests are authenticated with `Authorization: Bearer <supabase access token>` 
 ## Model per task
 
 Each AI feature reads its own model variable and falls back to `AI_MODEL` when it is empty (`lib/ai/models.ts`). The fallbacks are shared by every task.
+
+### Provider chain
+
+`LLM_API_KEY` accepts several keys separated by commas, tried in that order (`lib/ai/providers.ts`). The provider is
+recognised from the key: `sk-or-` OpenRouter, `gsk_` Groq, `oc_sk_` OpenCode Zen, `cfut_` Cloudflare, `<32 hex>.<…>`
+Ollama Cloud. A key can also be written `groq:<key>`; an unrecognised key is treated as OpenRouter.
+
+| Provider | Text model (default) | Vision model (default) |
+|---|---|---|
+| OpenRouter | `AI_MODEL_<TASK>` / `AI_MODEL`, then `AI_FALLBACK_MODELS` | same |
+| Groq | `openai/gpt-oss-120b` | none: skipped for images |
+| Ollama Cloud | `gpt-oss:120b` | `gemma4:31b` |
+| OpenCode Zen | `big-pickle` | `nemotron-3.5-super-vl-free` |
+| Cloudflare (needs `CLOUDFLARE_ACCOUNT_ID`) | `@cf/meta/llama-3.3-70b-instruct-fp8-fast` | `@cf/meta/llama-4-scout-17b-16e-instruct` |
+
+`reasoning` and the `web` plugin are only sent to OpenRouter. For the other providers, a request that needs web search
+(`/verify`) first calls Ollama's web search API with the Ollama key (`lib/ai/web-search.ts`), once per request, and
+passes the results to the model inside `<web_search_results>` (`lib/ai/prompts/search.ts`). Only those result URLs
+count as cited, so sources the search did not return are still removed. Without an Ollama key, such requests only go to
+OpenRouter.
 
 ### Model rotation
 

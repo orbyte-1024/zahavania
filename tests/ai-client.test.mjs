@@ -147,13 +147,19 @@ test("askText treats empty and truncated answers as invalid output", async () =>
   process.env.AI_FALLBACK_MODEL = "fallback/model";
 });
 
-test("a missing model fails clearly before any request", async () => {
-  const saved = process.env.AI_MODEL;
+test("no model at all fails clearly before any request; a fallback alone is enough", async () => {
+  const saved = { model: process.env.AI_MODEL, fallback: process.env.AI_FALLBACK_MODEL };
   delete process.env.AI_MODEL;
+  delete process.env.AI_FALLBACK_MODEL;
   requests.length = 0;
   await assert.rejects(askJson({ task: "experts", system: "s", user: "u", schema }), (error) => error.code === "config_missing");
   assert.equal(requests.length, 0);
-  process.env.AI_MODEL = saved;
+
+  process.env.AI_FALLBACK_MODEL = saved.fallback;
+  respond = () => reply({ ok: true });
+  const result = await askJson({ task: "experts", system: "s", user: "u", schema });
+  assert.equal(result.model, "fallback/model");
+  process.env.AI_MODEL = saved.model;
 });
 
 function quotaReply() {

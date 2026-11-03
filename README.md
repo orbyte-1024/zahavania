@@ -58,7 +58,8 @@ All variables are documented in `.env.example`. The primary ones are:
 
 | Variable | Role |
 | --- | --- |
-| `LLM_BASE_URL`, `LLM_API_KEY`, `AI_MODEL` | OpenRouter endpoint, API key, and default model |
+| `LLM_API_KEY` | One API key, or several separated by commas (OpenRouter, Groq, Ollama Cloud, ...), tried in order; see `README_AI.md` |
+| `LLM_BASE_URL`, `AI_MODEL` | OpenRouter endpoint (optional) and default model |
 | `AI_MODEL_VERIFY`, `_TRANSLATE`, `_VISION`, `_EXPERTS`, `_ANGLES` | Per-task models (optional, falls back to `AI_MODEL`) |
 | `AI_FALLBACK_MODELS` | Comma-separated fallback models, tried in order when a model fails (see `README_AI.md`) |
 | `AI_FALLBACK_MODEL` | Single fallback model, added at the end of the list |

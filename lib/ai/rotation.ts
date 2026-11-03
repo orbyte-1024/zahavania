@@ -2,6 +2,7 @@ export type ModelFailure = { code: string; providerStatus: number | null; messag
 
 const FREE_POOL = "*:free";
 const SHARED_FREE_QUOTA = /free-models-per-day/i;
+const ACCOUNT_QUOTA = /usage limit|quota|credits/i;
 
 export const COOLDOWN_MS = {
   timeout: 60_000,
@@ -10,6 +11,7 @@ export const COOLDOWN_MS = {
   network: 30_000,
   notFound: 5 * 60_000,
   freeQuota: 15 * 60_000,
+  accountQuota: 15 * 60_000,
 } as const;
 
 const cooldowns = new Map<string, number>();
@@ -25,8 +27,9 @@ export function isSharedFreeQuota(failure: ModelFailure): boolean {
 export function cooldownFor(failure: ModelFailure): number | null {
   if (isSharedFreeQuota(failure)) return COOLDOWN_MS.freeQuota;
   if (failure.code === "timeout") return COOLDOWN_MS.timeout;
-  if (failure.code === "rate_limited") return COOLDOWN_MS.rateLimited;
+  if (failure.code === "rate_limited") return ACCOUNT_QUOTA.test(failure.message) ? COOLDOWN_MS.accountQuota : COOLDOWN_MS.rateLimited;
   if (failure.code !== "provider_error") return null;
+  if (failure.providerStatus === 402) return COOLDOWN_MS.accountQuota;
   if (failure.providerStatus === null) return COOLDOWN_MS.network;
   if (failure.providerStatus === 404) return COOLDOWN_MS.notFound;
   if (failure.providerStatus >= 500) return COOLDOWN_MS.serverError;
