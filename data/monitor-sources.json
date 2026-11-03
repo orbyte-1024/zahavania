@@ -1,0 +1,56 @@
+{
+  "auditedAt": "2026-11-03T00:00:00Z",
+  "policy": "title link excerpt only, no full article, no verdict",
+  "sources": [
+    {
+      "id": "midi",
+      "name": "Midi Madagasikara",
+      "homepage": "https://www.midimadagasikara.mg",
+      "feedUrl": "https://www.midimadagasikara.mg/feed",
+      "lang": "fr",
+      "scope": "national",
+      "enabled": true,
+      "checkedAt": "2026-11-03T00:00:00Z"
+    },
+    {
+      "id": "tribune",
+      "name": "Madagascar Tribune",
+      "homepage": "https://www.madagastribune.com",
+      "feedUrl": "https://www.madagastribune.com/feed",
+      "lang": "fr",
+      "scope": "national",
+      "enabled": true,
+      "checkedAt": "2026-11-03T00:00:00Z"
+    },
+    {
+      "id": "newsmada",
+      "name": "Newsmada",
+      "homepage": "https://newsmada.com",
+      "feedUrl": "https://newsmada.com/feed",
+      "lang": "mg",
+      "scope": "national",
+      "enabled": true,
+      "checkedAt": "2026-11-03T00:00:00Z"
+    },
+    {
+      "id": "rfi",
+      "name": "RFI",
+      "homepage": "https://www.rfi.fr",
+      "feedUrl": "https://www.rfi.fr/fr/afrique/ Madagascar-rss",
+      "lang": "fr",
+      "scope": "international",
+      "enabled": true,
+      "checkedAt": "2026-11-03T00:00:00Z"
+    },
+    {
+      "id": "allafrica",
+      "name": "AllAfrica",
+      "homepage": "https://allafrica.com",
+      "feedUrl": "https://allafrica.com/themes/madagascar/rss",
+      "lang": "en",
+      "scope": "international",
+      "enabled": true,
+      "checkedAt": "2026-11-03T00:00:00Z"
+    }
+  ]
+}

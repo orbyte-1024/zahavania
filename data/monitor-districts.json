@@ -1,0 +1,20 @@
+{
+  "regions": [
+    { "id": "analamanga", "name": "Analamanga", "districts": [" Antsirabe Atsimondrano", "Antsirabe I", "Antsirabe II", "Antananarivo Atsimondrano", "Antananarivo Renivohitra", "Antananarivo C", "Antananarivo Iv Andro", "Antananarivo Ivontsy", "Antananarivo Analakely", "Antananarivo Ambohimiandra", "Antananarivo Anosy", "Antananarivo Ahilalana", "Antananarivo Isotry", "Antananarivo Antsahamanitra", "Antananarivo Tsaralalana", "Antananarivo Ambatobe", "Antananarivo Ambohipeno", "Antananarivo Besovay", "Antananarivo Analalinkely", "Antananarivo Tsarimahafa"] },
+    { "id": "ava", "name": "Atsimo-Andrefana", "districts": [" Toliara I", "Toliara II", "Toliara III", "Toliara IV", "Beloha", "Tsihombe", " Ampanihy", "Morombe", "Mandrare", "Belaoka"] },
+    { "id": "amatolo", "name": "Amoron'Imania", "districts": [" Ambatolampy", "Ambahy", "Ankazobe", "Faravohitra"] },
+    { "id": "boeny", "name": "Boeny", "districts": [" Maohi", "Marche", "Matsedroy", "Belo sur Mer"] },
+    { "id": "betsiboka", "name": "Betsiboka", "districts": [" Marolambo", "Ambilobe", "Antsohihy", "Ambatomaina"] },
+    { "id": "diana", "name": "Diana", "districts": [" Ambanja", "Ambilobe", "Ambatokala", "Antsoindrove"] },
+    { "id": "fitovinany", "name": "Fitovinany", "districts": [" Fianarantsoa I", "Fianarantsoa II", "Fianarantsoa III", "Vangaindrano", "Vatovavy"] },
+    { "id": "haute", "name": "Haute Matsiatra", "districts": [" Fianarantsoa I", "Fianarantsoa II", "Ambalavao", "Ihorombe"] },
+    { "id": "ihorombe", "name": "Ihorombe", "districts": [" Ivohibe", "Manager", "Vangaindrano"] },
+    { "id": "itasy", "name": "Ivantanarivo", "districts": [" Antananarivo Atsimondrano", "Antananarivo Renivohitra", "Antananarivo C", "Antananarivo Iv Andro", "Antananarivo Ivontsy", "Antananarivo Analakely", "Antananarivo Ambohimiandra", "Antananarivo Anosy", "Antananarivo Ahilalana", "Antananarivo Isotry", "Antananarivo Antsahamanitra", "Antananarivo Tsaralalana", "Antananarivo Ambatobe", "Antananarivo Ambohipeno", "Antananarivo Besovay", "Antananarivo Analalinkely", "Antananarivo Tsarimahafa"] },
+    { "id": "mahatal", "name": "Menabe", "districts": [" Morondava", "Mahajanga I", "Mahajanga II", "Besalampy"] },
+    { "id": "melaky", "name": "Melaky", "districts": [" Miandrivazo", "Maintirano"] },
+    { "id": "amoron", "name": "Amoron'Imania", "districts": [" Ambalavao", "Antsirabe", "Arivonimamo"] },
+    { "id": "amatol", "name": "Anosy", "districts": [" Fort-Dauphin", "Tolagnaro", "Sainte-Luce"] },
+    { "id": "amatoly", "name": "Analanat", "districts": [] },
+    { "id": "amatol", "name": " Anosy", "districts": [] }
+  ]
+}
