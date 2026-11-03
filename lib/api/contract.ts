@@ -81,9 +81,9 @@ export type EditorialAnglesSuccess = AnglesOutput & {
   attempts: number;
 };
 
-export type LegacyErrorBody = { ok: false; erreur: string };
+export type EditorialAnglesErrorCode = CommonErrorCode;
 
-export type EditorialAnglesResponse = EditorialAnglesSuccess | LegacyErrorBody;
+export type EditorialAnglesResponse = EditorialAnglesSuccess | ApiErrorBody<EditorialAnglesErrorCode>;
 
 export type TranslateRequest = { sourceLang: "mg" | "fr" | "en"; targetLang: "mg" | "fr" | "en"; text: string };
 
@@ -175,4 +175,3 @@ export type VerifyVideoErrorCode = CommonErrorCode | "frames_missing" | "frames_
 
 export type VerifyVideoResponse = VerifyVideoSuccess | ApiErrorBody<VerifyVideoErrorCode>;
 
-export type PingAiResponse = { ok: true; mock: boolean; reponse: string } | LegacyErrorBody;

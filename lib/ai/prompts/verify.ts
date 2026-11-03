@@ -1,10 +1,5 @@
+import { LANGUAGE_NAMES, neutralizeTags } from "@/lib/ai/prompts/common";
 import type { Language } from "@/lib/ai/schemas";
-
-const LANGUAGE_NAMES: Record<Language, string> = {
-  mg: "Malagasy",
-  fr: "French",
-  en: "English",
-};
 
 export const VERIFY_SYSTEM_PROMPT = `You are a fact-checking assistant for journalists in Madagascar.
 You help a journalist move from a piece of information they received to information that is verified, documented and usable. The journalist always makes the final decision.
@@ -48,10 +43,6 @@ Respond with ONLY one JSON object, no text before or after, no markdown, matchin
 "url" must be copied exactly from a web search result. "date" is the publication date in YYYY-MM-DD format when known, otherwise null.
 Write "summary", "rationale", "contradictions", "recommendedChecks" and "limitations" in the output language given in the user message. Keep "text" in the original language of the claim.`;
 
-function neutralizeTags(content: string): string {
-  return content.replace(/<\/?\s*content_to_verify\s*>/gi, "");
-}
-
 export function buildVerifyUserMessage(params: {
   content: string;
   lang?: Language;
@@ -64,6 +55,6 @@ export function buildVerifyUserMessage(params: {
 
   return `Output language: ${outputLanguage}
 ${origin}<content_to_verify>
-${neutralizeTags(params.content)}
+${neutralizeTags(params.content, ["content_to_verify"])}
 </content_to_verify>`;
 }

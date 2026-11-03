@@ -71,17 +71,6 @@
       "rail": "Angles de reportage"
     }
   },
-  "imageReport": {
-    "loading": "Chargement...",
-    "error": "Erreur lors de la vérification.",
-    "empty": "Aucune image soumise.",
-    "banner": "L'absence d'anomalie ne prouve pas l'authenticité de l'image. Ce rapport présente uniquement des indices techniques.",
-    "elaTitle": "Analyse de niveau d'erreur (ELA)",
-    "elaAlt": "Carte ELA amplifiée",
-    "elaMetric": "Différence :",
-    "elaNotApplicable": "Analyse ELA non applicable (JPEG uniquement).",
-    "demoBadge": "Démonstration — l'analyse visuelle est simulée. Le résultat est indicatif, pas une preuve. Consultez TinEye / Google Lens pour une recherche manuelle."
-  },
   "landing": {
     "kicker": "CHECKEKO — VÉRIFICATION POUR LES RÉDACTIONS DE MADAGASCAR",
     "line1": "Une information circule,",

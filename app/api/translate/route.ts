@@ -3,9 +3,9 @@ import { AiError, type AiUsage } from "@/lib/ai/client";
 import { translateInputSchema, translateText } from "@/lib/ai/translate";
 import type { TranslateSuccess } from "@/lib/api/contract";
 import { readIntEnv } from "@/lib/env";
-import { clientIp, createRateLimiter } from "@/lib/ratelimit";
+import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
 import { authenticate } from "@/lib/security/auth";
-import { errorResponse, jsonResponse, readJsonBody, startTimer } from "@/lib/security/request";
+import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 
 const MAX_BODY_BYTES = 24 * 1024;
 const MINUTE_MS = 60_000;
@@ -23,12 +23,6 @@ function logRequest(entry: LogEntry) {
   const line = JSON.stringify({ route: "POST /api/translate", ...entry });
   if (entry.status >= 500) console.error(line);
   else console.info(line);
-}
-
-function tooManyRequests(retryAfterSeconds: number, code = "rate_limited") {
-  return errorResponse(429, code, "Too many requests. Please try again later.", {
-    "Retry-After": String(retryAfterSeconds),
-  });
 }
 
 export async function POST(req: NextRequest) {

@@ -1,79 +1,101 @@
-import { NextResponse, type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { generateAngles } from "@/lib/ai/angles";
-import { AiError } from "@/lib/ai/client";
+import { AiError, type AiUsage } from "@/lib/ai/client";
 import { anglesInputSchema } from "@/lib/ai/schemas";
-import { clientIp, isRateLimited } from "@/lib/ratelimit";
-import { readJsonBody } from "@/lib/security/request";
+import type { EditorialAnglesSuccess } from "@/lib/api/contract";
+import { readIntEnv } from "@/lib/env";
+import { authenticate } from "@/lib/security/auth";
+import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
+import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 
-// Worst case: 50 claims of ~1 KB each plus subject and id.
+export const maxDuration = 60;
+
 const MAX_BODY_BYTES = 131_072;
+const MINUTE_MS = 60_000;
 
-function aiErrorReply(error: AiError) {
-  switch (error.code) {
-    case "timeout":
-      return { status: 504, message: "Le service IA a mis trop de temps à répondre" };
-    case "rate_limited":
-      return { status: 503, message: "Service IA momentanément saturé, réessayez dans une minute" };
-    case "config_missing":
-      return { status: 503, message: "Service IA non configuré" };
-    case "invalid_output":
-      return { status: 503, message: "Analyse partielle : le service n'a pas produit de réponse exploitable" };
-    default:
-      return { status: 503, message: "Appel IA échoué" };
-  }
+const ipLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
+const userLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
+const dailyLimiter = createRateLimiter({
+  limit: readIntEnv("AI_DAILY_LIMIT_PER_USER", 50, 1, 10_000),
+  windowMs: 24 * 60 * MINUTE_MS,
+});
+
+type LogEntry = { userId: string | null; durationMs: number; status: number; code?: string; providerStatus?: number | null; usage?: AiUsage | null; attempts?: number };
+
+function logRequest(entry: LogEntry) {
+  const line = JSON.stringify({ route: "POST /api/editorial/angles", ...entry });
+  if (entry.status >= 500) console.error(line);
+  else console.info(line);
 }
 
 export async function POST(req: NextRequest) {
-  if (isRateLimited(clientIp(req))) {
-    return NextResponse.json(
-      { ok: false, erreur: "Trop de requêtes, réessayez dans une minute" },
-      { status: 429, headers: { "Retry-After": "60" } },
-    );
+  const elapsed = startTimer();
+
+  const ipCheck = ipLimiter.check(clientIp(req));
+  if (!ipCheck.allowed) {
+    logRequest({ userId: null, durationMs: elapsed(), status: 429, code: "ip_rate_limited" });
+    return tooManyRequests(ipCheck.retryAfterSeconds);
+  }
+
+  const auth = await authenticate(req);
+  if (!auth.ok) {
+    if (auth.reason === "config_missing") {
+      logRequest({ userId: null, durationMs: elapsed(), status: 503, code: "auth_config_missing" });
+      return errorResponse(503, "auth_unavailable", "Authentication is temporarily unavailable.");
+    }
+    logRequest({ userId: null, durationMs: elapsed(), status: 401, code: auth.reason });
+    return errorResponse(401, "unauthorized", "You must be signed in to use this feature.");
+  }
+
+  const userCheck = userLimiter.check(auth.userId);
+  if (!userCheck.allowed) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "user_rate_limited" });
+    return tooManyRequests(userCheck.retryAfterSeconds);
   }
 
   const body = await readJsonBody(req, MAX_BODY_BYTES);
   if (!body.ok) {
-    const message =
-      body.status === 415
-        ? "Contenu attendu au format JSON"
-        : body.status === 413
-          ? "Requête trop volumineuse"
-          : "Corps de requête invalide";
-    return NextResponse.json({ ok: false, erreur: message }, { status: body.status });
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: body.status, code: "invalid_body" });
+    const messages = { 400: "Invalid JSON body.", 413: "Request body is too large.", 415: "Content-Type must be application/json." };
+    return errorResponse(body.status, "invalid_body", messages[body.status]);
   }
 
-  const parsed = anglesInputSchema.safeParse(body.data);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { ok: false, erreur: "Requête invalide : sujet, affirmations ou langue manquants" },
-      { status: 400 },
-    );
+  const input = anglesInputSchema.safeParse(body.data);
+  if (!input.success) {
+    const fields = [...new Set(input.error.issues.map((issue) => issue.path.join(".") || "(root)"))];
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 400, code: "invalid_input" });
+    return jsonResponse({ ok: false, error: { code: "invalid_input", message: "Invalid request.", fields } }, 400);
+  }
+
+  const dailyCheck = dailyLimiter.check(auth.userId);
+  if (!dailyCheck.allowed) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
+    return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
   }
 
   try {
-    const { output, mock, usage, attempts } = await generateAngles(parsed.data);
-    return NextResponse.json({
+    const { output, mock, usage, attempts } = await generateAngles(input.data);
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 200, usage, attempts });
+    return jsonResponse({
       ok: true,
       mock,
-      verificationId: parsed.data.verificationId ?? null,
+      verificationId: input.data.verificationId ?? null,
       ...output,
       usage,
       attempts,
-    });
-  } catch (e) {
-    if (e instanceof AiError) {
-      // Log the error code only: never the submitted content.
-      console.error("editorial/angles:", e.code);
-      const { status, message } = aiErrorReply(e);
-      return NextResponse.json({ ok: false, erreur: message }, { status });
+    } satisfies EditorialAnglesSuccess);
+  } catch (error) {
+    const code = error instanceof AiError ? error.code : error instanceof Error ? error.name : "internal_error";
+    const providerStatus = error instanceof AiError ? error.providerStatus : null;
+    if (error instanceof AiError && error.code === "timeout") {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 504, code, providerStatus });
+      return errorResponse(504, "ai_timeout", "The generation took too long. Please try again.");
     }
-    console.error(
-      "editorial/angles:",
-      e instanceof Error ? e.message : "unknown error",
-    );
-    return NextResponse.json(
-      { ok: false, erreur: "Génération impossible" },
-      { status: 500 },
-    );
+    if (error instanceof AiError) {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code, providerStatus });
+      return errorResponse(503, "ai_unavailable", "Angle suggestions are temporarily unavailable.");
+    }
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 500, code });
+    return errorResponse(500, "internal_error", "An unexpected error occurred.");
   }
 }
