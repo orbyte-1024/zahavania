@@ -97,14 +97,17 @@ test("postApi exposes error codes and retry-after", async () => {
   assert.equal(result.retryAfterSeconds, 42);
 });
 
-test("postApi normalizes legacy, unexpected and network failures", async () => {
-  const legacy = await postApi(
+test("postApi normalizes angle errors, unexpected and network failures", async () => {
+  const angles = await postApi(
     "/api/editorial/angles",
     { subject: "Riz", lang: "fr" },
-    { fetchImpl: fakeFetch(503, { ok: false, erreur: "Appel IA échoué" }) },
+    { fetchImpl: fakeFetch(503, { ok: false, error: { code: "ai_unavailable", message: "Unavailable." } }) },
   );
-  assert.equal(legacy.ok, false);
-  assert.equal(legacy.error.code, "request_failed");
+  assert.equal(angles.ok, false);
+  assert.equal(angles.error.code, "ai_unavailable");
+
+  const legacy = await postApi("/api/verify/text", { content: "Claim", type: "text" }, { fetchImpl: fakeFetch(503, { ok: false, erreur: "x" }) });
+  assert.equal(legacy.error.code, "unexpected_response");
 
   const unexpected = await postApi("/api/verify/text", { content: "Claim", type: "text" }, { fetchImpl: fakeFetch(405) });
   assert.equal(unexpected.error.code, "unexpected_response");

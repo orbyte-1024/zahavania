@@ -1,4 +1,5 @@
 import type {
+  EditorialAnglesErrorCode,
   EditorialAnglesRequest,
   EditorialAnglesSuccess,
   SuggestExpertsErrorCode,
@@ -20,12 +21,12 @@ export type ApiRoutes = {
     errorCode: SuggestExpertsErrorCode;
   };
   "/api/translate": { request: TranslateRequest; success: TranslateSuccess; errorCode: TranslateErrorCode };
-  "/api/editorial/angles": { request: EditorialAnglesRequest; success: EditorialAnglesSuccess; errorCode: never };
+  "/api/editorial/angles": { request: EditorialAnglesRequest; success: EditorialAnglesSuccess; errorCode: EditorialAnglesErrorCode };
 };
 
 export type ApiPath = keyof ApiRoutes;
 
-export type ClientErrorCode = "network_error" | "unexpected_response" | "request_failed";
+export type ClientErrorCode = "network_error" | "unexpected_response";
 
 export type ApiFailure<Code extends string> = {
   ok: false;
@@ -90,14 +91,6 @@ export async function postApi<P extends ApiPath>(
   if (isRecord(data) && data.ok === false && isRecord(data.error) && typeof data.error.code === "string") {
     const error = data.error as ApiFailure<ApiRoutes[P]["errorCode"]>["error"];
     return { ok: false, status: response.status, error, retryAfterSeconds };
-  }
-  if (isRecord(data) && data.ok === false && typeof data.erreur === "string") {
-    return {
-      ok: false,
-      status: response.status,
-      error: { code: "request_failed", message: data.erreur },
-      retryAfterSeconds,
-    };
   }
   return {
     ok: false,
