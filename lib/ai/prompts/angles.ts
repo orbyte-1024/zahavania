@@ -1,10 +1,5 @@
+import { LANGUAGE_NAMES, neutralizeTags } from "@/lib/ai/prompts/common";
 import type { AngleClaimRef, Language } from "@/lib/ai/schemas";
-
-const LANGUAGE_NAMES: Record<Language, string> = {
-  mg: "Malagasy",
-  fr: "French",
-  en: "English",
-};
 
 const STATUS_LABELS: Record<AngleClaimRef["status"], string> = {
   confirmed: "confirmed",
@@ -61,10 +56,6 @@ Return exactly 3 to 5 angles.
 Write ALL angle fields and "limitations" in the output language given in the user message. Keep quoted claim texts in their original language. "lang" must echo the requested output language.
 If the provided material leaves an important gap, do not fill it with guesses: state the gap in "limitations".`;
 
-function neutralizeTags(text: string): string {
-  return text.replace(/<\/?(?:subject|claims)\s*>/gi, "");
-}
-
 export function buildAnglesUserMessage(params: {
   subject?: string;
   verificationId?: string;
@@ -77,7 +68,7 @@ export function buildAnglesUserMessage(params: {
     lines.push(`verificationId: ${params.verificationId} (client-side reference, echo it nowhere else)`);
   }
 
-  lines.push("", "<subject>", params.subject ? neutralizeTags(params.subject) : "(none provided)", "</subject>");
+  lines.push("", "<subject>", params.subject ? neutralizeTags(params.subject, ["subject", "claims"]) : "(none provided)", "</subject>");
 
   const claims = params.claims ?? [];
   lines.push("", "<claims>");
@@ -85,7 +76,7 @@ export function buildAnglesUserMessage(params: {
     lines.push("(none provided)");
   } else {
     for (const claim of claims) {
-      lines.push(`[${STATUS_LABELS[claim.status]}] ${neutralizeTags(claim.text)}`);
+      lines.push(`[${STATUS_LABELS[claim.status]}] ${neutralizeTags(claim.text, ["subject", "claims"])}`);
     }
   }
   lines.push("</claims>");

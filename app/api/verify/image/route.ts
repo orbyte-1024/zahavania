@@ -6,10 +6,10 @@ import type { VerifyImageSuccess } from "@/lib/api/contract";
 import { readIntEnv } from "@/lib/env";
 import { EXIF_UNAVAILABLE_WARNING, readImageMetadata, type ImageMetadata } from "@/lib/exif";
 import { acceptUploadedImage } from "@/lib/image-intake";
-import { clientIp, createRateLimiter } from "@/lib/ratelimit";
+import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
 import { reverseSearchLinks } from "@/lib/reverse-search";
 import { authenticate } from "@/lib/security/auth";
-import { errorResponse, jsonResponse, startTimer } from "@/lib/security/request";
+import { errorResponse, jsonResponse, startTimer, tooManyRequests } from "@/lib/security/request";
 import { buildVerification, type VisionWarning } from "@/lib/verification-summary";
 import { analyzeImage } from "@/lib/vision-analyzer";
 
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
   const userCheck = userLimiter.check(userKey);
   if (!userCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "user_rate_limited" });
-    return errorResponse(429, "rate_limited", "Too many requests. Please try again later.", { "Retry-After": String(userCheck.retryAfterSeconds) });
+    return tooManyRequests(userCheck.retryAfterSeconds, "rate_limited");
   }
 
   const intake = await acceptUploadedImage(req);
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
   const dailyCheck = dailyLimiter.check(userKey);
   if (!dailyCheck.allowed) {
     logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
-    return errorResponse(429, "daily_quota_exceeded", "Too many requests. Please try again later.", { "Retry-After": String(dailyCheck.retryAfterSeconds) });
+    return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
   }
 
   try {

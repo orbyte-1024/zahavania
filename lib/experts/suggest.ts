@@ -1,6 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { askJson, isMockMode, type AiUsage } from "@/lib/ai/client";
+import { addUsage, askJson, isMockMode, type AiUsage } from "@/lib/ai/client";
 import {
   expertRankingSchema,
   topicClassificationSchema,
@@ -114,15 +114,6 @@ const NOTICE_MESSAGES: Record<Language, Record<SuggestNoticeCode, string>> = {
 
 function noticeFor(code: SuggestNoticeCode, lang?: Language): SuggestNotice {
   return { code, message: NOTICE_MESSAGES[lang ?? "fr"][code] };
-}
-
-function addUsage(current: AiUsage | null, next: AiUsage): AiUsage {
-  if (!current) return next;
-  return {
-    promptTokens: current.promptTokens + next.promptTokens,
-    completionTokens: current.completionTokens + next.completionTokens,
-    totalTokens: current.totalTokens + next.totalTokens,
-  };
 }
 
 async function classifyTopic(input: SuggestInput): Promise<{

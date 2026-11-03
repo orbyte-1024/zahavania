@@ -71,17 +71,6 @@
       "rail": "Story angles"
     }
   },
-  "imageReport": {
-    "loading": "Loading...",
-    "error": "Verification error.",
-    "empty": "No image submitted.",
-    "banner": "The absence of anomalies does not prove the image is authentic. This report shows only technical indicators.",
-    "elaTitle": "Error Level Analysis (ELA)",
-    "elaAlt": "Amplified ELA map",
-    "elaMetric": "Difference:",
-    "elaNotApplicable": "ELA analysis not applicable (JPEG only).",
-    "demoBadge": "Demonstration — visual analysis is simulated. The result is indicative, not proof. Check TinEye / Google Lens for manual search."
-  },
   "landing": {
     "kicker": "CHECKEKO — FACT-CHECKING FOR MADAGASCAR'S NEWSROOMS",
     "line1": "A claim is spreading,",

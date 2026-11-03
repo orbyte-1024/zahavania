@@ -1,10 +1,5 @@
+import { LANGUAGE_NAMES } from "@/lib/ai/prompts/common";
 import type { Language } from "@/lib/ai/schemas";
-
-const LANGUAGE_NAMES: Record<Language, string> = {
-  mg: "Malagasy",
-  fr: "French",
-  en: "English",
-};
 
 export const VISION_SYSTEM_PROMPT = `You assist a journalist in Madagascar who is checking an image.
 

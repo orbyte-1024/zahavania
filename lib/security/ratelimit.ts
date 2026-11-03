@@ -1,3 +1,4 @@
+import "server-only";
 import type { NextRequest } from "next/server";
 
 type Bucket = { count: number; resetAt: number };
@@ -10,9 +11,6 @@ export type RateLimiter = {
   check: (key: string) => RateLimitResult;
 };
 
-// In-memory: counters live in this server process only, reset on restart and are not
-// shared between instances. In production, back this with a shared store (e.g. Upstash
-// Redis or a Supabase table with an atomic increment) so limits hold across instances.
 export function createRateLimiter(options: { limit: number; windowMs: number }): RateLimiter {
   const buckets = new Map<string, Bucket>();
 
@@ -32,12 +30,6 @@ export function createRateLimiter(options: { limit: number; windowMs: number }):
       return { allowed: true, remaining: options.limit - bucket.count };
     },
   };
-}
-
-const defaultIpLimiter = createRateLimiter({ limit: 10, windowMs: 60_000 });
-
-export function isRateLimited(ip: string): boolean {
-  return !defaultIpLimiter.check(ip).allowed;
 }
 
 export function clientIp(req: NextRequest): string {

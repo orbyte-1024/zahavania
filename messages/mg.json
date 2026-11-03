@@ -71,17 +71,6 @@
       "rail": "Lafiny tatitra"
     }
   },
-  "imageReport": {
-    "loading": "Mampiditra...",
-    "error": "Nisy diso tamin'ny fanamarinana.",
-    "empty": "Tsy misy sary.",
-    "banner": "Ny tsy fisian'ny tsy ara-dalàna dia tsy manaporofo fa marina ny sary. Ity tatitra ity dia manome famantarana ara-teknika ihany.",
-    "elaTitle": "Fanadihadiana ny haavon'ny fahadisoana (ELA)",
-    "elaAlt": "Sary ELA nampitomboina",
-    "elaMetric": "Fahasamihafana:",
-    "elaNotApplicable": "Fanadihadiana ELA tsy azo atao (JPEG ihany).",
-    "demoBadge": "Fanehoana — ny fandinihana sary dia natao tamin'ny alalan'ny simulasi. Ny vokatra dia famantarana, fa tsy porofo. Jereo TinEye / Google Lens ho an'ny fikarohana tanana."
-  },
   "landing": {
     "kicker": "CHECKEKO — FANAMARINANA HO AN'NY MPANAO GAZETY ETO MADAGASIKARA",
     "line1": "Misy vaovao miely,",

@@ -1,6 +1,6 @@
 import "server-only";
 import { z } from "zod";
-import { askText, isMockMode, type AiUsage } from "@/lib/ai/client";
+import { addUsage, askText, isMockMode, type AiUsage } from "@/lib/ai/client";
 import { buildTranslateUserMessage, TRANSLATE_SYSTEM_PROMPT } from "@/lib/ai/prompts/translate";
 import { languageSchema, type Language } from "@/lib/ai/schemas";
 import { readIntEnv } from "@/lib/env";
@@ -30,16 +30,6 @@ export type TranslateResult = {
   mock: boolean;
   usage: AiUsage | null;
 };
-
-function addUsage(total: AiUsage | null, next: AiUsage | null): AiUsage | null {
-  if (!next) return total;
-  if (!total) return next;
-  return {
-    promptTokens: total.promptTokens + next.promptTokens,
-    completionTokens: total.completionTokens + next.completionTokens,
-    totalTokens: total.totalTokens + next.totalTokens,
-  };
-}
 
 async function translateChunk(input: TranslateInput, chunk: string) {
   const maxTokens = Math.min(readIntEnv("AI_MAX_TOKENS", 4_000, 500, 8_000), Math.ceil(chunk.length * 1.6) + 400);

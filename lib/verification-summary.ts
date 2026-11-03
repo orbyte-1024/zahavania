@@ -1,5 +1,7 @@
 import type { ImageMetadata, MetadataWarning } from "./exif";
-import type { VisionResult } from "./vision-analyzer";
+import type { VisionResult, VisionWarning } from "./vision-analyzer";
+
+export type { VisionWarning };
 import type { ReverseSearch } from "./reverse-search";
 
 // ===========================================================================
@@ -29,15 +31,6 @@ export type VerificationReport = {
   visualAnalysis: VisionResult | null;
   reverseSearchLinks: ReverseSearch;
   warnings: Array<MetadataWarning | VisionWarning>;
-};
-
-// ===========================================================================
-// Warnings shared by both sources
-// ===========================================================================
-
-export type VisionWarning = {
-  code: "ANALYSE_IA_NON_DISPONIBLE";
-  message: string;
 };
 
 // ===========================================================================
@@ -106,23 +99,6 @@ function observationsFromVision(
   }
 
   return items;
-}
-
-/**
- * Confidence combination:
- *   - "high"  → "high"
- *   - "medium" → "medium" (unless there is a high)
- *   - "low"   → "low"   (unless there is a medium or high)
- *
- * Used to express the overall confidence of a set of observations
- * coming from the same source (for example all from IA analysis).
- */
-function combineConfidence(
-  items: Array<{ confidence: "low" | "medium" | "high" }>,
-): "low" | "medium" | "high" {
-  if (items.some((i) => i.confidence === "high")) return "high";
-  if (items.some((i) => i.confidence === "medium")) return "medium";
-  return "low";
 }
 
 // ---------------------------------------------------------------------------

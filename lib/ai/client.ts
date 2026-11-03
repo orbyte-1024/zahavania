@@ -37,6 +37,16 @@ export type AiUsage = {
   totalTokens: number;
 };
 
+export function addUsage(total: AiUsage | null, next: AiUsage | null): AiUsage | null {
+  if (!next) return total;
+  if (!total) return next;
+  return {
+    promptTokens: total.promptTokens + next.promptTokens,
+    completionTokens: total.completionTokens + next.completionTokens,
+    totalTokens: total.totalTokens + next.totalTokens,
+  };
+}
+
 export type ContentPart =
   | { type: "text"; text: string }
   | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" | "auto" } };

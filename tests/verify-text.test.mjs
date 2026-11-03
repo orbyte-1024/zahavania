@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createRateLimiter, isRateLimited } from "../lib/ratelimit.ts";
+import { createRateLimiter } from "../lib/security/ratelimit.ts";
 import { isBlockedIp, SafeFetchError, validatePublicUrl } from "../lib/security/safe-fetch.ts";
 import { extractMainText } from "../lib/web/extract-text.ts";
 import { verifyInputSchema } from "../lib/ai/schemas.ts";
@@ -33,12 +33,6 @@ test("rate limiter blocks after the limit and returns retry-after", () => {
   assert.equal(blocked.allowed, false);
   assert.ok(blocked.retryAfterSeconds >= 1 && blocked.retryAfterSeconds <= 60);
   assert.equal(limiter.check("user-b").allowed, true);
-});
-
-test("legacy ip limiter allows 10 requests per minute", () => {
-  const ip = `test-${Date.now()}`;
-  for (let i = 0; i < 10; i += 1) assert.equal(isRateLimited(ip), false);
-  assert.equal(isRateLimited(ip), true);
 });
 
 test("ssrf guard rejects private, local and non-standard destinations", () => {

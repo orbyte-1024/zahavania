@@ -22,6 +22,12 @@ export function errorResponse(
   return jsonResponse({ ok: false, error: { code, message } }, status, headers);
 }
 
+export function tooManyRequests(retryAfterSeconds: number, code = "rate_limited") {
+  return errorResponse(429, code, "Too many requests. Please try again later.", {
+    "Retry-After": String(retryAfterSeconds),
+  });
+}
+
 export function startTimer(): () => number {
   const startedAt = performance.now();
   return () => Math.round(performance.now() - startedAt);
