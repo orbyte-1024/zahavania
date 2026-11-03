@@ -16,7 +16,7 @@ The demo runs on the production build in real mode. Never present mock data as a
 
 | Time | Screen | What to say |
 |---|---|---|
-| 0:00 | Landing, scroll through the hero | A claim arrives as a rumour; Zahavan'Ia files it into sources. |
+| 0:00 | Landing, scroll through the hero | A claim arrives as a rumour; Zahavan'ia files it into sources. |
 | 0:25 | `/app/verify`, scenario 1 | Claims are isolated, sources come from a live web search, the index is computed by code. Open "Why this index?". |
 | 1:10 | Click "Find an expert" | The expert comes from the consented directory, never from the model. Show the demo badge on fictional profiles. |
 | 1:40 | Back, click "Find angles" | Angles start only from confirmed claims; the rest is listed as "check first". |
