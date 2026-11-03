@@ -14,16 +14,16 @@ import { BRAND_NAME_UPPER } from "@/lib/brand";
 const DispatchCloud = dynamic(() => import("@/components/landing/DispatchCloud"), { ssr: false });
 
 const FLOATERS = [
-  { x: "-4%", y: "13%", w: 196, d: 0.55 },
-  { x: "21%", y: "3%", w: 150, d: 0.9 },
-  { x: "37%", y: "9%", w: 210, d: 0.4 },
-  { x: "63%", y: "7%", w: 140, d: 0.75 },
-  { x: "84%", y: "2%", w: 206, d: 1 },
-  { x: "-2%", y: "46%", w: 132, d: 0.5 },
-  { x: "92%", y: "38%", w: 176, d: 0.7 },
-  { x: "12%", y: "72%", w: 236, d: 0.35 },
-  { x: "44%", y: "82%", w: 146, d: 0.85 },
-  { x: "72%", y: "66%", w: 192, d: 0.6 },
+  { x: "-4%", y: "13%", w: 294, d: 0.55 },
+  { x: "21%", y: "3%", w: 225, d: 0.9 },
+  { x: "37%", y: "9%", w: 315, d: 0.4 },
+  { x: "63%", y: "7%", w: 210, d: 0.75 },
+  { x: "84%", y: "2%", w: 309, d: 1 },
+  { x: "-2%", y: "46%", w: 198, d: 0.5 },
+  { x: "92%", y: "38%", w: 264, d: 0.7 },
+  { x: "12%", y: "72%", w: 354, d: 0.35 },
+  { x: "44%", y: "82%", w: 219, d: 0.85 },
+  { x: "72%", y: "66%", w: 288, d: 0.6 },
 ] as const;
 
 export function Hero() {
@@ -128,7 +128,7 @@ export function Hero() {
                   rel="noopener noreferrer"
                   aria-label={tc("photoBy", { label: labels[i], author: image.author, license: image.license })}
                 >
-                  <Image src={image.file} alt="" fill sizes="(max-width: 900px) 140px, 240px" priority={i < 4} />
+                  <Image src={image.file} alt="" fill sizes="(max-width: 900px) 220px, 360px" priority={i < 4} />
                 </a>
                 <figcaption className="fl-caption">
                   <span className="fl-label mono">{labels[i]}</span>

@@ -144,6 +144,7 @@ body.handoff .dock {
   min-height: 44px;
   padding: 0 14px;
   font-size: 16px;
+  white-space: nowrap;
   color: var(--ash);
   transition: color 0.3s;
 }
