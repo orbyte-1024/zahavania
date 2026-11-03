@@ -1,20 +1,282 @@
 {
+  "updatedAt": "2026-11-03",
+  "source": "Portail officiel torolalana.gov.mg, Régions et districts (114 districts, 23 régions)",
+  "sourceUrl": "https://torolalana.gov.mg/services/regions-et-districts/",
   "regions": [
-    { "id": "analamanga", "name": "Analamanga", "districts": [" Antsirabe Atsimondrano", "Antsirabe I", "Antsirabe II", "Antananarivo Atsimondrano", "Antananarivo Renivohitra", "Antananarivo C", "Antananarivo Iv Andro", "Antananarivo Ivontsy", "Antananarivo Analakely", "Antananarivo Ambohimiandra", "Antananarivo Anosy", "Antananarivo Ahilalana", "Antananarivo Isotry", "Antananarivo Antsahamanitra", "Antananarivo Tsaralalana", "Antananarivo Ambatobe", "Antananarivo Ambohipeno", "Antananarivo Besovay", "Antananarivo Analalinkely", "Antananarivo Tsarimahafa"] },
-    { "id": "ava", "name": "Atsimo-Andrefana", "districts": [" Toliara I", "Toliara II", "Toliara III", "Toliara IV", "Beloha", "Tsihombe", " Ampanihy", "Morombe", "Mandrare", "Belaoka"] },
-    { "id": "amatolo", "name": "Amoron'Imania", "districts": [" Ambatolampy", "Ambahy", "Ankazobe", "Faravohitra"] },
-    { "id": "boeny", "name": "Boeny", "districts": [" Maohi", "Marche", "Matsedroy", "Belo sur Mer"] },
-    { "id": "betsiboka", "name": "Betsiboka", "districts": [" Marolambo", "Ambilobe", "Antsohihy", "Ambatomaina"] },
-    { "id": "diana", "name": "Diana", "districts": [" Ambanja", "Ambilobe", "Ambatokala", "Antsoindrove"] },
-    { "id": "fitovinany", "name": "Fitovinany", "districts": [" Fianarantsoa I", "Fianarantsoa II", "Fianarantsoa III", "Vangaindrano", "Vatovavy"] },
-    { "id": "haute", "name": "Haute Matsiatra", "districts": [" Fianarantsoa I", "Fianarantsoa II", "Ambalavao", "Ihorombe"] },
-    { "id": "ihorombe", "name": "Ihorombe", "districts": [" Ivohibe", "Manager", "Vangaindrano"] },
-    { "id": "itasy", "name": "Ivantanarivo", "districts": [" Antananarivo Atsimondrano", "Antananarivo Renivohitra", "Antananarivo C", "Antananarivo Iv Andro", "Antananarivo Ivontsy", "Antananarivo Analakely", "Antananarivo Ambohimiandra", "Antananarivo Anosy", "Antananarivo Ahilalana", "Antananarivo Isotry", "Antananarivo Antsahamanitra", "Antananarivo Tsaralalana", "Antananarivo Ambatobe", "Antananarivo Ambohipeno", "Antananarivo Besovay", "Antananarivo Analalinkely", "Antananarivo Tsarimahafa"] },
-    { "id": "mahatal", "name": "Menabe", "districts": [" Morondava", "Mahajanga I", "Mahajanga II", "Besalampy"] },
-    { "id": "melaky", "name": "Melaky", "districts": [" Miandrivazo", "Maintirano"] },
-    { "id": "amoron", "name": "Amoron'Imania", "districts": [" Ambalavao", "Antsirabe", "Arivonimamo"] },
-    { "id": "amatol", "name": "Anosy", "districts": [" Fort-Dauphin", "Tolagnaro", "Sainte-Luce"] },
-    { "id": "amatoly", "name": "Analanat", "districts": [] },
-    { "id": "amatol", "name": " Anosy", "districts": [] }
+    {
+      "id": "diana",
+      "name": "Diana",
+      "aliases": ["diana"],
+      "districts": [
+        { "id": "ambanja", "name": "Ambanja", "aliases": [] },
+        { "id": "ambilobe", "name": "Ambilobe", "aliases": [] },
+        { "id": "antsiranana-i", "name": "Antsiranana I", "aliases": ["antsiranana", "diego suarez", "diego-suarez"] },
+        { "id": "antsiranana-ii", "name": "Antsiranana II", "aliases": [] },
+        { "id": "nosy-be", "name": "Nosy Be", "aliases": ["nosy-be"] }
+      ]
+    },
+    {
+      "id": "sava",
+      "name": "Sava",
+      "aliases": ["sava"],
+      "districts": [
+        { "id": "andapa", "name": "Andapa", "aliases": [] },
+        { "id": "antalaha", "name": "Antalaha", "aliases": [] },
+        { "id": "sambava", "name": "Sambava", "aliases": [] },
+        { "id": "vohemar", "name": "Vohemar", "aliases": ["vohémar", "vohimarina"] }
+      ]
+    },
+    {
+      "id": "itasy",
+      "name": "Itasy",
+      "aliases": ["itasy"],
+      "districts": [
+        { "id": "arivonimamo", "name": "Arivonimamo", "aliases": [] },
+        { "id": "miarinarivo", "name": "Miarinarivo", "aliases": [] },
+        { "id": "soavinandriana", "name": "Soavinandriana", "aliases": [] }
+      ]
+    },
+    {
+      "id": "analamanga",
+      "name": "Analamanga",
+      "aliases": ["analamanga", "tananarive"],
+      "districts": [
+        { "id": "ambohidratrimo", "name": "Ambohidratrimo", "aliases": [] },
+        { "id": "andramasina", "name": "Andramasina", "aliases": [] },
+        { "id": "anjozorobe", "name": "Anjozorobe", "aliases": [] },
+        { "id": "ankazobe", "name": "Ankazobe", "aliases": [] },
+        { "id": "antananarivo-atsimondrano", "name": "Antananarivo Atsimondrano", "aliases": ["atsimondrano"] },
+        { "id": "antananarivo-avaradrano", "name": "Antananarivo Avaradrano", "aliases": ["avaradrano"] },
+        { "id": "antananarivo-renivohitra", "name": "Antananarivo Renivohitra", "aliases": ["antananarivo", "tana", "tananarive"] },
+        { "id": "manjakandriana", "name": "Manjakandriana", "aliases": [] }
+      ]
+    },
+    {
+      "id": "vakinankaratra",
+      "name": "Vakinankaratra",
+      "aliases": ["vakinankaratra"],
+      "districts": [
+        { "id": "ambatolampy", "name": "Ambatolampy", "aliases": [] },
+        { "id": "antanifotsy", "name": "Antanifotsy", "aliases": [] },
+        { "id": "antsirabe-i", "name": "Antsirabe I", "aliases": ["antsirabe"] },
+        { "id": "antsirabe-ii", "name": "Antsirabe II", "aliases": [] },
+        { "id": "betafo", "name": "Betafo", "aliases": [] },
+        { "id": "faratsiho", "name": "Faratsiho", "aliases": [] },
+        { "id": "mandoto", "name": "Mandoto", "aliases": [] }
+      ]
+    },
+    {
+      "id": "bongolava",
+      "name": "Bongolava",
+      "aliases": ["bongolava"],
+      "districts": [
+        { "id": "fenoarivobe", "name": "Fenoarivobe", "aliases": ["fenoarivo afovoany", "fenoarivo-afovoany"] },
+        { "id": "tsiroanomandidy", "name": "Tsiroanomandidy", "aliases": [] }
+      ]
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia",
+      "aliases": ["sofia"],
+      "districts": [
+        { "id": "analalava", "name": "Analalava", "aliases": [] },
+        { "id": "antsohihy", "name": "Antsohihy", "aliases": [] },
+        { "id": "bealanana", "name": "Bealanana", "aliases": [] },
+        { "id": "befandriana-nord", "name": "Befandriana Nord", "aliases": ["befandriana avaratra", "befandriana-avaratra"] },
+        { "id": "mampikony", "name": "Mampikony", "aliases": [] },
+        { "id": "mandritsara", "name": "Mandritsara", "aliases": [] },
+        { "id": "port-berge", "name": "Port-Bergé", "aliases": ["port berge", "boriziny", "boriziny-vaovao"] }
+      ]
+    },
+    {
+      "id": "boeny",
+      "name": "Boeny",
+      "aliases": ["boeny"],
+      "districts": [
+        { "id": "ambato-boeni", "name": "Ambato-Boeni", "aliases": ["ambato boeny", "ambato-boeny"] },
+        { "id": "mahajanga-i", "name": "Mahajanga I", "aliases": ["mahajanga", "majunga"] },
+        { "id": "mahajanga-ii", "name": "Mahajanga II", "aliases": [] },
+        { "id": "marovoay", "name": "Marovoay", "aliases": [] },
+        { "id": "mitsinjo", "name": "Mitsinjo", "aliases": [] },
+        { "id": "soalala", "name": "Soalala", "aliases": [] }
+      ]
+    },
+    {
+      "id": "betsiboka",
+      "name": "Betsiboka",
+      "aliases": ["betsiboka"],
+      "districts": [
+        { "id": "kandreho", "name": "Kandreho", "aliases": [] },
+        { "id": "maevatanana", "name": "Maevatanana", "aliases": [] },
+        { "id": "tsaratanana", "name": "Tsaratanana", "aliases": [] }
+      ]
+    },
+    {
+      "id": "melaky",
+      "name": "Melaky",
+      "aliases": ["melaky"],
+      "districts": [
+        { "id": "ambatomainty", "name": "Ambatomainty", "aliases": [] },
+        { "id": "antsalova", "name": "Antsalova", "aliases": [] },
+        { "id": "besalampy", "name": "Besalampy", "aliases": [] },
+        { "id": "maintirano", "name": "Maintirano", "aliases": [] },
+        { "id": "morafenobe", "name": "Morafenobe", "aliases": [] }
+      ]
+    },
+    {
+      "id": "alaotra_mangoro",
+      "name": "Alaotra-Mangoro",
+      "aliases": ["alaotra mangoro", "alaotra-mangoro"],
+      "districts": [
+        { "id": "ambatondrazaka", "name": "Ambatondrazaka", "aliases": [] },
+        { "id": "amparafaravola", "name": "Amparafaravola", "aliases": [] },
+        { "id": "andilamena", "name": "Andilamena", "aliases": [] },
+        { "id": "anosibe-an-ala", "name": "Anosibe An'ala", "aliases": ["anosibe an'ala", "anosibe-anala"] },
+        { "id": "moramanga", "name": "Moramanga", "aliases": [] }
+      ]
+    },
+    {
+      "id": "atsinanana",
+      "name": "Atsinanana",
+      "aliases": ["atsinanana", "toamasina", "tamatave"],
+      "districts": [
+        { "id": "antanambao-manampotsy", "name": "Antanambao Manampotsy", "aliases": [] },
+        { "id": "brickaville", "name": "Brickaville", "aliases": ["vohibinany"] },
+        { "id": "mahanoro", "name": "Mahanoro", "aliases": [] },
+        { "id": "marolambo", "name": "Marolambo", "aliases": [] },
+        { "id": "toamasina-i", "name": "Toamasina I", "aliases": ["toamasina", "tamatave"] },
+        { "id": "toamasina-ii", "name": "Toamasina II", "aliases": [] },
+        { "id": "vatomandry", "name": "Vatomandry", "aliases": [] }
+      ]
+    },
+    {
+      "id": "analanjirofo",
+      "name": "Analanjirofo",
+      "aliases": ["analanjirofo"],
+      "districts": [
+        { "id": "fenerive-est", "name": "Fenerive Est", "aliases": ["fenoarivo atsinanana", "fenoarivo-atsinanana"] },
+        { "id": "mananara-nord", "name": "Mananara-Nord", "aliases": ["mananara nord", "mananara avaratra"] },
+        { "id": "maroantsetra", "name": "Maroantsetra", "aliases": [] },
+        { "id": "sainte-marie", "name": "Sainte-Marie", "aliases": ["sainte marie", "nosy boraha"] },
+        { "id": "soanierana-ivongo", "name": "Soanierana Ivongo", "aliases": [] },
+        { "id": "vavatenina", "name": "Vavatenina", "aliases": [] }
+      ]
+    },
+    {
+      "id": "amoron_i_mania",
+      "name": "Amoron'i Mania",
+      "aliases": ["amoron'i mania", "amoron i mania", "amoron'i-mania"],
+      "districts": [
+        { "id": "ambatofinandrahana", "name": "Ambatofinandrahana", "aliases": [] },
+        { "id": "ambositra", "name": "Ambositra", "aliases": [] },
+        { "id": "fandriana", "name": "Fandriana", "aliases": [] },
+        { "id": "manandriana", "name": "Manandriana", "aliases": [] }
+      ]
+    },
+    {
+      "id": "haute_matsiatra",
+      "name": "Haute Matsiatra",
+      "aliases": ["haute matsiatra", "haute-matsiatra", "matsiatra ambony"],
+      "districts": [
+        { "id": "ambalavao", "name": "Ambalavao", "aliases": [] },
+        { "id": "ambohimahasoa", "name": "Ambohimahasoa", "aliases": [] },
+        { "id": "fianarantsoa", "name": "Fianarantsoa", "aliases": ["fianarantsoa i"] },
+        { "id": "ikalamavony", "name": "Ikalamavony", "aliases": [] },
+        { "id": "isandra", "name": "Isandra", "aliases": [] },
+        { "id": "lalangina", "name": "Lalangina", "aliases": [] },
+        { "id": "vohibato", "name": "Vohibato", "aliases": [] }
+      ]
+    },
+    {
+      "id": "vatovavy",
+      "name": "Vatovavy",
+      "aliases": ["vatovavy"],
+      "districts": [
+        { "id": "ifanadiana", "name": "Ifanadiana", "aliases": [] },
+        { "id": "mananjary", "name": "Mananjary", "aliases": [] },
+        { "id": "nosy-varika", "name": "Nosy Varika", "aliases": ["nosy-varika"] }
+      ]
+    },
+    {
+      "id": "fitovinany",
+      "name": "Fitovinany",
+      "aliases": ["fitovinany"],
+      "districts": [
+        { "id": "ikongo", "name": "Ikongo", "aliases": ["fort canot"] },
+        { "id": "manakara", "name": "Manakara", "aliases": ["manakara atsimo"] },
+        { "id": "vohipeno", "name": "Vohipeno", "aliases": [] }
+      ]
+    },
+    {
+      "id": "atsimo_atsinanana",
+      "name": "Atsimo-Atsinanana",
+      "aliases": ["atsimo atsinanana", "atsimo-atsinanana"],
+      "districts": [
+        { "id": "befotaka-atsimo", "name": "Befotaka Atsimo", "aliases": ["befotaka"] },
+        { "id": "farafangana", "name": "Farafangana", "aliases": [] },
+        { "id": "midongy-sud", "name": "Midongy Sud", "aliases": ["midongy atsimo", "midongy-atsimo"] },
+        { "id": "vangaindrano", "name": "Vangaindrano", "aliases": [] },
+        { "id": "vondrozo", "name": "Vondrozo", "aliases": [] }
+      ]
+    },
+    {
+      "id": "ihorombe",
+      "name": "Ihorombe",
+      "aliases": ["ihorombe"],
+      "districts": [
+        { "id": "iakora", "name": "Iakora", "aliases": [] },
+        { "id": "ihosy", "name": "Ihosy", "aliases": [] },
+        { "id": "ivohibe", "name": "Ivohibe", "aliases": [] }
+      ]
+    },
+    {
+      "id": "menabe",
+      "name": "Menabe",
+      "aliases": ["menabe"],
+      "districts": [
+        { "id": "belo-sur-tsiribihina", "name": "Belo sur Tsiribihina", "aliases": ["belo-sur-tsiribihina", "belon'i tsiribihina"] },
+        { "id": "mahabo", "name": "Mahabo", "aliases": [] },
+        { "id": "manja", "name": "Manja", "aliases": [] },
+        { "id": "miandrivazo", "name": "Miandrivazo", "aliases": [] },
+        { "id": "morondava", "name": "Morondava", "aliases": [] }
+      ]
+    },
+    {
+      "id": "atsimo_andrefana",
+      "name": "Atsimo-Andrefana",
+      "aliases": ["atsimo andrefana", "atsimo-andrefana", "toliara", "tulear"],
+      "districts": [
+        { "id": "ampanihy-ouest", "name": "Ampanihy Ouest", "aliases": ["ampanihy"] },
+        { "id": "ankazoabo-sud", "name": "Ankazoabo Sud", "aliases": ["ankazoabo"] },
+        { "id": "benenitra", "name": "Benenitra", "aliases": [] },
+        { "id": "beroroha", "name": "Beroroha", "aliases": [] },
+        { "id": "betioky-sud", "name": "Betioky Sud", "aliases": ["betioky", "betioky atsimo"] },
+        { "id": "morombe", "name": "Morombe", "aliases": [] },
+        { "id": "sakaraha", "name": "Sakaraha", "aliases": [] },
+        { "id": "toliara-i", "name": "Toliara I", "aliases": ["toliara", "tuléar", "tulear"] },
+        { "id": "toliara-ii", "name": "Toliara II", "aliases": [] }
+      ]
+    },
+    {
+      "id": "androy",
+      "name": "Androy",
+      "aliases": ["androy"],
+      "districts": [
+        { "id": "ambovombe-androy", "name": "Ambovombe Androy", "aliases": ["ambovombe"] },
+        { "id": "bekily", "name": "Bekily", "aliases": [] },
+        { "id": "beloha-androy", "name": "Beloha Androy", "aliases": ["beloha"] },
+        { "id": "tsihombe", "name": "Tsihombe", "aliases": ["tsiombe"] }
+      ]
+    },
+    {
+      "id": "anosy",
+      "name": "Anosy",
+      "aliases": ["anosy"],
+      "districts": [
+        { "id": "amboasary-sud", "name": "Amboasary Sud", "aliases": ["amboasary", "amboasary atsimo"] },
+        { "id": "betroka", "name": "Betroka", "aliases": [] },
+        { "id": "taolanaro", "name": "Taolanaro", "aliases": ["taolagnaro", "fort-dauphin", "fort dauphin"] }
+      ]
+    }
   ]
 }

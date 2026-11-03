@@ -1,104 +1,103 @@
 import type { NextRequest } from "next/server";
-import { jsonResponse } from "@/lib/security/request";
+import type { MonitorSuccess } from "@/lib/api/contract";
+import { readIntEnv } from "@/lib/env";
+import { monitorInputSchema } from "@/lib/monitor/input";
+import { MonitorError, runMonitor } from "@/lib/monitor/run";
+import { authenticate } from "@/lib/security/auth";
+import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
+import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 
 export const maxDuration = 300;
 
 const MAX_BODY_BYTES = 8 * 1024;
+const MINUTE_MS = 60_000;
 
-function validateBody(body: unknown) {
-  if (!body || typeof body !== "object") {
-    return { ok: false, error: { code: "invalid_body", message: "Invalid JSON body." } };
-  }
-  const b = body as Record<string, unknown>;
-  
-  const lang = b.lang;
-  if (lang !== "mg" && lang !== "fr" && lang !== "en") {
-    return { ok: false, error: { code: "invalid_input", message: "Invalid language", fields: ["lang"] } };
-  }
-  
-  const sinceHours = b.sinceHours;
-  if (sinceHours !== undefined && (typeof sinceHours !== "number" || sinceHours < 6 || sinceHours > 168)) {
-    return { ok: false, error: { code: "invalid_input", message: "Invalid sinceHours", fields: ["sinceHours"] } };
-  }
-  
-  const maxArticles = b.maxArticles;
-  if (maxArticles !== undefined && (typeof maxArticles !== "number" || maxArticles < 10 || maxArticles > 120)) {
-    return { ok: false, error: { code: "invalid_input", message: "Invalid maxArticles", fields: ["maxArticles"] } };
-  }
-  
-  return { ok: true };
+const ipLimiter = createRateLimiter({ name: "monitor:ip", limit: 20, windowMs: MINUTE_MS });
+const userLimiter = createRateLimiter({ name: "monitor:user", limit: 15, windowMs: MINUTE_MS });
+const dailyLimiter = createRateLimiter({
+  name: "monitor:daily",
+  limit: readIntEnv("MONITOR_DAILY_LIMIT_PER_USER", 80, 1, 10_000),
+  windowMs: 24 * 60 * MINUTE_MS,
+});
+
+type LogEntry = {
+  userId: string | null;
+  durationMs: number;
+  status: number;
+  code?: string;
+  sinceHours?: number;
+  feedFailures?: number;
+  analysis?: string;
+};
+
+function logRequest(entry: LogEntry) {
+  const line = JSON.stringify({ route: "POST /api/monitor", ...entry });
+  if (entry.status >= 500) console.error(line);
+  else console.info(line);
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  if (!body) {
-    return jsonResponse({ ok: false, error: { code: "invalid_body", message: "Invalid JSON body." } }, 400);
+  const elapsed = startTimer();
+
+  const ipCheck = await ipLimiter.check(clientIp(req));
+  if (!ipCheck.allowed) {
+    logRequest({ userId: null, durationMs: elapsed(), status: 429, code: "ip_rate_limited" });
+    return tooManyRequests(ipCheck.retryAfterSeconds);
   }
 
-  const validation = validateBody(body);
-  if (!validation.ok) {
-    return jsonResponse({ ok: false, error: validation.error }, 400);
+  const auth = await authenticate(req);
+  if (!auth.ok) {
+    if (auth.reason === "config_missing") {
+      logRequest({ userId: null, durationMs: elapsed(), status: 503, code: "auth_config_missing" });
+      return errorResponse(503, "auth_unavailable", "Authentication is temporarily unavailable.");
+    }
+    logRequest({ userId: null, durationMs: elapsed(), status: 401, code: auth.reason });
+    return errorResponse(401, "unauthorized", "You must be signed in to use this feature.");
   }
 
-  const now = new Date();
-  const collected = [
-    { id: "1", title: "Article sur la météo à Antananarivo", sourceId: "midi", sourceName: "Midi Madagasikara", lang: "fr", publishedAt: now.toISOString(), excerpt: "Extrait météo", region: "analamanga", district: null, themes: ["society"] },
-    { id: "2", title: "Article sur les prix du riz", sourceId: "tribune", sourceName: "Madagascar Tribune", lang: "fr", publishedAt: now.toISOString(), excerpt: "Prix du riz", region: "analamanga", district: null, themes: ["economy"] },
-  ];
+  const userCheck = await userLimiter.check(auth.userId);
+  if (!userCheck.allowed) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "user_rate_limited" });
+    return tooManyRequests(userCheck.retryAfterSeconds);
+  }
 
-  const events = [
-    {
-      id: "evt1",
-      title: "Mise en garde météo",
-      articleIds: ["1"],
-      sources: [{ sourceId: "midi", sourceName: "Midi Madagasikara", articleCount: 1 }],
-      firstSeenAt: now.toISOString(),
-      lastSeenAt: now.toISOString(),
-      articleCount: 1,
-      sourceCount: 1,
-      region: "analamanga",
-      district: null,
-      themes: ["society"],
-      momentum: { score: 85, level: "surge", recentArticles: 1, earlierArticles: 0, recentSources: 1, factors: [{ code: "recent_articles", value: 1 }] },
-      versions: { coverage: "single_source", summary: "Single source", sharedFacts: [], divergences: [], limitations: [] },
-      alerts: [],  // Fixed: alerts is an empty array
-    },
-  ];
+  const body = await readJsonBody(req, MAX_BODY_BYTES);
+  if (!body.ok) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: body.status, code: "invalid_body" });
+    const messages = { 400: "Invalid JSON body.", 413: "Request body is too large.", 415: "Content-Type must be application/json." };
+    return errorResponse(body.status, "invalid_body", messages[body.status]);
+  }
 
-  const payload = {
-    generatedAt: now.toISOString(),
-    window: {
-      from: new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString(),
-      to: now.toISOString(),
-    },
-    filters: {
-      lang: body.lang,
-      region: body.region ?? null,
-      district: body.district ?? null,
-      theme: body.theme ?? null,
-      query: body.query ?? null,
-      sinceHours: body.sinceHours,
-      maxArticles: body.maxArticles,
-    },
-    coverage: {
-      sourcesConfigured: 3,
-      sourcesFetched: 3,
-      articlesFetched: collected.length,
-      articlesMatched: collected.length,
-      truncated: false,
-      failed: [],
-    },
-    articles: collected,
-    events,
-    alerts: [],  // Fixed: add alerts at top level
-    limitations: ["headlines_and_excerpts_only", "lexical_event_grouping", "location_inferred_from_text"],
-    meta: {
-      durationMs: 0,
-      cached: false,
-      analysis: "ok",
-      aiErrorCode: null,
-    },
-  } as const;
+  const input = monitorInputSchema.safeParse(body.data);
+  if (!input.success) {
+    const fields = [...new Set(input.error.issues.map((issue) => issue.path.join(".") || "(root)"))];
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 400, code: "invalid_input" });
+    return jsonResponse({ ok: false, error: { code: "invalid_input", message: "Invalid request.", fields } }, 400);
+  }
 
-  return jsonResponse({ ok: true, ...payload });
+  const dailyCheck = await dailyLimiter.check(auth.userId);
+  if (!dailyCheck.allowed) {
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 429, code: "daily_quota_exceeded" });
+    return tooManyRequests(dailyCheck.retryAfterSeconds, "daily_quota_exceeded");
+  }
+
+  try {
+    const { payload, mock } = await runMonitor(input.data, auth.userId);
+    logRequest({
+      userId: auth.userId,
+      durationMs: elapsed(),
+      status: 200,
+      sinceHours: input.data.sinceHours,
+      feedFailures: payload.coverage.failed.length,
+      analysis: payload.meta.analysis,
+    });
+    return jsonResponse({ ok: true, mock, ...payload } satisfies MonitorSuccess);
+  } catch (error) {
+    if (error instanceof MonitorError && error.code === "feeds_unavailable") {
+      logRequest({ userId: auth.userId, durationMs: elapsed(), status: 502, code: "feeds_unavailable" });
+      return errorResponse(502, "feeds_unavailable", "No news source could be reached. Please try again later.");
+    }
+    logRequest({ userId: auth.userId, durationMs: elapsed(), status: 503, code: "monitor_unavailable" });
+    return errorResponse(503, "monitor_unavailable", "The monitoring service is temporarily unavailable.");
+  }
 }

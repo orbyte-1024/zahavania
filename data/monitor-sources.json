@@ -1,56 +1,78 @@
 {
-  "auditedAt": "2026-11-03T00:00:00Z",
-  "policy": "title link excerpt only, no full article, no verdict",
+  "auditedAt": "2026-11-03",
+  "policy": "Only public RSS feeds. Stored and displayed fields are limited to title, link, short excerpt, source and publication date. Full articles are never archived, rewritten or republished.",
   "sources": [
     {
-      "id": "midi",
+      "id": "midi-madagasikara",
       "name": "Midi Madagasikara",
-      "homepage": "https://www.midimadagasikara.mg",
-      "feedUrl": "https://www.midimadagasikara.mg/feed",
+      "homepage": "https://www.midi-madagasikara.mg/",
+      "feedUrl": "https://www.midi-madagasikara.mg/feed/",
       "lang": "fr",
       "scope": "national",
-      "enabled": true,
-      "checkedAt": "2026-11-03T00:00:00Z"
+      "checkedAt": "2026-11-03",
+      "enabled": true
     },
     {
-      "id": "tribune",
-      "name": "Madagascar Tribune",
-      "homepage": "https://www.madagastribune.com",
-      "feedUrl": "https://www.madagastribune.com/feed",
+      "id": "madagascar-tribune",
+      "name": "Madagascar-Tribune",
+      "homepage": "https://www.madagascar-tribune.com/",
+      "feedUrl": "https://www.madagascar-tribune.com/spip.php?page=backend",
       "lang": "fr",
       "scope": "national",
-      "enabled": true,
-      "checkedAt": "2026-11-03T00:00:00Z"
+      "checkedAt": "2026-11-03",
+      "enabled": true
     },
     {
       "id": "newsmada",
       "name": "Newsmada",
-      "homepage": "https://newsmada.com",
-      "feedUrl": "https://newsmada.com/feed",
+      "homepage": "https://newsmada.com/",
+      "feedUrl": "https://newsmada.com/feed/",
       "lang": "mg",
       "scope": "national",
-      "enabled": true,
-      "checkedAt": "2026-11-03T00:00:00Z"
+      "checkedAt": "2026-11-03",
+      "enabled": true
     },
     {
-      "id": "rfi",
-      "name": "RFI",
-      "homepage": "https://www.rfi.fr",
-      "feedUrl": "https://www.rfi.fr/fr/afrique/ Madagascar-rss",
+      "id": "2424",
+      "name": "2424.mg",
+      "homepage": "https://2424.mg/",
+      "feedUrl": "https://2424.mg/feed/",
+      "lang": "fr",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "taniko-madagascar",
+      "name": "Taniko Madagascar",
+      "homepage": "https://tanikomadagascar.com/",
+      "feedUrl": "https://tanikomadagascar.com/feed/",
+      "lang": "fr",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true
+    },
+    {
+      "id": "allafrica-madagascar",
+      "name": "AllAfrica — Madagascar",
+      "homepage": "https://allafrica.com/madagascar/",
+      "feedUrl": "https://allafrica.com/tools/headlines/rdf/madagascar/headlines.rdf",
+      "lang": "en",
+      "scope": "national",
+      "checkedAt": "2026-11-03",
+      "enabled": true,
+      "requireTerms": ["madagascar", "malagasy", "malgache"]
+    },
+    {
+      "id": "rfi-afrique",
+      "name": "RFI Afrique",
+      "homepage": "https://www.rfi.fr/fr/afrique/",
+      "feedUrl": "https://www.rfi.fr/fr/afrique/rss",
       "lang": "fr",
       "scope": "international",
+      "checkedAt": "2026-11-03",
       "enabled": true,
-      "checkedAt": "2026-11-03T00:00:00Z"
-    },
-    {
-      "id": "allafrica",
-      "name": "AllAfrica",
-      "homepage": "https://allafrica.com",
-      "feedUrl": "https://allafrica.com/themes/madagascar/rss",
-      "lang": "en",
-      "scope": "international",
-      "enabled": true,
-      "checkedAt": "2026-11-03T00:00:00Z"
+      "requireTerms": ["madagascar", "malgache", "malagasy", "antananarivo"]
     }
   ]
 }
