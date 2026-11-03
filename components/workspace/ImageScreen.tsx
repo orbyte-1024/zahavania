@@ -4,11 +4,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { callForm, type Phase } from "@/components/workspace/requests";
-import type { ImageEvidence, VerifyImageSuccess, VerifyVideoSuccess } from "@/lib/api/contract";
+import type { AiDetection, AiSignalLevel, ImageEvidence, VerifyImageSuccess, VerifyVideoSuccess } from "@/lib/api/contract";
 import { compressImage, ImageDecodeError, readDeviceExif, SOURCE_MAX_BYTES } from "@/lib/browser/image-prep";
 import { extractKeyframes, VIDEO_SOURCE_MAX_BYTES, VideoTooLongError } from "@/lib/browser/video-prep";
 import { VideoFindings } from "@/components/workspace/VideoFindings";
-import { Badge, ErrorNote, ScreenHeader, SubmitButton, rise, stagger } from "@/components/workspace/ui";
+import { Badge, ErrorNote, IndexGauge, ScreenHeader, SubmitButton, rise, stagger } from "@/components/workspace/ui";
 
 type Evidence = ImageEvidence;
 
@@ -41,6 +41,28 @@ function EvidenceList({ title, items }: { title: string; items: Evidence[] }) {
           </li>
         ))}
       </ul>
+    </motion.div>
+  );
+}
+
+const LEVEL_SYMBOLS: Record<AiSignalLevel, string> = { low: "▽", uncertain: "◇", high: "▲" };
+
+function AiDetectionBlock({ detection }: { detection: AiDetection }) {
+  const t = useTranslations("image.aiDetection");
+  const locale = useLocale();
+  return (
+    <motion.div className="claim-block" variants={rise}>
+      <p className="mono ash">{t("title")}</p>
+      {detection.status === "ok" ? (
+        <>
+          <IndexGauge value={detection.index} label={`${LEVEL_SYMBOLS[detection.level]} ${t(`level.${detection.level}`)}`} note={t("note")} />
+          <p className="mono ash">
+            {t("source", { provider: detection.provider, date: new Date(detection.checkedAt).toLocaleString(locale) })}
+          </p>
+        </>
+      ) : (
+        <p className="ash">{t(`unavailable.${detection.reason}`)}</p>
+      )}
     </motion.div>
   );
 }
@@ -214,6 +236,7 @@ export function ImageScreen() {
             </motion.div>
 
             <div className="result-main">
+              {result?.kind === "image" && <AiDetectionBlock detection={result.data.aiDetection} />}
               {result?.kind === "image" && (
                 <motion.div className="claim-block" variants={rise}>
                   <p className="mono ash">

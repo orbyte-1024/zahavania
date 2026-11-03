@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     "/api/sources/suggest": ["./data/demo/sources-suggest-*.json"],
   },
   cacheComponents: true,
+  serverExternalPackages: ["exifr"],
   async headers() {
     return [
       {

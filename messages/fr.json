@@ -373,6 +373,21 @@
       "aiIndicators": "Indices possibles de génération par IA",
       "locationClues": "Indices sur le lieu",
       "note": "Seules 6 images fixes ont été examinées : le son, le montage et le reste de la vidéo n'ont pas été analysés."
+    },
+    "aiDetection": {
+      "title": "Indice de génération par IA",
+      "level": {
+        "low": "Signal faible",
+        "uncertain": "Signal incertain",
+        "high": "Signal élevé"
+      },
+      "note": "Indicatif, ce n'est pas une probabilité. Un indice faible ne prouve pas que l'image est authentique.",
+      "source": "Détecteur {provider}, analysé le {date}. L'image, réduite et sans métadonnées, est envoyée à {provider} pour ce calcul.",
+      "unavailable": {
+        "not_configured": "Le détecteur n'est pas configuré sur ce serveur : aucun indice n'a été calculé.",
+        "failed": "Le détecteur n'a pas répondu : aucun indice n'a été calculé. Réessayez plus tard.",
+        "mock": "Mode démonstration : le détecteur n'a pas été appelé."
+      }
     }
   },
   "translate": {
