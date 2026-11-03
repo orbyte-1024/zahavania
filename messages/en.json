@@ -423,11 +423,15 @@
     "lead": "The latest figures published for Madagascar by the World Bank. Each value shows its year, its source and its update date.",
     "retrieved": "Data retrieved on {date}",
     "period": "REFERENCE YEAR: {year}",
-    "range": "TREND {from} → {to}",
     "updated": "Updated by the source on {date}",
     "stale": "FIGURE FROM {year}",
     "agendaTitle": "Agenda",
-    "agendaEmpty": "No publication or press conference entered yet. Every date added must cite its source."
+    "agendaEmpty": "No upcoming date has been announced by an official source. A date is added only when the source itself publishes it.",
+    "chartCaption": "{label}, {from} to {to}",
+    "year": "Year",
+    "value": "Value",
+    "agendaChecked": "Agenda checked on {date}",
+    "watchTitle": "Official sources to watch"
   },
   "locale": {
     "mg": "Malagasy",
