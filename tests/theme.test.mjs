@@ -90,18 +90,31 @@ test("light theme text and the four statuses meet WCAG AA on every background", 
   }
 });
 
-test("the dark theme uses the logo brown and keeps text and statuses at WCAG AA", () => {
-  assert.equal(dark.bone, "#39231a");
-  const foregrounds = ["ink", "ash", "accent", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
+test("the dark theme is the original scheme, with text and statuses at WCAG AA", () => {
+  const original = {
+    bone: "#15130f",
+    surface: "#221e19",
+    "surface-2": "#2b2620",
+    ink: "#f0ebe3",
+    ash: "#9a9086",
+    accent: "#996e52",
+    "accent-deep": "#8c6449",
+    "accent-soft": "#e2c3a8",
+    "accent-ink": "#ffffff",
+    "st-confirmed": "#9bb38a",
+    "st-contradicted": "#d98a7a",
+    "st-needs": "#d9b36a",
+    "st-insufficient": "#9a9086",
+  };
+  for (const [name, value] of Object.entries(original)) assert.equal(dark[name], value, name);
+  const foregrounds = ["ink", "ash", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
   for (const fg of foregrounds) {
     for (const bg of ["bone", "surface", "surface-2"]) {
       const ratio = contrast(dark[fg], dark[bg]);
       assert.ok(ratio >= 4.5, `${fg} on ${bg}: ${ratio.toFixed(2)}`);
     }
   }
-  for (const bg of ["accent", "accent-deep"]) {
-    assert.ok(contrast(dark["accent-ink"], dark[bg]) >= 4.5, `accent-ink on ${bg}`);
-  }
+  assert.ok(contrast(dark["accent-ink"], dark["accent-deep"]) >= 4.5, "accent-ink on accent-deep");
 });
 
 test("stylesheets and the 3D scene use theme variables instead of literal colors", () => {
