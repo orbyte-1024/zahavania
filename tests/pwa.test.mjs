@@ -21,6 +21,17 @@ test("the manifest makes the app installable with the brand and real icons", asy
   assert.ok(sizes.has("192x192:any") && sizes.has("512x512:any") && sizes.has("512x512:maskable"));
 });
 
+test("browser and home screen icons are derived from the logo", async () => {
+  const logo = await sharp(readFileSync(new URL("../assets/zahavania.png", import.meta.url))).metadata();
+  assert.equal(logo.width, logo.height);
+  for (const [file, size] of [["favicon-32.png", 32], ["favicon-48.png", 48], ["apple-touch-icon.png", 180]]) {
+    const meta = await sharp(readFileSync(new URL(`../public/icons/${file}`, import.meta.url))).metadata();
+    assert.equal(meta.width, size, file);
+  }
+  const { data } = await sharp(readFileSync(new URL("../public/icons/icon-512.png", import.meta.url))).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  assert.deepEqual([data[0], data[1], data[2]], [57, 35, 26]);
+});
+
 function loadWorker({ network }) {
   const listeners = {};
   const store = new Map();

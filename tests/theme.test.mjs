@@ -90,6 +90,20 @@ test("light theme text and the four statuses meet WCAG AA on every background", 
   }
 });
 
+test("the dark theme uses the logo brown and keeps text and statuses at WCAG AA", () => {
+  assert.equal(dark.bone, "#39231a");
+  const foregrounds = ["ink", "ash", "accent", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
+  for (const fg of foregrounds) {
+    for (const bg of ["bone", "surface", "surface-2"]) {
+      const ratio = contrast(dark[fg], dark[bg]);
+      assert.ok(ratio >= 4.5, `${fg} on ${bg}: ${ratio.toFixed(2)}`);
+    }
+  }
+  for (const bg of ["accent", "accent-deep"]) {
+    assert.ok(contrast(dark["accent-ink"], dark[bg]) >= 4.5, `accent-ink on ${bg}`);
+  }
+});
+
 test("stylesheets and the 3D scene use theme variables instead of literal colors", () => {
   const literal = /#[0-9a-fA-F]{3,8}\b|rgba?\(\s*\d/;
   for (const path of ["../components/workspace/workspace.css", "../components/landing/landing.css", "../components/credits.css"]) {
