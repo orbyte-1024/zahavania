@@ -17,6 +17,12 @@
       "dark": "Maizina",
       "toLight": "Hampiasa ny endrika mazava",
       "toDark": "Hampiasa ny endrika maizina"
+    },
+    "sound": {
+      "on": "Feo",
+      "off": "Mangina",
+      "toOn": "Alefaso ny mozika sy ny feo",
+      "toOff": "Vonoy ny mozika sy ny feo"
     }
   },
   "modules": {

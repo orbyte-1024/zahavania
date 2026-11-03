@@ -10,6 +10,7 @@ import { FLOATER_IMAGES } from "@/lib/landing-images";
 import { createGrow } from "@/lib/motion/grow";
 import { easeInOut, easeOut, mix, pinnedProgress, seg } from "@/lib/motion/scroll";
 import { BRAND_NAME_UPPER } from "@/lib/brand";
+import { playPaperCues } from "@/lib/browser/sound";
 
 const DispatchCloud = dynamic(() => import("@/components/landing/DispatchCloud"), { ssr: false });
 
@@ -53,6 +54,7 @@ export function Hero() {
     const words = Array.from(el.querySelectorAll<HTMLElement>("[data-spot] span"));
     const floaters = Array.from(el.querySelectorAll<HTMLElement>("[data-floater]"));
     let dirs: { x: number; y: number; d: number; ex: number; ey: number }[] = [];
+    let previous: number | null = null;
 
     return {
       measure() {
@@ -72,6 +74,8 @@ export function Hero() {
       },
       update({ rect, vh, mx, my }) {
         const p = pinnedProgress(rect.top, rect.height, vh);
+        if (!cloud.current.still && previous !== null) playPaperCues(previous, p);
+        previous = p;
         cloud.current.progress = p;
         cloud.current.mx = mx;
         cloud.current.my = my;

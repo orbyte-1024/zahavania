@@ -259,6 +259,48 @@ select {
   outline-offset: 2px;
 }
 
+.sound-toggle-mark {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.sound-toggle-mark i {
+  width: 2px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.sound-toggle-mark[data-on] i {
+  animation: sound-bar 0.9s ease-in-out infinite alternate;
+}
+
+.sound-toggle-mark[data-on] i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.sound-toggle-mark[data-on] i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes sound-bar {
+  from {
+    height: 3px;
+  }
+  to {
+    height: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle-mark[data-on] i {
+    animation: none;
+    height: 9px;
+  }
+}
+
 .theme-toggle-mark {
   width: 12px;
   height: 12px;

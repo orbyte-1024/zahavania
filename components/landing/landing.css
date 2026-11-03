@@ -1333,6 +1333,15 @@ body.is-static .footer-name .chi {
     display: none;
   }
 
+  .dock-sound {
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .dock-sound .sound-toggle-text {
+    display: none;
+  }
+
   .dock-menu {
     display: inline-flex;
     align-items: center;

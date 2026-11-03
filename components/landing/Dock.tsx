@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type MouseEvent, type Ref } from "react";
 import { LanguageMenu } from "@/components/LanguageMenu";
+import { SoundToggle } from "@/components/SoundToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useEngine } from "@/components/landing/engine";
 
@@ -108,6 +109,7 @@ export function Dock({ wordmarkRef, wordmark }: { wordmarkRef: Ref<HTMLAnchorEle
           ))}
         </nav>
         <div className="dock-actions">
+          <SoundToggle className="dock-sound" />
           <ThemeToggle className="dock-theme" />
           <LanguageMenu />
           <Link className="dock-cta" href="/app">
