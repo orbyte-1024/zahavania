@@ -1,4 +1,4 @@
-# Zahavan'Ia
+# Zahavan'ia
 
 **Journalistic investigation assistant for Madagascar.**
 
