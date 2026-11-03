@@ -106,6 +106,9 @@
       "sub": "Every need journalists described has its own screen. The first five are live.",
       "meta": "NEEDS 1 TO 8 — OFFLINE MODE EXCLUDED"
     },
+    "tools": {
+      "discover": "DISCOVER"
+    },
     "motto": {
       "kicker": "WHAT GUIDES EVERY CHECK",
       "words": [

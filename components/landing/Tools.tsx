@@ -58,8 +58,7 @@ export function Tools() {
                   <span className="tool-desc">{t(`modules.${id}.desc`)}</span>
                 </span>
                 <span className="tool-meta mono">
-                  <span>{t(`modules.${id}.need`)}</span>
-                  <span className={live ? "tool-state live" : "tool-state"}>{t(`modules.${id}.state`)}</span>
+                  <span className={live ? "tool-state live" : "tool-state"}>{t("landing.tools.discover")}</span>
                 </span>
                 <span className="tool-arrow" aria-hidden="true">
                   →
