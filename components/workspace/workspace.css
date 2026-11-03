@@ -449,6 +449,37 @@
   letter-spacing: -0.012em;
 }
 
+/* Image/video report: the verdict card gets its own right-hand column so the
+   evidence lists keep the full reading width. */
+.result-split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  column-gap: clamp(24px, 3vw, 44px);
+}
+
+.result-split > .verdict {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  padding: 18px 20px;
+}
+
+/* Without an explicit column, the grid would flow the remaining blocks into the
+   second column; they must all stay in the reading column. */
+.result-split > :not(.verdict) {
+  grid-column: 1;
+}
+
+/* The summary is a conclusion, not the body of the report: it is set smaller
+   than the evidence text (19px, 17px on small screens). */
+.result-split .verdict-status {
+  font-size: clamp(20px, 2vw, 23px);
+}
+
+.result-split .result-summary-text {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
 .handoff {
   display: flex;
   flex-wrap: wrap;
@@ -1206,6 +1237,15 @@
 
   .result-top {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .result-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .result-split > .verdict,
+  .result-split > :not(.verdict) {
+    grid-column: 1;
   }
 
   .overview li:nth-child(n) {

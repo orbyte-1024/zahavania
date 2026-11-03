@@ -196,7 +196,7 @@ export function ImageScreen() {
         )}
         {phase.kind === "error" && <ErrorNote key="error" code={phase.code} retryAfter={phase.retryAfter} />}
         {report && (
-          <motion.section key="done" className="result" variants={stagger} initial="hidden" animate="show">
+          <motion.section key="done" className="result result-split" variants={stagger} initial="hidden" animate="show">
             <motion.div className="verdict" variants={rise} data-verdict={report.verification.status}>
               <span className="mono ash">{t("summary")}</span>
               <p className="verdict-status">{t(`verdict.${report.verification.status}`)}</p>
