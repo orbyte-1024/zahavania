@@ -17,6 +17,12 @@
       "dark": "Sombre",
       "toLight": "Passer au thème clair",
       "toDark": "Passer au thème sombre"
+    },
+    "sound": {
+      "on": "Son",
+      "off": "Muet",
+      "toOn": "Activer la musique et les bruitages",
+      "toOff": "Couper la musique et les bruitages"
     }
   },
   "modules": {
