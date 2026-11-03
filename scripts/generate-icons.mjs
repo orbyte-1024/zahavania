@@ -1,30 +1,46 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 
-const BONE = "#15130f";
-const INK = "#f0ebe3";
-const ACCENT = "#996e52";
+const SOURCE = "assets/zahavania.png";
+const BROWN = { r: 57, g: 35, b: 26, alpha: 1 };
+const MONOGRAM = { left: 162, top: 704, width: 224, height: 270 };
 
-function mark(size, safeZone) {
-  const inset = size * safeZone;
-  const span = size - inset * 2;
-  const x = (f) => (inset + span * f).toFixed(1);
-  const stroke = (size * 0.075).toFixed(1);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <rect width="${size}" height="${size}" fill="${BONE}"/>
-  <path d="M${x(0.18)} ${x(0.22)} H${x(0.82)} L${x(0.18)} ${x(0.78)} H${x(0.82)}" fill="none" stroke="${INK}" stroke-width="${stroke}" stroke-linejoin="bevel" stroke-linecap="butt"/>
-  <ellipse cx="${x(0.5)}" cy="${x(0.5)}" rx="${(span * 0.47).toFixed(1)}" ry="${(span * 0.36).toFixed(1)}" fill="none" stroke="${ACCENT}" stroke-width="${(size * 0.022).toFixed(1)}" transform="rotate(-8 ${x(0.5)} ${x(0.5)})"/>
-</svg>`;
+async function fullLogo(size) {
+  return sharp(SOURCE).resize(size, size).flatten({ background: BROWN }).png({ compressionLevel: 9 }).toBuffer();
+}
+
+async function paddedLogo(size, scale) {
+  const inner = Math.round(size * scale);
+  const logo = await sharp(SOURCE).resize(inner, inner).flatten({ background: BROWN }).png().toBuffer();
+  const offset = Math.round((size - inner) / 2);
+  return sharp({ create: { width: size, height: size, channels: 4, background: BROWN } })
+    .composite([{ input: logo, left: offset, top: offset }])
+    .png({ compressionLevel: 9 })
+    .toBuffer();
+}
+
+async function monogram(size) {
+  const side = Math.max(MONOGRAM.width, MONOGRAM.height);
+  const padX = Math.floor((side - MONOGRAM.width) / 2);
+  const padY = Math.floor((side - MONOGRAM.height) / 2);
+  const margin = Math.round(side * 0.18);
+  const glyph = await sharp(SOURCE)
+    .extract(MONOGRAM)
+    .flatten({ background: BROWN })
+    .extend({ top: padY + margin, bottom: side - MONOGRAM.height - padY + margin, left: padX + margin, right: side - MONOGRAM.width - padX + margin, background: BROWN })
+    .png()
+    .toBuffer();
+  return sharp(glyph).resize(size, size).png({ compressionLevel: 9 }).toBuffer();
 }
 
 const outputs = [
-  { file: "public/icons/icon-192.png", size: 192, safeZone: 0.08 },
-  { file: "public/icons/icon-512.png", size: 512, safeZone: 0.08 },
-  { file: "public/icons/maskable-512.png", size: 512, safeZone: 0.2 },
-  { file: "public/icons/apple-touch-icon.png", size: 180, safeZone: 0.12 },
+  ["public/icons/icon-192.png", () => fullLogo(192)],
+  ["public/icons/icon-512.png", () => fullLogo(512)],
+  ["public/icons/maskable-512.png", () => paddedLogo(512, 0.78)],
+  ["public/icons/apple-touch-icon.png", () => fullLogo(180)],
+  ["public/icons/favicon-32.png", () => monogram(32)],
+  ["public/icons/favicon-48.png", () => monogram(48)],
 ];
 
 await mkdir("public/icons", { recursive: true });
-for (const { file, size, safeZone } of outputs) {
-  await writeFile(file, await sharp(Buffer.from(mark(size, safeZone))).png({ compressionLevel: 9 }).toBuffer());
-}
+for (const [file, render] of outputs) await writeFile(file, await render());
