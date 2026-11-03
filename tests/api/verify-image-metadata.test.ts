@@ -165,7 +165,7 @@ describe("POST /api/verify/image — EXIF metadata", () => {
     const { status, body, raw } = await upload("text-as.jpeg", "image/jpeg");
     expect(status).toBe(415);
     expect(Object.keys(body).sort()).toEqual([
-      "erreur",
+      "error",
       "ok",
       "reverseSearch",
     ]);

@@ -2,7 +2,7 @@
 
 ## Principe (AGENTS.md §14)
 
-Checkeko ne fait **aucun scraping** sur TinEye, Google Lens ou Yandex. La route `/api/image` expose des liens cliquables (`reverseSearchLinks` dans `lib/reverse-search.ts`) que le journaliste ouvre manuellement. L'image n'est jamais envoyée automatiquement à ces services.
+Checkeko ne fait **aucun scraping** sur TinEye, Google Lens ou Yandex. La route `/api/verify/image` expose des liens cliquables (`reverseSearchLinks` dans `lib/reverse-search.ts`) que le journaliste ouvre manuellement. L'image n'est jamais envoyée automatiquement à ces services.
 
 ## Liens disponibles
 

@@ -1,7 +1,6 @@
 import { imageSize } from "image-size";
 
-/** Hard cap for one upload: 8 MiB (8 × 1024 × 1024). */
-export const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+export const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
 /**
  * Multipart boundaries and part headers wrap the file in a few hundred bytes.
@@ -12,20 +11,14 @@ const MAX_BODY_BYTES = MAX_IMAGE_BYTES + 64 * 1024;
 
 export type ImageFormat = "image/jpeg" | "image/png" | "image/webp";
 
-export type IntakeResult =
-  | { ok: true; format: ImageFormat; size: number; bytes: Uint8Array }
-  | { ok: false; status: 400 | 413 | 415; erreur: string };
+export type IntakeErrorCode = "invalid_body" | "image_missing" | "image_too_large" | "unsupported_media" | "invalid_image";
 
-const TOO_LARGE: IntakeResult = {
-  ok: false,
-  status: 413,
-  erreur: "Fichier trop volumineux",
-};
-const INVALID_BODY: IntakeResult = {
-  ok: false,
-  status: 400,
-  erreur: "Requête invalide",
-};
+export type IntakeResult =
+  | { ok: true; format: ImageFormat; size: number; bytes: Uint8Array; fields: FormData }
+  | { ok: false; status: 400 | 413 | 415; code: IntakeErrorCode };
+
+const TOO_LARGE: IntakeResult = { ok: false, status: 413, code: "image_too_large" };
+const INVALID_BODY: IntakeResult = { ok: false, status: 400, code: "invalid_body" };
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const RIFF_SIGNATURE = [0x52, 0x49, 0x46, 0x46];
@@ -165,24 +158,24 @@ function asFile(entry: FormDataEntryValue | undefined): File | null {
   return typeof entry === "object" && entry !== null ? entry : null;
 }
 
-async function inspect(file: File): Promise<IntakeResult> {
+async function inspect(file: File, fields: FormData): Promise<IntakeResult> {
   if (file.size === 0) {
-    return { ok: false, status: 400, erreur: "Fichier vide" };
+    return { ok: false, status: 400, code: "image_missing" };
   }
   if (file.size > MAX_IMAGE_BYTES) return TOO_LARGE;
 
   const bytes = new Uint8Array(await file.arrayBuffer());
   const format = detectFormat(bytes);
   if (!format) {
-    return { ok: false, status: 415, erreur: "Format non pris en charge" };
+    return { ok: false, status: 415, code: "unsupported_media" };
   }
   if (!isIntactImage(bytes, format) || !hasCompleteStructure(bytes, format)) {
-    return { ok: false, status: 400, erreur: "Image illisible ou corrompue" };
+    return { ok: false, status: 400, code: "invalid_image" };
   }
 
   // Handed back so later steps can read the file from memory: it is never
   // written to disk, cached or serialised.
-  return { ok: true, format, size: bytes.byteLength, bytes };
+  return { ok: true, format, size: bytes.byteLength, bytes, fields };
 }
 
 /**
@@ -200,16 +193,16 @@ export async function acceptUploadedImage(req: Request): Promise<IntakeResult> {
 
   const entries = form.getAll("image");
   if (entries.length === 0) {
-    return { ok: false, status: 400, erreur: "Champ image manquant" };
+    return { ok: false, status: 400, code: "image_missing" };
   }
   if (entries.length > 1) {
-    return { ok: false, status: 400, erreur: "Une seule image par requête" };
+    return INVALID_BODY;
   }
 
   const file = asFile(entries[0]);
   if (!file) {
-    return { ok: false, status: 400, erreur: "Le champ image doit être un fichier" };
+    return { ok: false, status: 400, code: "image_missing" };
   }
 
-  return inspect(file);
+  return inspect(file, form);
 }

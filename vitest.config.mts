@@ -10,6 +10,7 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    env: { DEMO_MODE: "true" },
     include: ["tests/**/*.test.ts"],
   },
 });
