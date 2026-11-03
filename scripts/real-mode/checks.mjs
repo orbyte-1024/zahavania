@@ -45,6 +45,21 @@ const ROUTE_CHECKS = {
     if (!(body.analysedCount > 0)) return fail(`no frame analysed (${body.failedCount ?? "?"} failed)`);
     return passed({ analysed: body.analysedCount, failed: body.failedCount });
   },
+  monitor: (body) => {
+    if (!Array.isArray(body.articles) || !Array.isArray(body.events) || !Array.isArray(body.alerts)) {
+      return fail("missing monitor lists");
+    }
+    if (body.articles.length === 0) return fail("no article matched");
+    if (body.events.length === 0) return fail("no event grouped");
+    const coverages = new Set(["divergent", "no_divergence_found", "single_source", "not_analysed"]);
+    for (const event of body.events) {
+      if (!coverages.has(event.versions?.coverage)) return fail(`unknown versions coverage ${event.versions?.coverage}`);
+      if (!(event.momentum?.score >= 0 && event.momentum?.score <= 100)) return fail("momentum outside 0-100");
+      if (!Array.isArray(event.sources) || event.sources.length === 0) return fail("event without source");
+    }
+    if (!["ok", "skipped", "unavailable"].includes(body.meta?.analysis)) return fail("unknown analysis state");
+    return passed({ articles: body.articles.length, events: body.events.length, alerts: body.alerts.length, analysis: body.meta.analysis });
+  },
 };
 
 export function checkResponse(route, status, body) {

@@ -20,6 +20,7 @@ Set them in **Project → Settings → Environment Variables** for *Production* 
 | `LLM_API_KEY` | **yes** | OpenRouter key with a spending limit |
 | `AI_MODEL` | no | default model for every task |
 | `AI_MODEL_VERIFY`, `AI_MODEL_TRANSLATE`, `AI_MODEL_VISION`, `AI_MODEL_EXPERTS`, `AI_MODEL_ANGLES` | no | optional, one model per task (see `README_AI.md`) |
+| `SIGHTENGINE_API_USER`, `SIGHTENGINE_API_SECRET` | no | AI-generated image index on `/app/image`; without them the screen says the detector is not configured. Server-only, never `NEXT_PUBLIC_` |
 | `AI_FALLBACK_MODEL` | no | optional, used once when the main model fails |
 | `AI_MAX_TOKENS`, `AI_REASONING_TOKENS`, `AI_WEB_MAX_RESULTS` | no | optional tuning, defaults are in `.env.example` |
 | `AI_DAILY_LIMIT_PER_USER` | no | daily AI requests per user and route |

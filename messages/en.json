@@ -330,6 +330,8 @@
     "submit": "Analyse",
     "change": "Change file",
     "summary": "Summary",
+    "summaryMore": "Read more",
+    "summaryLess": "Read less",
     "supporting": "Consistent hints",
     "contradictory": "Conflicting hints",
     "metadata": "Metadata",
@@ -371,6 +373,21 @@
       "aiIndicators": "Possible signs of AI generation",
       "locationClues": "Clues about the place",
       "note": "Only 6 still frames were checked: the sound, the editing and the rest of the video were not analysed."
+    },
+    "aiDetection": {
+      "title": "AI generation index",
+      "level": {
+        "low": "Weak signal",
+        "uncertain": "Uncertain signal",
+        "high": "Strong signal"
+      },
+      "note": "Indicative, not a probability. A low index does not prove the image is authentic.",
+      "source": "{provider} detector, checked on {date}. The image, reduced and without metadata, is sent to {provider} for this check.",
+      "unavailable": {
+        "not_configured": "The detector is not configured on this server: no index was computed.",
+        "failed": "The detector did not respond: no index was computed. Try again later.",
+        "mock": "Demonstration mode: the detector was not called."
+      }
     }
   },
   "translate": {

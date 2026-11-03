@@ -1,3 +1,4 @@
+import type { AiDetection, AiSignalLevel } from "./ai-detection";
 import type { ImageMetadata, MetadataWarning } from "./exif";
 import type { VisionResult, VisionWarning } from "./vision-analyzer";
 
@@ -111,6 +112,7 @@ export function buildVerification(
   visualAnalysis: VisionResult | null,
   visionWarnings: VisionWarning[],
   reverseSearchLinks: ReverseSearch,
+  aiDetection: AiDetection | null = null,
 ): VerificationReport {
   const supportingEvidence: EvidenceItem[] = [];
   const contradictoryEvidence: EvidenceItem[] = [];
@@ -261,6 +263,8 @@ export function buildVerification(
     );
   }
 
+  limitations.push(...detectionLimitations(aiDetection));
+
   // EXIF-related limitations.
   if (metadata === null || !metadata.available) {
     limitations.push(
@@ -296,6 +300,7 @@ export function buildVerification(
     exifWarnings,
     visionWarnings,
     limitations,
+    aiDetection,
   );
 
   return {
@@ -317,6 +322,7 @@ function buildSummary(
   exifWarnings: MetadataWarning[],
   visionWarnings: VisionWarning[],
   limitations: string[],
+  aiDetection: AiDetection | null,
 ): string {
   const parts: string[] = [];
 
@@ -355,6 +361,12 @@ function buildSummary(
     }
   }
 
+  if (aiDetection?.status === "ok") {
+    parts.push(
+      `Détecteur de génération par IA (${aiDetection.provider}) : indice ${aiDetection.index}/100, ${LEVEL_LABELS[aiDetection.level]}. Cet indice est indicatif.`,
+    );
+  }
+
   if (limitations.length > 0) {
     parts.push(`Limites : ${limitations.join(" ; ")}`);
   }
@@ -364,4 +376,21 @@ function buildSummary(
   );
 
   return parts.join(" ");
+}
+
+const LEVEL_LABELS: Record<AiSignalLevel, string> = {
+  low: "signal faible",
+  uncertain: "signal incertain",
+  high: "signal élevé",
+};
+
+function detectionLimitations(aiDetection: AiDetection | null): string[] {
+  if (aiDetection === null || (aiDetection.status === "unavailable" && aiDetection.reason === "mock")) return [];
+  if (aiDetection.status === "unavailable") {
+    return ["La détection automatique d'image générée par IA est indisponible : aucun indice de génération n'a pu être calculé."];
+  }
+  return [
+    "L'indice de génération par IA vient d'un détecteur automatique. Ce n'est pas une probabilité : les détecteurs se trompent, surtout sur les images compressées, retouchées, recadrées ou les captures d'écran.",
+    "Un indice faible ne prouve pas que l'image est authentique ; un indice élevé ne prouve pas qu'elle a été générée.",
+  ];
 }

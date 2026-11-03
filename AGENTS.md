@@ -41,6 +41,7 @@ Un parcours qui marche de bout en bout vaut mieux que 8 écrans simulés.
 - i18n : `next-intl`, langue par cookie `NEXT_LOCALE` (`mg` | `fr` | `en`, défaut `mg`), messages **imbriqués** (jamais de clé contenant un point).
 - IA : SDK `openai` pointé sur OpenRouter. Recherche web : plugin `web` d'OpenRouter (`webSearch` dans `askJson`). Validation : `zod`.
 - Données : Supabase (auth anonyme + annuaire `experts` avec RLS), `data/stats.json` (Banque mondiale), `localStorage` pour "Mes dossiers".
+- Détection d'image générée par IA : API Sightengine (modèle `genai`, `lib/sightengine.ts`), appelée par `fetch` sans SDK ; l'image envoyée est réduite et sans métadonnées. Indice 0–100 indicatif (`lib/ai-detection.ts`), jamais une preuve.
 - Images : `sharp` (orientation, réduction, sans métadonnées), `exifr` (EXIF, aussi lu dans le navigateur), `image-size`. Vidéo : 6 images clés extraites **dans le navigateur** (pas de ffmpeg côté serveur).
 - Animations : `three` + `@react-three/fiber` (scène 3D de la landing), `gsap` + `lenis` (scènes scrubées), `motion` (transitions de l'application).
 - Tests : `vitest` (`tests/api/*.test.ts`) et `node --test` (`tests/*.test.mjs`). CI : `.github/workflows/ci.yml`.

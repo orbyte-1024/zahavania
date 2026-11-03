@@ -330,6 +330,8 @@
     "submit": "Dinihina",
     "change": "Hanova rakitra",
     "summary": "Famintinana",
+    "summaryMore": "Mandika",
+    "summaryLess": "Mandoro",
     "supporting": "Famantarana mifanaraka",
     "contradictory": "Famantarana mifanohitra",
     "metadata": "Metadata",
@@ -371,6 +373,21 @@
       "aiIndicators": "Famantarana mety ho noforonin'ny IA",
       "locationClues": "Famantarana momba ny toerana",
       "note": "Sary tsy mihetsika 6 ihany no nodinihina: tsy nodinihina ny feo, ny fanovana ary ny ambin'ny horonan-tsary."
+    },
+    "aiDetection": {
+      "title": "Tondro famoronana amin'ny IA",
+      "level": {
+        "low": "Famantarana malemy",
+        "uncertain": "Famantarana tsy azo antoka",
+        "high": "Famantarana mahery"
+      },
+      "note": "Tondro fotsiny, tsy probabilité. Ny tondro ambany dia tsy porofo fa tena izy ny sary.",
+      "source": "Mpitsikilo {provider}, nojerena tamin'ny {date}. Alefa any amin'ny {provider} ny sary, nahena sady tsy misy metadata, mba hanaovana ity kajy ity.",
+      "unavailable": {
+        "not_configured": "Tsy voalamina amin'ity mpizara ity ilay mpitsikilo: tsy nisy tondro voakajy.",
+        "failed": "Tsy namaly ilay mpitsikilo: tsy nisy tondro voakajy. Andramo indray any aoriana.",
+        "mock": "Fampisehoana: tsy nantsoina ilay mpitsikilo."
+      }
     }
   },
   "translate": {
