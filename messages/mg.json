@@ -217,7 +217,11 @@
       "image_missing": "Tsy nisy sary voaray.",
       "image_too_large": "Mavesatra loatra ny sary.",
       "unsupported_media": "Sary JPEG, PNG ary WebP ihany no ekena.",
-      "invalid_image": "Tsy azo vakiana na simba ny sary."
+      "invalid_image": "Tsy azo vakiana na simba ny sary.",
+      "video_decode_failed": "Tsy mahavaky ity horonan-tsary ity ity navigateur ity (matetika .mov na HEVC). Avadiho ho MP4 (H.264) dia andramo indray.",
+      "video_too_long": "Lava loatra ny horonan-tsary (4 ora farafahabetsany).",
+      "frames_missing": "Tsy nisy sary fototra voaray.",
+      "frames_too_large": "Lehibe loatra ny sary fototra."
     }
   },
   "status": {
@@ -323,12 +327,12 @@
   },
   "image": {
     "title": "Hamarino sary",
-    "lead": "Apetraho sary JPEG, PNG na WebP. Hakelezina amin'ny fitaovanao izy alohan'ny handefasana azy, ary tsy miala amin'ny finday mihitsy ny toerana GPS.",
-    "drop": "Apetraho eto ny sary",
+    "lead": "Apetraho sary JPEG, PNG na WebP, na horonan-tsary MP4 na WebM. Hakelezina ny sary ary avadika ho sary fototra 6 ny horonan-tsary amin'ny fitaovanao: ireo sary ireo ihany no alefa, ary tsy miala amin'ny finday mihitsy ny toerana GPS.",
+    "drop": "Apetraho eto ny sary na horonan-tsary",
     "or": "na",
     "browse": "misafidiana rakitra",
     "submit": "Dinihina",
-    "change": "Hanova sary",
+    "change": "Hanova rakitra",
     "summary": "Famintinana",
     "supporting": "Famantarana mifanaraka",
     "contradictory": "Famantarana mifanohitra",
@@ -357,6 +361,20 @@
       "file": "novakiana tao amin'ny rakitra",
       "device": "novakiana teo amin'ny fitaovana alohan'ny nanakelezana",
       "none": "tsy misy"
+    },
+    "video": {
+      "extracting": "Maka ny sary fototra {done} amin'ny {total} amin'ny fitaovanao…",
+      "analysing": "Mandinika sary fototra {count}…",
+      "frames": "Sary fototra",
+      "counts": "Sary {analysed} amin'ny {total} no voadinika, {failed} tsy nahomby",
+      "at": "Amin'ny {time}",
+      "analysed": "Voadinika",
+      "failed": "Tsy nahomby ny fandinihana ity sary ity",
+      "seenAt": "hita amin'ny {times}",
+      "inconsistencies": "Tsy fifandrindrana hita maso mety misy",
+      "aiIndicators": "Famantarana mety ho noforonin'ny IA",
+      "locationClues": "Famantarana momba ny toerana",
+      "note": "Sary tsy mihetsika 6 ihany no nodinihina: tsy nodinihina ny feo, ny fanovana ary ny ambin'ny horonan-tsary."
     }
   },
   "translate": {

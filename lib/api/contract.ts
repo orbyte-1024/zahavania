@@ -149,4 +149,30 @@ export type VerifyImageErrorCode =
 
 export type VerifyImageResponse = VerifyImageSuccess | ApiErrorBody<VerifyImageErrorCode>;
 
+export type VideoObservation = VisionObservation & { timestamps: number[] };
+
+export type VideoFrameReport = { timestamp: number; status: "analysed" | "failed"; analysis: VisionAnalysis | null };
+
+export type VerifyVideoSuccess = {
+  ok: true;
+  mock: boolean;
+  video: { duration: number; framesReceived: number; totalBytes: number };
+  frames: VideoFrameReport[];
+  analysedCount: number;
+  failedCount: number;
+  observations: {
+    visualInconsistencies: VideoObservation[];
+    possibleAIGenerationIndicators: VideoObservation[];
+    locationClues: VideoObservation[];
+  };
+  warnings: { code: string; message: string }[];
+  reverseSearch: VerifyImageSuccess["reverseSearch"];
+  verification: VerifyImageSuccess["verification"];
+  meta: { durationMs: number };
+};
+
+export type VerifyVideoErrorCode = CommonErrorCode | "frames_missing" | "frames_too_large" | "unsupported_media" | "invalid_image";
+
+export type VerifyVideoResponse = VerifyVideoSuccess | ApiErrorBody<VerifyVideoErrorCode>;
+
 export type PingAiResponse = { ok: true; mock: boolean; reponse: string } | LegacyErrorBody;
