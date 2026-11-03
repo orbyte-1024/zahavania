@@ -102,6 +102,7 @@
 html {
   background: var(--bone);
   -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
 }
 
 body {

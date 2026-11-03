@@ -47,6 +47,8 @@ export const viewport: Viewport = {
   ],
   colorScheme: "dark light",
   viewportFit: "cover",
+  maximumScale: 1,
+  userScalable: false,
 };
 
 async function IntlProvider({ children }: { children: React.ReactNode }) {
