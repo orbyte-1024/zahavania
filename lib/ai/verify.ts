@@ -106,6 +106,7 @@ export async function verifyContent(input: VerifyInput): Promise<VerifyResult> {
 
   const { content, analyzedUrl } = await loadContent(input);
   const { data, citedUrls, usage, attempts } = await askJson({
+    task: "verify",
     system: VERIFY_SYSTEM_PROMPT,
     user: buildVerifyUserMessage({ content, lang: input.lang, sourceUrl: analyzedUrl ?? undefined }),
     schema: verifyOutputSchema,

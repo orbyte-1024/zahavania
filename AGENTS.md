@@ -69,7 +69,8 @@ app/
   api/translate/route.ts
 components/landing/             # scènes scrubées, DispatchCloud (3D)
 components/workspace/           # écrans de l'application
-lib/ai/client.ts                # SEUL point d'appel au modèle (askJson, isMockMode, AiError)
+lib/ai/client.ts                # SEUL point d'appel au modèle (askJson, askText, isMockMode, AiError)
+lib/ai/models.ts                # tâche → modèle (AI_MODEL_<TASK>, sinon AI_MODEL ; AI_FALLBACK_MODEL partagé)
 lib/ai/prompts/                 # tous les prompts
 lib/ai/{verify,angles,translate,schemas}.ts
 lib/score.ts                    # indice de confiance calculé par le code
@@ -95,7 +96,10 @@ messages/{mg,fr,en}.json
 
 ## 7. Règles IA (cruciales)
 
-- **Tous** les appels au modèle passent par `lib/ai/client.ts` (`askJson`). Jamais d'appel direct ailleurs.
+- **Tous** les appels au modèle passent par `lib/ai/client.ts` : `askJson` (sortie JSON validée par zod) ou
+  `askText` (texte brut), avec une `task` (`verify`, `translate`, `vision`, `experts`, `angles`) qui choisit le
+  modèle via `lib/ai/models.ts`. Le champ `user` accepte du texte ou des parties `text` + `image_url`.
+  Jamais d'appel direct ailleurs.
   `lib/llm.ts` est un reliquat utilisé par l'analyse d'image : ne pas l'étendre.
 - **Tous** les prompts sont dans `lib/ai/prompts/`. Aucun prompt inline dans une route.
 - Le contenu utilisateur est une **donnée** : toujours entre balises (`<content_to_verify>…</content_to_verify>`),

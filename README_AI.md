@@ -23,6 +23,45 @@ Copy `.env.example` to `.env.local` (never commit it) and fill in:
 
 Requests are authenticated with `Authorization: Bearer <supabase access token>` or the Supabase session cookie. Anonymous Supabase sessions (`signInAnonymously`) count as authenticated users.
 
+## Model per task
+
+Each AI feature reads its own model variable and falls back to `AI_MODEL` when it is empty (`lib/ai/models.ts`). `AI_FALLBACK_MODEL` is shared: when a task's model fails (rate limit, provider error, invalid output), the request is retried once with it, unless it is the same model.
+
+The team uses free models only. Tasks are spread across providers so that one saturated provider does not stop every feature, and the fallback comes from another provider.
+
+| Task | Variable | Free model | Why |
+|---|---|---|---|
+| Claim verification | `AI_MODEL_VERIFY` | `nvidia/nemotron-3.5-super-vl:free` | JSON and structured output, 1M context |
+| Translation | `AI_MODEL_TRANSLATE` | `google/gemma-4-31b-it:free` | largest free Gemma, plain-text output |
+| Story angles | `AI_MODEL_ANGLES` | `google/gemma-4-31b-it:free` | JSON mode, good writing |
+| Image and video analysis | `AI_MODEL_VISION` | `google/gemma-4-26b-a4b-it:free` | image input and JSON mode |
+| Expert classification and ranking | `AI_MODEL_EXPERTS` | `google/gemma-4-26b-a4b-it:free` | JSON mode, fast |
+| Shared fallback | `AI_FALLBACK_MODEL` | `dots-studio/dots-3-note-preview:free` | image input and JSON mode, different provider |
+
+These IDs were listed in the OpenRouter catalog on 2026-11-03. Free models come and go: check the catalog before the demo. Set the values in `.env.local` only.
+
+Limits of free models, to keep in mind before the demo:
+
+- **Web search is never free.** Claim verification uses the OpenRouter `web` plugin, billed per search whatever the model. Without credits, verification cannot find sources, and every claim stays `insufficient`. Lower `AI_WEB_MAX_RESULTS` to reduce the cost per check.
+- **Daily quota.** OpenRouter caps free-model requests per account and per day, and the cap is much higher once the account has bought credits. A rehearsal can use up the quota before the demo.
+- **Privacy.** Some free providers log prompts or use them for training, and OpenRouter only routes to them when that is allowed in the account's privacy settings. Never submit confidential or unpublished material while free models are configured.
+- **Quality.** Malagasy output from free models is weak: every Malagasy translation stays marked "to be reviewed".
+
+In code, pick the task, never a model id:
+
+```ts
+const { data } = await askJson({ task: "verify", system, user, schema });
+const { text } = await askText({ task: "translate", system, user, accept: (out) => out !== input });
+const vision = await askJson({
+  task: "vision",
+  system,
+  user: [{ type: "text", text: "Describe" }, { type: "image_url", image_url: { url: dataUrl } }],
+  schema,
+});
+```
+
+Both keep the same retry, reasoning budget, timeout and fallback behaviour. `askText` retries once when the answer is empty, truncated or rejected by `accept`. A failed call throws an `AiError` whose `code` and `providerStatus` are safe to log.
+
 ## Cache and demo fallback
 
 - Identical requests from the same user are answered from an in-memory cache for `AI_CACHE_TTL_SECONDS`, without calling the model or using the daily quota (`meta.cached: true`). Keys are SHA-256 hashes that include the user ID, so one user can never learn what another submitted. Entries are kept in memory only and expire after the TTL.

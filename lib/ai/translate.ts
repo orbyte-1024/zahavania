@@ -40,6 +40,7 @@ export async function translateText(input: TranslateInput): Promise<TranslateRes
 
   const maxTokens = Math.min(readIntEnv("AI_MAX_TOKENS", 4_000, 500, 8_000), Math.ceil(input.text.length * 1.6) + 400);
   const { data, usage } = await askJson({
+    task: "translate",
     system: TRANSLATE_SYSTEM_PROMPT,
     user: buildTranslateUserMessage(input),
     schema: translateOutputSchema,
