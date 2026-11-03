@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Checkeko — fact-checking for Madagascar's newsrooms",
+    "title": "{brand} — fact-checking for Madagascar's newsrooms",
     "description": "Check a claim, find its sources and the right experts, in Malagasy, French and English."
   },
   "nav": {
@@ -72,7 +72,7 @@
     }
   },
   "landing": {
-    "kicker": "CHECKEKO — FACT-CHECKING FOR MADAGASCAR'S NEWSROOMS",
+    "kicker": "{brand} — FACT-CHECKING FOR MADAGASCAR'S NEWSROOMS",
     "line1": "A claim is spreading,",
     "line2a": "we",
     "line2b": "check it.",
@@ -90,7 +90,7 @@
       "FISHING PIROGUE · MADAGASCAR"
     ],
     "manifesto": {
-      "before": "Checkeko never says true or false. It shows the sources, weighs how solid they are and flags what is missing. In the end,",
+      "before": "{brand} never says true or false. It shows the sources, weighs how solid they are and flags what is missing. In the end,",
       "boxed": "the journalist",
       "after": "decides."
     },
@@ -146,7 +146,7 @@
       "figure": "100",
       "unit": "%",
       "text": "A source the request's own search did not return is never shown. The claim then falls back to \"insufficient\".",
-      "author": "CHECKEKO RULE NO. 1"
+      "author": "{brand} RULE NO. 1"
     },
     "objections": {
       "items": [
@@ -159,9 +159,9 @@
     },
     "footer": {
       "kicker": "A CLAIM TO CHECK?",
-      "cta": "Open Checkeko",
+      "cta": "Open {brand}",
       "reassurance": "NO ACCOUNT — MALAGASY, FRENCH, ENGLISH",
-      "left": "© 2026 — CHECKEKO",
+      "left": "© 2026 — {brand}",
       "middle": "MG · FR · EN",
       "right": "DESIGNED FOR MADAGASCAR'S NEWSROOMS"
     }
@@ -222,7 +222,7 @@
   },
   "verify": {
     "title": "Check a claim",
-    "lead": "Paste a text or a link. Checkeko isolates the checkable claims and looks for their sources.",
+    "lead": "Paste a text or a link. {brand} isolates the checkable claims and looks for their sources.",
     "modeText": "Text",
     "modeUrl": "Link",
     "placeholderText": "Paste the message, article or statement to check…",

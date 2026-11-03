@@ -119,7 +119,7 @@ function requestOnce(url: URL, signal: AbortSignal): Promise<RawResponse> {
         agent: false,
         signal,
         headers: {
-          "User-Agent": "CheckekoVerifier/1.0 (+fact-checking for journalists)",
+          "User-Agent": "ZahavaniaVerifier/1.0 (+fact-checking for journalists)",
           Accept: "text/html,application/xhtml+xml,text/plain;q=0.9",
         },
       },

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Checkeko — vérification pour les rédactions de Madagascar",
+    "title": "{brand} — vérification pour les rédactions de Madagascar",
     "description": "Vérifiez une information, trouvez ses sources et les bons experts, en malagasy, en français et en anglais."
   },
   "nav": {
@@ -72,7 +72,7 @@
     }
   },
   "landing": {
-    "kicker": "CHECKEKO — VÉRIFICATION POUR LES RÉDACTIONS DE MADAGASCAR",
+    "kicker": "{brand} — VÉRIFICATION POUR LES RÉDACTIONS DE MADAGASCAR",
     "line1": "Une information circule,",
     "line2a": "on la",
     "line2b": "vérifie.",
@@ -90,7 +90,7 @@
       "PIROGUE DE PÊCHE · MADAGASCAR"
     ],
     "manifesto": {
-      "before": "Checkeko ne dit jamais vrai ou faux. Il montre les sources, mesure leur solidité et signale ce qui manque. Au bout du compte, c'est",
+      "before": "{brand} ne dit jamais vrai ou faux. Il montre les sources, mesure leur solidité et signale ce qui manque. Au bout du compte, c'est",
       "boxed": "le journaliste",
       "after": "qui décide."
     },
@@ -146,7 +146,7 @@
       "figure": "100",
       "unit": "%",
       "text": "Une source que la recherche de la requête n'a pas renvoyée n'apparaît jamais à l'écran. L'affirmation repasse alors en « insuffisant ».",
-      "author": "RÈGLE N° 1 DE CHECKEKO"
+      "author": "RÈGLE N° 1 DE {brand}"
     },
     "objections": {
       "items": [
@@ -159,9 +159,9 @@
     },
     "footer": {
       "kicker": "UNE INFORMATION À VÉRIFIER ?",
-      "cta": "Ouvrir Checkeko",
+      "cta": "Ouvrir {brand}",
       "reassurance": "SANS COMPTE — MALAGASY, FRANÇAIS, ANGLAIS",
-      "left": "© 2026 — CHECKEKO",
+      "left": "© 2026 — {brand}",
       "middle": "MG · FR · EN",
       "right": "CONÇU POUR LES RÉDACTIONS DE MADAGASCAR"
     }
@@ -222,7 +222,7 @@
   },
   "verify": {
     "title": "Vérifier une information",
-    "lead": "Collez un texte ou un lien. Checkeko isole les affirmations vérifiables et cherche leurs sources.",
+    "lead": "Collez un texte ou un lien. {brand} isole les affirmations vérifiables et cherche leurs sources.",
     "modeText": "Texte",
     "modeUrl": "Lien",
     "placeholderText": "Collez le message, l'article ou la déclaration à vérifier…",

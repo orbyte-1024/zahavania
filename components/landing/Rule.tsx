@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useRef } from "react";
 import { useScene, type SceneFactory } from "@/components/landing/engine";
 import { easeInOut, easeOut, pinnedProgress, seg } from "@/lib/motion/scroll";
+import { BRAND_NAME_UPPER } from "@/lib/brand";
 
 export function Rule() {
   const t = useTranslations("landing.rule");
@@ -66,7 +67,7 @@ export function Rule() {
             <span className="q-rule" data-rule aria-hidden="true" />
             <div className="q-sign-row">
               <p className="q-name mono" data-name>
-                {t("author")}
+                {t("author", { brand: BRAND_NAME_UPPER })}
               </p>
               <p className="q-fig" data-figure>
                 <span className="fig-val" data-value>

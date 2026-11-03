@@ -14,8 +14,9 @@ import { Process } from "@/components/landing/Process";
 import { Rule } from "@/components/landing/Rule";
 import { Tools } from "@/components/landing/Tools";
 import "@/components/landing/landing.css";
+import { BRAND_NAME } from "@/lib/brand";
 
-const WORDMARK = "Checkeko";
+const WORDMARK = BRAND_NAME;
 const HANDOFF_MS = 900;
 
 function Chrome() {

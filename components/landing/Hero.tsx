@@ -9,6 +9,7 @@ import { useEngine, useScene, type SceneFactory } from "@/components/landing/eng
 import { FLOATER_IMAGES } from "@/lib/landing-images";
 import { createGrow } from "@/lib/motion/grow";
 import { easeInOut, easeOut, mix, pinnedProgress, seg } from "@/lib/motion/scroll";
+import { BRAND_NAME_UPPER } from "@/lib/brand";
 
 const DispatchCloud = dynamic(() => import("@/components/landing/DispatchCloud"), { ssr: false });
 
@@ -139,7 +140,7 @@ export function Hero() {
 
         <div className="hero-copy">
           <p className="hero-kicker mono" data-kicker>
-            {t("kicker")}
+            {t("kicker", { brand: BRAND_NAME_UPPER })}
           </p>
           <h1 className="hero-title">
             <span className="hero-line1" data-line1>

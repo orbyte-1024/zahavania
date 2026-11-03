@@ -8,6 +8,7 @@ import { useState, type ReactNode } from "react";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { LIVE_MODULES, MODULE_IDS, modulePath, type ModuleId } from "@/lib/modules";
 import "@/components/workspace/workspace.css";
+import { BRAND_NAME } from "@/lib/brand";
 
 function ModuleNav({ onNavigate }: { onNavigate?: () => void }) {
   const t = useTranslations("modules");
@@ -63,7 +64,7 @@ export function Workspace({ children }: { children: ReactNode }) {
 
       <aside className="rail">
         <Link href="/" className="rail-wordmark">
-          Checkeko
+          {BRAND_NAME}
         </Link>
         <ModuleNav />
         <FilesLink />
@@ -74,7 +75,7 @@ export function Workspace({ children }: { children: ReactNode }) {
 
       <header className="topbar">
         <Link href="/" className="rail-wordmark">
-          Checkeko
+          {BRAND_NAME}
         </Link>
         <button type="button" className="topbar-menu mono" aria-expanded={open} onClick={() => setOpen(true)}>
           {t("menu")}
@@ -92,7 +93,7 @@ export function Workspace({ children }: { children: ReactNode }) {
           >
             <div className="sheet-head">
               <Link href="/" className="rail-wordmark" onClick={() => setOpen(false)}>
-                Checkeko
+                {BRAND_NAME}
               </Link>
               <button type="button" className="topbar-menu mono" onClick={() => setOpen(false)}>
                 {t("close")}

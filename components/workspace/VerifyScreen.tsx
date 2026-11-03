@@ -20,6 +20,7 @@ import {
   rise,
   stagger,
 } from "@/components/workspace/ui";
+import { BRAND_NAME } from "@/lib/brand";
 
 const MAX_TEXT = 8000;
 type Mode = "text" | "url" | "image";
@@ -281,7 +282,7 @@ export function VerifyScreen() {
 
   return (
     <div className="screen-grid">
-      <ScreenHeader need={`${tm("need")} · ${tm("state")}`} title={t("title")} lead={t("lead")} />
+      <ScreenHeader need={`${tm("need")} · ${tm("state")}`} title={t("title")} lead={t("lead", { brand: BRAND_NAME })} />
 
       <motion.form className="panel form" onSubmit={submit} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}>
         <div className="form-row">

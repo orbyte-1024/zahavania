@@ -57,7 +57,7 @@ test("cache keys are per user and ignore case and spacing", () => {
 });
 
 test("demo recordings round-trip and reject bad files", async () => {
-  const dir = await mkdtemp(path.join(tmpdir(), "checkeko-demo-"));
+  const dir = await mkdtemp(path.join(tmpdir(), "zahavania-demo-"));
   try {
     const key = hashKey(["verify-text", "scenario"]);
     assert.equal(await readDemoRecording("verify-text", key, dir), null);

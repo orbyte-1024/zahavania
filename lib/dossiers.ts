@@ -1,4 +1,5 @@
 import type { VerifyTextSuccess } from "@/lib/api/contract";
+import { BRAND_NAME_UPPER, BRAND_SLUG } from "@/lib/brand";
 
 export type Decision = "validate" | "complete" | "reject";
 
@@ -13,8 +14,9 @@ export type SavedReport = {
   decisions: Record<string, Decision>;
 };
 
-export const DOSSIERS_KEY = "checkeko:dossiers:v1";
-const CHANGE_EVENT = "checkeko:dossiers";
+export const DOSSIERS_KEY = `${BRAND_SLUG}:dossiers:v1`;
+export const LEGACY_DOSSIERS_KEY = "checkeko:dossiers:v1";
+const CHANGE_EVENT = `${BRAND_SLUG}:dossiers`;
 const MAX_REPORTS = 50;
 
 function storage(): Storage | null {
@@ -25,9 +27,23 @@ function storage(): Storage | null {
   }
 }
 
+export function migrateLegacyDossiers(store: Pick<Storage, "getItem" | "setItem" | "removeItem"> | null): void {
+  if (!store) return;
+  try {
+    const legacy = store.getItem(LEGACY_DOSSIERS_KEY);
+    if (legacy === null) return;
+    if (store.getItem(DOSSIERS_KEY) === null) store.setItem(DOSSIERS_KEY, legacy);
+    store.removeItem(LEGACY_DOSSIERS_KEY);
+  } catch {
+    return;
+  }
+}
+
 export function readRaw(): string | null {
   try {
-    return storage()?.getItem(DOSSIERS_KEY) ?? null;
+    const store = storage();
+    migrateLegacyDossiers(store);
+    return store?.getItem(DOSSIERS_KEY) ?? null;
   } catch {
     return null;
   }
@@ -95,7 +111,7 @@ export type ReportLabels = {
 
 export function reportToText(report: SavedReport, labels: ReportLabels): string {
   const lines: string[] = [];
-  lines.push(`CHECKEKO — ${labels.savedOn} ${report.savedAt.slice(0, 10)}`);
+  lines.push(`${BRAND_NAME_UPPER} — ${labels.savedOn} ${report.savedAt.slice(0, 10)}`);
   if (report.meta.analyzedUrl) lines.push(report.meta.analyzedUrl);
   lines.push("", report.result.summary, "", `${labels.globalIndex}: ${report.result.globalIndex}/100`, "");
   report.result.claims.forEach((claim, i) => {
