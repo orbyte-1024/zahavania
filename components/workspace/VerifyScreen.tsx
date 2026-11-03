@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type { Language, ScoreItem, ScoredClaim, VerifyTextSuccess } from "@/lib/api/contract";
@@ -248,8 +248,9 @@ export function VerifyScreen() {
   const tm = useTranslations("modules.verify");
   const tc = useTranslations("common");
   const tl = useTranslations("locale");
-  const [mode, setMode] = useState<Mode>("text");
-  const [content, setContent] = useState("");
+  const params = useSearchParams();
+  const [mode, setMode] = useState<Mode>(() => (params.get("url") ? "url" : "text"));
+  const [content, setContent] = useState(() => params.get("url") ?? "");
   const [lang, setLang] = useState<Language | "auto">("auto");
   const [phase, setPhase] = useState<Phase<VerifyTextSuccess>>({ kind: "idle" });
   const [stage, setStage] = useState(0);

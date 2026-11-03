@@ -44,7 +44,7 @@
       "name": "National monitoring",
       "short": "Monitoring",
       "desc": "RSS feeds from Malagasy media, filtered by source, language and topic. Title, link and excerpt only.",
-      "state": "IN PREPARATION",
+      "state": "LIVE",
       "rail": "Media monitoring"
     },
     "translate": {
@@ -431,14 +431,89 @@
   },
   "monitor": {
     "title": "National monitoring",
-    "lead": "This screen will show RSS feeds from Malagasy media. It is in preparation: nothing is shown until the feeds have been audited.",
-    "rulesTitle": "What monitoring will show",
-    "rules": [
-      "The title, the link and a short excerpt, never the full article.",
-      "The source, the language and the publication date.",
-      "A button to suggest angles from a topic."
-    ],
-    "next": "Next step: list the media that publish a usable RSS feed, with the audit date."
+    "lead": "Public RSS feeds from Malagasy media, grouped into events. Title, link and short excerpt only: read the article on the outlet's site.",
+    "query": "Keyword",
+    "queryPlaceholder": "rice, power cuts, CENI…",
+    "themeLabel": "Topic",
+    "anyTheme": "All topics",
+    "region": "Region",
+    "anyRegion": "Whole country",
+    "district": "District",
+    "anyDistrict": "All districts",
+    "period": "Period",
+    "periods": {
+      "24": "24 h",
+      "72": "3 days",
+      "168": "7 days"
+    },
+    "submit": "Refresh monitoring",
+    "loading": "Reading the feeds of {count} outlets…",
+    "empty": "No article matches these filters over the period. Widen the period or remove a filter.",
+    "showAll": "Show all {count} events",
+    "showLess": "Show less",
+    "coverageLine": "{matched} articles kept out of {fetched} read, from {sources} of {configured} outlets.",
+    "window": "From {from} to {to}",
+    "audited": "feeds audited on {date}",
+    "failedSources": "Feeds unavailable this time: {names}.",
+    "truncated": "Too many articles: only the most recent are shown.",
+    "analysisUnavailable": "Version comparison unavailable",
+    "alerts": "Alerts",
+    "severity": {
+      "info": "Info",
+      "attention": "Attention",
+      "urgent": "Urgent"
+    },
+    "alertKind": {
+      "new_event": "new event",
+      "rising_event": "rising story",
+      "contradictory_versions": "conflicting versions"
+    },
+    "eventFacts": "{articles, plural, one {# article} other {# articles}}, {sources, plural, one {# outlet} other {# outlets}}",
+    "lastSeen": "latest on {date}",
+    "momentum": {
+      "steady": "Steady",
+      "rising": "Rising",
+      "surge": "Surging"
+    },
+    "theme": {
+      "politics": "Politics",
+      "economy": "Economy",
+      "agriculture": "Agriculture",
+      "health": "Health",
+      "education": "Education",
+      "environment": "Environment",
+      "security_justice": "Security and justice",
+      "infrastructure": "Infrastructure",
+      "energy_mining": "Energy and mining",
+      "society": "Society",
+      "sport": "Sport",
+      "general": "General"
+    },
+    "coverage": {
+      "divergent": "Outlets do not tell the same story",
+      "no_divergence_found": "No divergence found between outlets",
+      "single_source": "A single outlet",
+      "not_analysed": "Versions not compared"
+    },
+    "sharedFacts": "Shared facts",
+    "verifyArticle": "Verify this article",
+    "toAngles": "Suggest angles",
+    "limitsTitle": "Limits",
+    "limits": {
+      "headlines_and_excerpts_only": "Only the title and a short excerpt are read: the full article stays on the outlet's site.",
+      "lexical_event_grouping": "Articles are grouped by shared words: two close stories can be merged or split by mistake.",
+      "location_inferred_from_text": "Region and district are inferred from the text: they can be missing or wrong.",
+      "ai_summary_from_headlines": "Summaries and divergences are written by AI from titles and excerpts only: check them in the articles.",
+      "ai_analysis_unavailable": "AI version comparison is unavailable: events are shown without it.",
+      "ai_analysis_skipped": "Version comparison was not run for this search.",
+      "ai_references_filtered": "AI references to articles missing from the feeds were removed.",
+      "feed_failures": "Some feeds did not answer: monitoring is incomplete.",
+      "articles_truncated": "The number of articles was capped: the oldest are not shown.",
+      "no_matching_articles": "No article matches the filters.",
+      "mock_demo_data": "Demonstration data: these are not real articles."
+    },
+    "sourcesTitle": "Outlets followed ({count})",
+    "policy": "Public RSS feeds only. No article is copied: title, link, short excerpt, source and date."
   },
   "stats": {
     "title": "Key figures",

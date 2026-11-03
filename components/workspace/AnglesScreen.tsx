@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState, useSyncExternalStore, type FormEvent } from "react";
 import type { ClaimStatus, EditorialAnglesSuccess, Language } from "@/lib/api/contract";
@@ -35,7 +36,8 @@ export function AnglesScreen() {
   const raw = useSyncExternalStore(subscribe, readHandoff, serverHandoff);
   const [dismissed, setDismissed] = useState(false);
   const claims = useMemo(() => (dismissed ? [] : parseClaims(raw)), [raw, dismissed]);
-  const [subject, setSubject] = useState("");
+  const params = useSearchParams();
+  const [subject, setSubject] = useState(() => params.get("subject")?.slice(0, 300) ?? "");
   const [lang, setLang] = useState<Language>(locale);
   const [phase, setPhase] = useState<Phase<EditorialAnglesSuccess>>({ kind: "idle" });
 

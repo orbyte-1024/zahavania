@@ -44,7 +44,7 @@
       "name": "Fanaraha-maso nasionaly",
       "short": "Fanaraha-maso",
       "desc": "Ny RSS an'ny haino aman-jery malagasy, sivanina araka ny loharano, ny fiteny ary ny lohahevitra. Lohateny, rohy ary sombiny ihany.",
-      "state": "AN-DALAM-PANOMANANA",
+      "state": "MANDEHA",
       "rail": "Fanaraha-maso"
     },
     "translate": {
@@ -431,14 +431,89 @@
   },
   "monitor": {
     "title": "Fanaraha-maso nasionaly",
-    "lead": "Hampiseho ny RSS an'ny haino aman-jery malagasy ity efijery ity. Mbola an-dalam-panomanana izy : tsy misy aseho raha tsy voadinika ireo RSS.",
-    "rulesTitle": "Izay hasehon'ny fanaraha-maso",
-    "rules": [
-      "Ny lohateny, ny rohy ary sombiny fohy, tsy ny lahatsoratra manontolo mihitsy.",
-      "Ny loharano, ny fiteny ary ny daty namoahana.",
-      "Bokotra hanolorana lafiny avy amin'ny lohahevitra iray."
-    ],
-    "next": "Dingana manaraka : lisitry ny haino aman-jery mamoaka RSS azo ampiasaina, miaraka amin'ny daty nandinihana."
+    "lead": "Ireo RSS ampahibemaso an'ny haino aman-jery malagasy, voavondrona ho hetsika. Lohateny, rohy ary ampahany fohy ihany: vakio ao amin'ny tranonkalan'ny haino aman-jery ny lahatsoratra.",
+    "query": "Teny fanalahidy",
+    "queryPlaceholder": "vary, fahatapahan-jiro, CENI…",
+    "themeLabel": "Lohahevitra",
+    "anyTheme": "Lohahevitra rehetra",
+    "region": "Faritra",
+    "anyRegion": "Firenena manontolo",
+    "district": "Distrika",
+    "anyDistrict": "Distrika rehetra",
+    "period": "Fe-potoana",
+    "periods": {
+      "24": "24 ora",
+      "72": "3 andro",
+      "168": "7 andro"
+    },
+    "submit": "Havaozina ny fanaraha-maso",
+    "loading": "Mamaky ny RSS an'ny haino aman-jery {count}…",
+    "empty": "Tsy misy lahatsoratra mifanaraka amin'ireo sivana ireo amin'io fe-potoana io. Halavao ny fe-potoana na esory ny sivana iray.",
+    "showAll": "Jereo ny hetsika {count}",
+    "showLess": "Hihena",
+    "coverageLine": "Lahatsoratra {matched} notazomina tamin'ny {fetched} novakiana, avy amin'ny haino aman-jery {sources} amin'ny {configured}.",
+    "window": "Nanomboka ny {from} ka hatramin'ny {to}",
+    "audited": "RSS nohamarinina ny {date}",
+    "failedSources": "RSS tsy azo tamin'ity indray mitoraka ity: {names}.",
+    "truncated": "Be loatra ny lahatsoratra: ireo farany indrindra ihany no aseho.",
+    "analysisUnavailable": "Tsy misy ny fampitahana ny dikan-teny",
+    "alerts": "Fampitandremana",
+    "severity": {
+      "info": "Fampahafantarana",
+      "attention": "Mitandrema",
+      "urgent": "Maika"
+    },
+    "alertKind": {
+      "new_event": "hetsika vaovao",
+      "rising_event": "lohahevitra miakatra",
+      "contradictory_versions": "dikan-teny mifanohitra"
+    },
+    "eventFacts": "lahatsoratra {articles}, haino aman-jery {sources}",
+    "lastSeen": "farany ny {date}",
+    "momentum": {
+      "steady": "Tsy miova",
+      "rising": "Miakatra",
+      "surge": "Miakatra mafy"
+    },
+    "theme": {
+      "politics": "Politika",
+      "economy": "Toekarena",
+      "agriculture": "Fambolena",
+      "health": "Fahasalamana",
+      "education": "Fanabeazana",
+      "environment": "Tontolo iainana",
+      "security_justice": "Filaminana sy fitsarana",
+      "infrastructure": "Fotodrafitrasa",
+      "energy_mining": "Angovo sy harena an-kibon'ny tany",
+      "society": "Fiaraha-monina",
+      "sport": "Fanatanjahantena",
+      "general": "Ankapobeny"
+    },
+    "coverage": {
+      "divergent": "Tsy mitovy ny lazain'ny haino aman-jery",
+      "no_divergence_found": "Tsy nisy fahasamihafana hita teo amin'ny haino aman-jery",
+      "single_source": "Haino aman-jery iray ihany",
+      "not_analysed": "Tsy nampitahaina ny dikan-teny"
+    },
+    "sharedFacts": "Zavatra iraisana",
+    "verifyArticle": "Hamarino ity lahatsoratra ity",
+    "toAngles": "Hanolo-kevitra fomba fijery",
+    "limitsTitle": "Fetra",
+    "limits": {
+      "headlines_and_excerpts_only": "Ny lohateny sy ampahany fohy ihany no vakiana: ao amin'ny haino aman-jery ny lahatsoratra feno.",
+      "lexical_event_grouping": "Avondrona araka ny teny iraisana ny lahatsoratra: mety hatambatra na hosarahina diso ny lohahevitra roa mifanakaiky.",
+      "location_inferred_from_text": "Avy amin'ny lahatsoratra no ahitana ny faritra sy ny distrika: mety tsy misy na diso izy ireo.",
+      "ai_summary_from_headlines": "Ny IA no manoratra ny famintinana sy ny fahasamihafana avy amin'ny lohateny sy ampahany ihany: hamarino ao amin'ny lahatsoratra.",
+      "ai_analysis_unavailable": "Tsy misy ny fampitahana ny dikan-teny ataon'ny IA: aseho tsy misy izany ny hetsika.",
+      "ai_analysis_skipped": "Tsy natao ho an'ity fikarohana ity ny fampitahana ny dikan-teny.",
+      "ai_references_filtered": "Nesorina ireo fanondroan'ny IA lahatsoratra tsy misy ao amin'ny RSS.",
+      "feed_failures": "Tsy namaly ny RSS sasany: tsy feno ny fanaraha-maso.",
+      "articles_truncated": "Voafetra ny isan'ny lahatsoratra: tsy aseho ireo tranainy.",
+      "no_matching_articles": "Tsy misy lahatsoratra mifanaraka amin'ny sivana.",
+      "mock_demo_data": "Angona fampisehoana: tsy tena lahatsoratra ireo."
+    },
+    "sourcesTitle": "Haino aman-jery arahina ({count})",
+    "policy": "RSS ampahibemaso ihany. Tsy misy lahatsoratra adika: lohateny, rohy, ampahany fohy, loharano ary daty."
   },
   "stats": {
     "title": "Isa fototra",
