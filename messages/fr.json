@@ -19,49 +19,56 @@
       "short": "Vérifier",
       "desc": "Un texte ou un lien. Les affirmations sont isolées, confrontées aux sources trouvées par la recherche web, et notées par le code.",
       "need": "BESOIN 1",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Vérifier une info"
     },
     "image": {
       "name": "Authentifier une image",
       "short": "Image",
       "desc": "Métadonnées EXIF, analyse visuelle présentée comme des indices, liens de recherche inversée. Jamais « vrai » ni « faux ».",
       "need": "BESOIN 2",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Analyser une image"
     },
     "monitor": {
       "name": "Veille nationale",
       "short": "Veille",
       "desc": "Les flux RSS des médias malgaches, filtrés par source, langue et sujet. Titre, lien et extrait seulement.",
       "need": "BESOIN 3",
-      "state": "EN PRÉPARATION"
+      "state": "EN PRÉPARATION",
+      "rail": "Veille des médias"
     },
     "translate": {
       "name": "Traduire",
       "short": "Traduire",
       "desc": "Malagasy, français, anglais. Le malagasy généré est toujours marqué « à relire ».",
       "need": "BESOIN 4",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Traduire"
     },
     "experts": {
       "name": "Trouver un expert",
       "short": "Experts",
       "desc": "Un sujet, une région, une langue. Les experts viennent uniquement de l'annuaire consenti, jamais du modèle.",
       "need": "BESOIN 6",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Trouver un expert"
     },
     "stats": {
       "name": "Chiffres et agenda",
       "short": "Chiffres",
       "desc": "Quelques indicateurs clés, chacun avec sa source, sa période et sa date de mise à jour.",
       "need": "BESOIN 7",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Chiffres clés"
     },
     "angles": {
       "name": "Angles de reportage",
       "short": "Angles",
       "desc": "Trois à cinq angles construits sur les seules affirmations confirmées, avec questions et profils à interroger.",
       "need": "BESOIN 8",
-      "state": "EN SERVICE"
+      "state": "EN SERVICE",
+      "rail": "Angles de reportage"
     }
   },
   "imageReport": {
@@ -414,7 +421,8 @@
     "export": "Exporter en texte",
     "delete": "Supprimer",
     "confirmDelete": "Confirmer la suppression",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "rail": "Mes dossiers"
   },
   "credits": {
     "kicker": "PHOTOS",

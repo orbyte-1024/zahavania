@@ -27,8 +27,7 @@ function ModuleNav({ onNavigate }: { onNavigate?: () => void }) {
               onClick={onNavigate}
             >
               {current && <motion.span layoutId="rail-active" className="rail-active" transition={{ type: "spring", stiffness: 380, damping: 34 }} />}
-              <span className="rail-need mono">{t(`${id}.need`)}</span>
-              <span className="rail-name">{t(`${id}.short`)}</span>
+              <span className="rail-name">{t(`${id}.rail`)}</span>
               <span className="rail-dot" data-live={LIVE_MODULES.has(id) || undefined} aria-hidden="true" />
             </Link>
           </li>
@@ -45,8 +44,7 @@ function FilesLink({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <Link href="/app/files" className="rail-link rail-files" aria-current={current ? "page" : undefined} onClick={onNavigate}>
       {current && <motion.span layoutId="rail-active" className="rail-active" transition={{ type: "spring", stiffness: 380, damping: 34 }} />}
-      <span className="rail-need mono">{t("kicker")}</span>
-      <span className="rail-name">{t("short")}</span>
+      <span className="rail-name">{t("rail")}</span>
       <span aria-hidden="true" />
     </Link>
   );

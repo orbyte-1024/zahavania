@@ -29,11 +29,11 @@
 .rail-link {
   position: relative;
   display: grid;
-  grid-template-columns: 74px minmax(0, 1fr) 8px;
+  grid-template-columns: minmax(0, 1fr) 8px;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   min-height: 46px;
-  padding: 0 10px;
+  padding: 0 12px;
   border-radius: var(--radius);
   color: var(--ash);
   transition: color 0.3s;
@@ -52,12 +52,12 @@
   border-radius: var(--radius);
 }
 
-.rail-need {
-  font-size: 10px;
-}
 
 .rail-name {
   font-size: 17px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rail-dot {
@@ -1197,6 +1197,7 @@
 
   .sheet .rail-name {
     font-size: 24px;
+    white-space: normal;
   }
 
   .result-top {
