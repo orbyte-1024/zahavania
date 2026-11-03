@@ -49,6 +49,7 @@ describe("POST /api/verify/image", () => {
     );
     expect(JSON.stringify(body)).not.toContain("confidentiel-source");
     expect(Object.keys(body).sort()).toEqual([
+      "aiDetection",
       "analysis",
       "file",
       "meta",

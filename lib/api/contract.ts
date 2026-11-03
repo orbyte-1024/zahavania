@@ -5,6 +5,7 @@ import type { anglesInputSchema, AnglesOutput, verifyInputSchema } from "@/lib/a
 import type { Domain } from "@/lib/constants/domains";
 import type { Region } from "@/lib/constants/regions";
 import type { ExpertSuggestion, SuggestNotice } from "@/lib/experts/suggest";
+import type { AiDetection } from "@/lib/ai-detection";
 import type { ScoredVerification } from "@/lib/score";
 import type { monitorInputSchema } from "@/lib/monitor/input";
 import type { MonitorPayload, MonitorSourceSummary } from "@/lib/monitor/types";
@@ -17,6 +18,7 @@ export type {
   SourceKind,
 } from "@/lib/ai/schemas";
 export type { ScoreCode, ScoreItem, ScoredClaim, ScoredVerification } from "@/lib/score";
+export type { AiDetection, AiSignalLevel } from "@/lib/ai-detection";
 export type { ContributionType } from "@/lib/ai/expert-schemas";
 export type { Domain } from "@/lib/constants/domains";
 export type { Region } from "@/lib/constants/regions";
@@ -142,6 +144,7 @@ export type VerifyImageSuccess = {
   warnings: { code: string; message: string }[];
   reverseSearch: { googleLens: { name: string; url: string }; tineye: { name: string; url: string } };
   analysis: VisionAnalysis | null;
+  aiDetection: AiDetection;
   verification: {
     status: "indices concordants" | "indices contradictoires" | "non concluant";
     summary: string;
