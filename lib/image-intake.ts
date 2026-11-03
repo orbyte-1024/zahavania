@@ -1,7 +1,7 @@
 import { imageSize } from "image-size";
 
 /** Hard cap for one upload: 8 MiB (8 × 1024 × 1024). */
-export const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+export const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
 /**
  * Multipart boundaries and part headers wrap the file in a few hundred bytes.

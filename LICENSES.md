@@ -4,6 +4,7 @@
 | ------ | ------- | ------- |
 | @supabase/ssr | 0.12.7 | MIT |
 | @supabase/supabase-js | 2.118.0 | MIT |
+| c2pa-node | 0.5.26 | MIT |
 | exifr | 7.1.3 | MIT |
 | image-size | 2.0.4 | MIT |
 | openai | 7.47.0 | Apache-2.0 |

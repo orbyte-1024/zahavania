@@ -108,7 +108,7 @@ function base64Url(bytes: Uint8Array): string {
     "data:" +
     bytesToMimeType(bytes) +
     ";base64," +
-    bin.replace(/\+/g, "+").replace(/=+$/, "").replace(/\//g, "/")
+    bin.replace(/\+/g, "-").replace(/=+$/, "").replace(/\//g, "_")
   );
 }
 
@@ -170,7 +170,8 @@ export async function analyzeImage(
       model: process.env.AI_MODEL,
     });
     return { analysis: result, warnings };
-  } catch {
+  } catch (e: unknown) {
+    console.error("VISION_ANALYZER_ERROR:", e instanceof Error ? e.message : String(e), "USE_MOCK:", process.env.USE_MOCK, "model:", process.env.AI_MODEL);
     warnings.push({
       code: "ANALYSE_IA_NON_DISPONIBLE",
       message:
