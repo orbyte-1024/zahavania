@@ -666,10 +666,14 @@
 }
 
 .source-kind {
-  grid-area: kind;
   align-self: start;
   color: var(--ash);
   font-size: 10.5px;
+}
+
+/* Only the sources list defines a "kind" grid area; elsewhere the badge must flow normally. */
+.source .source-kind {
+  grid-area: kind;
 }
 
 .source-kind[data-kind="official"] {
