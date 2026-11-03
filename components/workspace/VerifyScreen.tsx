@@ -3,8 +3,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type { Language, ScoreItem, ScoredClaim, VerifyTextSuccess } from "@/lib/api/contract";
+import { reportTitle, saveReport, type Decision } from "@/lib/dossiers";
 import { CLAIMS_HANDOFF_KEY, callApi, type Phase } from "@/components/workspace/requests";
 import {
   Badge,
@@ -21,8 +22,7 @@ import {
 } from "@/components/workspace/ui";
 
 const MAX_TEXT = 8000;
-type Mode = "text" | "url";
-type Decision = "validate" | "complete" | "reject";
+type Mode = "text" | "url" | "image";
 
 function Breakdown({ items }: { items: ScoreItem[] }) {
   const t = useTranslations("score");
@@ -67,9 +67,18 @@ function Why({ items, label }: { items: ScoreItem[]; label: string }) {
   );
 }
 
-function ClaimCard({ claim, index }: { claim: ScoredClaim; index: number }) {
+function ClaimCard({
+  claim,
+  index,
+  decision,
+  onDecide,
+}: {
+  claim: ScoredClaim;
+  index: number;
+  decision: Decision | null;
+  onDecide: (decision: Decision | null) => void;
+}) {
   const t = useTranslations("verify");
-  const [decision, setDecision] = useState<Decision | null>(null);
 
   return (
     <motion.article className="claim" variants={rise} data-decision={decision ?? undefined}>
@@ -134,7 +143,7 @@ function ClaimCard({ claim, index }: { claim: ScoredClaim; index: number }) {
         <Why items={claim.breakdown} label={t("why")} />
         <div className="decision" role="group" aria-label={t("decision")}>
           {(["validate", "complete", "reject"] as const).map((d) => (
-            <button key={d} type="button" className="decision-item mono" aria-pressed={decision === d} onClick={() => setDecision(decision === d ? null : d)}>
+            <button key={d} type="button" className="decision-item mono" aria-pressed={decision === d} onClick={() => onDecide(decision === d ? null : d)}>
               {t(d)}
             </button>
           ))}
@@ -144,7 +153,17 @@ function ClaimCard({ claim, index }: { claim: ScoredClaim; index: number }) {
   );
 }
 
-function Result({ data }: { data: VerifyTextSuccess }) {
+export function VerifyReport({
+  data,
+  decisions,
+  onDecide,
+  actions,
+}: {
+  data: VerifyTextSuccess;
+  decisions: Record<string, Decision>;
+  onDecide: (index: number, decision: Decision | null) => void;
+  actions?: ReactNode;
+}) {
   const t = useTranslations("verify");
   const tc = useTranslations("common");
   const locale = useLocale();
@@ -183,6 +202,7 @@ function Result({ data }: { data: VerifyTextSuccess }) {
             <button type="button" className="ghost-button" onClick={toExperts} disabled={result.claims.length === 0}>
               {t("toExperts")} →
             </button>
+            {actions}
           </div>
         </div>
       </motion.div>
@@ -197,7 +217,13 @@ function Result({ data }: { data: VerifyTextSuccess }) {
       ) : (
         <motion.div className="claims" variants={stagger}>
           {result.claims.map((claim, i) => (
-            <ClaimCard key={`${i}-${claim.text}`} claim={claim} index={i} />
+            <ClaimCard
+              key={`${i}-${claim.text}`}
+              claim={claim}
+              index={i}
+              decision={decisions[String(i)] ?? null}
+              onDecide={(d) => onDecide(i, d)}
+            />
           ))}
         </motion.div>
       )}
@@ -226,6 +252,9 @@ export function VerifyScreen() {
   const [lang, setLang] = useState<Language | "auto">("auto");
   const [phase, setPhase] = useState<Phase<VerifyTextSuccess>>({ kind: "idle" });
   const [stage, setStage] = useState(0);
+  const [decisions, setDecisions] = useState<Record<string, Decision>>({});
+  const [savedState, setSavedState] = useState<"idle" | "saved" | "failed">("idle");
+  const router = useRouter();
   const stages = t.raw("stages") as string[];
 
   useEffect(() => {
@@ -238,7 +267,10 @@ export function VerifyScreen() {
     event.preventDefault();
     const value = content.trim();
     if (!value) return;
+    if (mode === "image") return;
     setStage(0);
+    setDecisions({});
+    setSavedState("idle");
     setPhase({ kind: "loading" });
     const res = await callApi("/api/verify/text", { content: value, type: mode, ...(lang === "auto" ? {} : { lang }) });
     if (res.ok) setPhase({ kind: "done", data: res });
@@ -257,12 +289,17 @@ export function VerifyScreen() {
             label={t("title")}
             value={mode}
             onChange={(m) => {
+              if (m === "image") {
+                router.push("/app/image");
+                return;
+              }
               setMode(m);
               setContent("");
             }}
             options={[
               { value: "text", label: t("modeText") },
               { value: "url", label: t("modeUrl") },
+              { value: "image", label: t("modeImage") },
             ]}
           />
           {mode === "text" && (
@@ -323,7 +360,42 @@ export function VerifyScreen() {
           </motion.div>
         )}
         {phase.kind === "error" && <ErrorNote key="error" code={phase.code} retryAfter={phase.retryAfter} />}
-        {phase.kind === "done" && <Result key="result" data={phase.data} />}
+        {phase.kind === "done" && (
+          <VerifyReport
+            key="result"
+            data={phase.data}
+            decisions={decisions}
+            onDecide={(index, d) => {
+              setDecisions((current) => {
+                const next = { ...current };
+                if (d) next[String(index)] = d;
+                else delete next[String(index)];
+                return next;
+              });
+              setSavedState("idle");
+            }}
+            actions={
+              <button
+                type="button"
+                className="ghost-button"
+                disabled={savedState === "saved"}
+                onClick={() => {
+                  const saved = saveReport({
+                    title: reportTitle(phase.data.result),
+                    mode: mode === "url" ? "url" : "text",
+                    mock: phase.data.mock,
+                    result: phase.data.result,
+                    meta: phase.data.meta,
+                    decisions,
+                  });
+                  setSavedState(saved ? "saved" : "failed");
+                }}
+              >
+                {savedState === "saved" ? t("saved") : savedState === "failed" ? t("saveFailed") : t("save")}
+              </button>
+            }
+          />
+        )}
       </AnimatePresence>
     </div>
   );

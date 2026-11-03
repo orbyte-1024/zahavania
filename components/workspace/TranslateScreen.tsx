@@ -3,11 +3,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
-import type { Language } from "@/lib/api/contract";
-import { callLegacy, type Phase } from "@/components/workspace/requests";
+import type { Language, TranslateSuccess } from "@/lib/api/contract";
+import { callApi, type Phase } from "@/components/workspace/requests";
 import { Badge, ErrorNote, Field, ScreenHeader, SubmitButton } from "@/components/workspace/ui";
-
-type TranslateResponse = { ok: true; translatedText: string; sourceLang: Language; targetLang: Language };
 
 const LANGS: Language[] = ["mg", "fr", "en"];
 
@@ -20,7 +18,7 @@ export function TranslateScreen() {
   const [to, setTo] = useState<Language>("mg");
   const [text, setText] = useState("");
   const [copied, setCopied] = useState(false);
-  const [phase, setPhase] = useState<Phase<TranslateResponse>>({ kind: "idle" });
+  const [phase, setPhase] = useState<Phase<TranslateSuccess>>({ kind: "idle" });
 
   const swap = () => {
     setFrom(to);
@@ -36,13 +34,9 @@ export function TranslateScreen() {
     if (!text.trim() || from === to) return;
     setPhase({ kind: "loading" });
     setCopied(false);
-    const res = await callLegacy<TranslateResponse>("/api/translate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sourceLang: from, targetLang: to, text: text.trim() }),
-    });
-    if (res.ok) setPhase({ kind: "done", data: res.data });
-    else setPhase({ kind: "error", code: res.code, retryAfter: res.retryAfter });
+    const res = await callApi("/api/translate", { sourceLang: from, targetLang: to, text: text.trim() });
+    if (res.ok) setPhase({ kind: "done", data: res });
+    else setPhase({ kind: "error", code: res.error.code, retryAfter: res.retryAfterSeconds });
   };
 
   const copy = async () => {
@@ -105,7 +99,8 @@ export function TranslateScreen() {
               <p className="mono ash">
                 {t("result")} · {tl(phase.data.targetLang)}
               </p>
-              {phase.data.targetLang === "mg" && <Badge tone="warn">{t("review")}</Badge>}
+              {phase.data.needsReview && <Badge tone="warn">{t("review")}</Badge>}
+              {phase.data.mock && <Badge tone="accent">{tc("demo")}</Badge>}
             </div>
             <p className="translation-text">{phase.data.translatedText}</p>
             <button type="button" className="link-button mono" onClick={copy}>

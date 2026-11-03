@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run && npm run test:node",
-    "test:node": "node --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/register.mjs --test tests/*.test.mjs"
+    "test:node": "node --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/register.mjs --test tests/*.test.mjs",
+    "stats:update": "node scripts/update-stats.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.2",

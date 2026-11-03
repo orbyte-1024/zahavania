@@ -1,5 +1,5 @@
-import { PlannedScreen } from "@/components/workspace/PlannedScreen";
+import { StatsScreen } from "@/components/workspace/StatsScreen";
 
 export default function StatsPage() {
-  return <PlannedScreen id="stats" />;
+  return <StatsScreen />;
 }

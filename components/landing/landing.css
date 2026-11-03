@@ -177,8 +177,7 @@ body.handoff .dock {
   top: var(--y);
   width: var(--w);
   display: grid;
-  gap: 12px;
-  padding: 14px 14px 18px;
+  overflow: hidden;
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: 0 1px 0 var(--ink-hair) inset;
@@ -192,29 +191,39 @@ body.is-ready .fl {
   clip-path: inset(0 0 0 0);
 }
 
+.fl-image {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.4;
+  overflow: hidden;
+}
+
+.fl-image:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.fl-image img {
+  object-fit: cover;
+}
+
 .fl-label {
   color: var(--ink);
   font-size: 11px;
+  line-height: 1.2;
 }
 
-.fl-lines {
+.fl-caption {
   display: grid;
-  gap: 7px;
+  gap: 5px;
+  padding: 8px 10px 10px;
 }
 
-.fl-lines i {
-  display: block;
-  height: 3px;
-  background: var(--ink-hair);
-  border-radius: 1px;
-}
-
-.fl-lines i:nth-child(2) {
-  width: 82%;
-}
-
-.fl-lines i:nth-child(3) {
-  width: 54%;
+.fl-credit {
+  color: var(--ash);
+  font-size: 7px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 .fl:nth-child(4n + 2) .fl-label {
@@ -1159,11 +1168,19 @@ body.is-static .footer-name .chi {
 
   .fl {
     width: calc(var(--w) * 0.6);
-    padding: 10px 10px 14px;
   }
 
   .fl-label {
     font-size: 9px;
+  }
+
+  .fl-caption {
+    gap: 4px;
+    padding: 6px 6px 7px;
+  }
+
+  .fl-credit {
+    font-size: 6px;
   }
 
   .floaters {

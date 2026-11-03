@@ -3,8 +3,9 @@ import dns from "node:dns";
 import http from "node:http";
 import https from "node:https";
 import net from "node:net";
+import { readIntEnv } from "@/lib/env";
 
-const TIMEOUT_MS = 8_000;
+const fetchTimeoutMs = (): number => readIntEnv("URL_FETCH_TIMEOUT_MS", 12_000, 3_000, 20_000);
 const MAX_BYTES = 2 * 1024 * 1024;
 const MAX_REDIRECTS = 3;
 const ALLOWED_PORTS = new Set(["", "80", "443"]);
@@ -174,7 +175,7 @@ function decodeBody(body: Buffer, contentType: string): string {
 
 function toSafeFetchError(error: unknown, signal: AbortSignal): SafeFetchError {
   if (error instanceof SafeFetchError) return error;
-  if (signal.aborted) return new SafeFetchError("timeout", `no response within ${TIMEOUT_MS} ms`);
+  if (signal.aborted) return new SafeFetchError("timeout", `no response within ${fetchTimeoutMs()} ms`);
   if (error instanceof AggregateError) {
     const codes = error.errors.map((inner: unknown) => (inner instanceof Error ? inner.message : String(inner)));
     return new SafeFetchError("network_error", codes.join("; ") || "connection failed");
@@ -183,7 +184,7 @@ function toSafeFetchError(error: unknown, signal: AbortSignal): SafeFetchError {
 }
 
 export async function safeFetchText(rawUrl: string): Promise<SafeFetchResult> {
-  const signal = AbortSignal.timeout(TIMEOUT_MS);
+  const signal = AbortSignal.timeout(fetchTimeoutMs());
   let url = validatePublicUrl(rawUrl);
 
   for (let redirects = 0; ; redirects += 1) {

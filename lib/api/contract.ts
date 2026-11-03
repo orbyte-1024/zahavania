@@ -85,4 +85,19 @@ export type LegacyErrorBody = { ok: false; erreur: string };
 
 export type EditorialAnglesResponse = EditorialAnglesSuccess | LegacyErrorBody;
 
+export type TranslateRequest = { sourceLang: "mg" | "fr" | "en"; targetLang: "mg" | "fr" | "en"; text: string };
+
+export type TranslateSuccess = {
+  ok: true;
+  mock: boolean;
+  translatedText: string;
+  sourceLang: "mg" | "fr" | "en";
+  targetLang: "mg" | "fr" | "en";
+  needsReview: boolean;
+};
+
+export type TranslateErrorCode = CommonErrorCode;
+
+export type TranslateResponse = TranslateSuccess | ApiErrorBody<TranslateErrorCode>;
+
 export type PingAiResponse = { ok: true; mock: boolean; reponse: string } | LegacyErrorBody;

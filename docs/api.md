@@ -124,6 +124,14 @@ Route-specific error: `directory_unavailable` (503).
 
 Mock mode: topic domains are detected by keywords and the ranking is deterministic. Without Supabase, the 16 fictional seed profiles in `lib/experts/fixtures.ts` are used, with the same consent filter.
 
+## POST /api/translate
+
+Request (`TranslateRequest`), max body 24 KB, unknown keys rejected: `{ "sourceLang": "mg" | "fr" | "en", "targetLang": "mg" | "fr" | "en", "text": string }`. The two languages must differ; `text` is 1 to 5,000 characters.
+
+Success (`TranslateSuccess`): `{ ok: true, mock, translatedText, sourceLang, targetLang, needsReview }`. `needsReview` is true when the target is Malagasy: show "to be reviewed by a speaker".
+
+Errors: the common codes above. Provider details are never returned.
+
 ## POST /api/editorial/angles
 
 Request (`EditorialAnglesRequest`): `{ "subject"?: string, "verificationId"?: string, "claims"?: [{ "text", "status" }], "lang": "mg" | "fr" | "en" }`. A subject or at least one confirmed claim is required.

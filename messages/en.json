@@ -11,13 +11,55 @@
     "skip": "Skip to content"
   },
   "modules": {
-    "verify": { "name": "Check a claim", "short": "Check", "desc": "A text or a link. Claims are isolated, matched against sources found by web search, and scored by code.", "need": "NEED 1", "state": "LIVE" },
-    "image": { "name": "Authenticate an image", "short": "Image", "desc": "EXIF metadata, visual analysis presented as hints, reverse search links. Never \"real\" or \"fake\".", "need": "NEED 2", "state": "LIVE" },
-    "monitor": { "name": "National monitoring", "short": "Monitoring", "desc": "RSS feeds from Malagasy media, filtered by source, language and topic. Title, link and excerpt only.", "need": "NEED 3", "state": "IN PREPARATION" },
-    "translate": { "name": "Translate", "short": "Translate", "desc": "Malagasy, French, English. Generated Malagasy is always marked \"to be reviewed\".", "need": "NEED 4", "state": "LIVE" },
-    "experts": { "name": "Find an expert", "short": "Experts", "desc": "A topic, a region, a language. Experts come only from the consented directory, never from the model.", "need": "NEED 6", "state": "LIVE" },
-    "stats": { "name": "Figures and agenda", "short": "Figures", "desc": "A few key indicators, each with its source, reference period and update date.", "need": "NEED 7", "state": "IN PREPARATION" },
-    "angles": { "name": "Story angles", "short": "Angles", "desc": "Three to five angles built only on confirmed claims, with questions and profiles to interview.", "need": "NEED 8", "state": "LIVE" }
+    "verify": {
+      "name": "Check a claim",
+      "short": "Check",
+      "desc": "A text or a link. Claims are isolated, matched against sources found by web search, and scored by code.",
+      "need": "NEED 1",
+      "state": "LIVE"
+    },
+    "image": {
+      "name": "Authenticate an image",
+      "short": "Image",
+      "desc": "EXIF metadata, visual analysis presented as hints, reverse search links. Never \"real\" or \"fake\".",
+      "need": "NEED 2",
+      "state": "LIVE"
+    },
+    "monitor": {
+      "name": "National monitoring",
+      "short": "Monitoring",
+      "desc": "RSS feeds from Malagasy media, filtered by source, language and topic. Title, link and excerpt only.",
+      "need": "NEED 3",
+      "state": "IN PREPARATION"
+    },
+    "translate": {
+      "name": "Translate",
+      "short": "Translate",
+      "desc": "Malagasy, French, English. Generated Malagasy is always marked \"to be reviewed\".",
+      "need": "NEED 4",
+      "state": "LIVE"
+    },
+    "experts": {
+      "name": "Find an expert",
+      "short": "Experts",
+      "desc": "A topic, a region, a language. Experts come only from the consented directory, never from the model.",
+      "need": "NEED 6",
+      "state": "LIVE"
+    },
+    "stats": {
+      "name": "Figures and agenda",
+      "short": "Figures",
+      "desc": "A few key indicators, each with its source, reference period and update date.",
+      "need": "NEED 7",
+      "state": "LIVE"
+    },
+    "angles": {
+      "name": "Story angles",
+      "short": "Angles",
+      "desc": "Three to five angles built only on confirmed claims, with questions and profiles to interview.",
+      "need": "NEED 8",
+      "state": "LIVE"
+    }
   },
   "landing": {
     "kicker": "CHECKEKO — FACT-CHECKING FOR MADAGASCAR'S NEWSROOMS",
@@ -25,7 +67,18 @@
     "line2a": "we",
     "line2b": "check it.",
     "positioning": "Sources, experts, context. In three languages.",
-    "floaters": ["SCREENSHOT · WHATSAPP", "WIRE · 08:42", "PDF · PRESS RELEASE", "A 2019 FIGURE?", "VIDEO · TIKTOK", "AUDIO · RADIO", "SHORTENED LINK", "NO SOURCE", "PHOTO · FACEBOOK", "FORWARDED ×38"],
+    "floaters": [
+      "POLICE LINE · NEW YORK",
+      "ANTI-CORRUPTION · KHARKIV",
+      "ANTI-CORRUPTION · MANILA",
+      "CYCLONE DAMAGE · MADAGASCAR",
+      "ELECTION · CZECH REPUBLIC",
+      "WILDFIRE · SMOKE",
+      "DEFORESTATION · MADAGASCAR",
+      "PRESS FREEDOM · CAIRO",
+      "WATER POLLUTION · USA",
+      "FLOODING · MADAGASCAR"
+    ],
     "manifesto": {
       "before": "Checkeko never says true or false. It shows the sources, weighs how solid they are and flags what is missing. In the end,",
       "boxed": "the journalist",
@@ -40,9 +93,18 @@
     "motto": {
       "kicker": "WHAT GUIDES EVERY CHECK",
       "words": [
-        { "word": "Source", "hint": "No claim without a link you can open." },
-        { "word": "Cross", "hint": "Three articles copying one press release count as one." },
-        { "word": "Decide", "hint": "The tool ranks the evidence; the conclusion stays human." }
+        {
+          "word": "Source",
+          "hint": "No claim without a link you can open."
+        },
+        {
+          "word": "Cross",
+          "hint": "Three articles copying one press release count as one."
+        },
+        {
+          "word": "Decide",
+          "hint": "The tool ranks the evidence; the conclusion stays human."
+        }
       ]
     },
     "process": {
@@ -52,9 +114,21 @@
       "claim": "\"The price of rice doubled in a month.\"",
       "cta": "Open the tool →",
       "steps": [
-        { "name": "Paste", "meta": "STEP — 01", "desc": "A message, an article or a link. The text is never written to our logs." },
-        { "name": "Search", "meta": "STEP — 02", "desc": "The model searches the web. Any source it cites without having found it is removed." },
-        { "name": "Weigh", "meta": "STEP — 03", "desc": "Code computes the index from source type, independence and date." }
+        {
+          "name": "Paste",
+          "meta": "STEP — 01",
+          "desc": "A message, an article or a link. The text is never written to our logs."
+        },
+        {
+          "name": "Search",
+          "meta": "STEP — 02",
+          "desc": "The model searches the web. Any source it cites without having found it is removed."
+        },
+        {
+          "name": "Weigh",
+          "meta": "STEP — 03",
+          "desc": "Code computes the index from source type, independence and date."
+        }
       ]
     },
     "rule": {
@@ -65,10 +139,23 @@
       "author": "CHECKEKO RULE NO. 1"
     },
     "objections": {
-      "items": ["No verdict.", "No invented source.", "No text in our logs."],
+      "items": [
+        "No verdict.",
+        "No invented source.",
+        "No text in our logs."
+      ],
       "finale": "Just",
       "pill": "evidence.",
-      "trail": ["CONFIRMED", "OFFICIAL SOURCE", "TO CHECK", "INDEPENDENT MEDIA", "INSUFFICIENT", "CONTRADICTED", "DATED 2019", "LINK ↗"]
+      "trail": [
+        "CONFIRMED",
+        "OFFICIAL SOURCE",
+        "TO CHECK",
+        "INDEPENDENT MEDIA",
+        "INSUFFICIENT",
+        "CONTRADICTED",
+        "DATED 2019",
+        "LINK ↗"
+      ]
     },
     "footer": {
       "kicker": "A CLAIM TO CHECK?",
@@ -134,7 +221,12 @@
     "auto": "Automatic",
     "submit": "Check",
     "example": "Madagascar's poverty rate reached 75% in 2022 according to INSTAT, and the price of rice doubled in a month in Antananarivo.",
-    "stages": ["Reading the text", "Searching for sources", "Crossing the sources", "Computing the index"],
+    "stages": [
+      "Reading the text",
+      "Searching for sources",
+      "Crossing the sources",
+      "Computing the index"
+    ],
     "globalIndex": "Overall confidence index",
     "indexNote": "Not a probability: the index measures the quality of the evidence.",
     "why": "Why this index?",
@@ -151,9 +243,21 @@
     "reject": "Reject",
     "toAngles": "Find angles",
     "toExperts": "Find an expert",
-    "kind": { "official": "Official", "independent": "Independent", "other": "Other" },
-    "stance": { "supports": "supports", "contradicts": "contradicts", "context": "context" },
-    "empty": "No checkable claim was found in this text."
+    "kind": {
+      "official": "Official",
+      "independent": "Independent",
+      "other": "Other"
+    },
+    "stance": {
+      "supports": "supports",
+      "contradicts": "contradicts",
+      "context": "context"
+    },
+    "empty": "No checkable claim was found in this text.",
+    "modeImage": "Image",
+    "save": "Save to My files",
+    "saved": "Saved ✓",
+    "saveFailed": "Cannot save on this device"
   },
   "score": {
     "official_source": "Official sources",
@@ -193,7 +297,13 @@
     "national": "National",
     "missing": "Profiles missing from the directory",
     "broadened": "Few experts in this region: the search was widened to the whole country.",
-    "contribution": { "confirm": "Can confirm", "explain": "Can explain", "contradict": "Can contradict", "field_testimony": "Field testimony", "data": "Can provide data" }
+    "contribution": {
+      "confirm": "Can confirm",
+      "explain": "Can explain",
+      "contradict": "Can contradict",
+      "field_testimony": "Field testimony",
+      "data": "Can provide data"
+    }
   },
   "image": {
     "title": "Authenticate an image",
@@ -215,8 +325,16 @@
     "gps": "GPS present (not kept)",
     "reverse": "Reverse search",
     "reverseNote": "The image is not sent to these services: open them and drop it yourself.",
-    "provenance": { "metadata": "Metadata", "visualAnalysis": "Visual analysis", "externalSource": "External source" },
-    "verdict": { "indices concordants": "Consistent hints", "indices contradictoires": "Conflicting hints", "non concluant": "Inconclusive" }
+    "provenance": {
+      "metadata": "Metadata",
+      "visualAnalysis": "Visual analysis",
+      "externalSource": "External source"
+    },
+    "verdict": {
+      "indices concordants": "Consistent hints",
+      "indices contradictoires": "Conflicting hints",
+      "non concluant": "Inconclusive"
+    }
   },
   "translate": {
     "title": "Translate",
@@ -246,21 +364,52 @@
     "data": "Data to look for",
     "basedOn": "Based on",
     "verifyFirst": "Check first",
-    "format": { "brief": "Brief", "investigation": "Investigation", "radio_report": "Radio report" }
+    "format": {
+      "brief": "Brief",
+      "investigation": "Investigation",
+      "radio_report": "Radio report"
+    }
   },
   "monitor": {
     "title": "National monitoring",
     "lead": "This screen will show RSS feeds from Malagasy media. It is in preparation: nothing is shown until the feeds have been audited.",
     "rulesTitle": "What monitoring will show",
-    "rules": ["The title, the link and a short excerpt, never the full article.", "The source, the language and the publication date.", "A button to suggest angles from a topic."],
+    "rules": [
+      "The title, the link and a short excerpt, never the full article.",
+      "The source, the language and the publication date.",
+      "A button to suggest angles from a topic."
+    ],
     "next": "Next step: list the media that publish a usable RSS feed, with the audit date."
   },
   "stats": {
-    "title": "Figures and agenda",
-    "lead": "This screen will gather a few key indicators and upcoming publications. It is in preparation: no figure is shown without its source.",
-    "rulesTitle": "Every figure will show",
-    "rules": ["Its source, with a link.", "Its reference period.", "Its update date."],
-    "next": "Next step: enter the first sourced indicators by hand."
+    "title": "Key figures",
+    "lead": "The latest figures published for Madagascar by the World Bank. Each value shows its year, its source and its update date.",
+    "retrieved": "Data retrieved on {date}",
+    "period": "REFERENCE YEAR: {year}",
+    "range": "TREND {from} → {to}",
+    "updated": "Updated by the source on {date}",
+    "stale": "FIGURE FROM {year}",
+    "agendaTitle": "Agenda",
+    "agendaEmpty": "No publication or press conference entered yet. Every date added must cite its source."
   },
-  "locale": { "mg": "Malagasy", "fr": "Français", "en": "English" }
+  "locale": {
+    "mg": "Malagasy",
+    "fr": "Français",
+    "en": "English"
+  },
+  "files": {
+    "kicker": "ON THIS DEVICE",
+    "short": "My files",
+    "title": "My files",
+    "lead": "The checks you chose to save. They stay in this browser and are never sent to a server.",
+    "empty": "No saved files yet. Run a check, then click \"Save to My files\".",
+    "start": "Check a claim",
+    "savedOn": "Saved on",
+    "open": "Open",
+    "close": "Close",
+    "export": "Export as text",
+    "delete": "Delete",
+    "confirmDelete": "Confirm deletion",
+    "cancel": "Cancel"
+  }
 }

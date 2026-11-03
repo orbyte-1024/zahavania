@@ -38,6 +38,20 @@ function ModuleNav({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
+function FilesLink({ onNavigate }: { onNavigate?: () => void }) {
+  const t = useTranslations("files");
+  const pathname = usePathname();
+  const current = pathname.startsWith("/app/files");
+  return (
+    <Link href="/app/files" className="rail-link rail-files" aria-current={current ? "page" : undefined} onClick={onNavigate}>
+      {current && <motion.span layoutId="rail-active" className="rail-active" transition={{ type: "spring", stiffness: 380, damping: 34 }} />}
+      <span className="rail-need mono">{t("kicker")}</span>
+      <span className="rail-name">{t("short")}</span>
+      <span aria-hidden="true" />
+    </Link>
+  );
+}
+
 export function Workspace({ children }: { children: ReactNode }) {
   const t = useTranslations("workspace");
   const tn = useTranslations("nav");
@@ -54,6 +68,7 @@ export function Workspace({ children }: { children: ReactNode }) {
           Checkeko
         </Link>
         <ModuleNav />
+        <FilesLink />
         <div className="rail-foot">
           <LanguageSwitch />
         </div>
@@ -86,6 +101,7 @@ export function Workspace({ children }: { children: ReactNode }) {
               </button>
             </div>
             <ModuleNav onNavigate={() => setOpen(false)} />
+            <FilesLink onNavigate={() => setOpen(false)} />
             <div className="rail-foot">
               <LanguageSwitch />
             </div>

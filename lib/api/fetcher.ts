@@ -4,6 +4,9 @@ import type {
   SuggestExpertsErrorCode,
   SuggestExpertsRequest,
   SuggestExpertsSuccess,
+  TranslateErrorCode,
+  TranslateRequest,
+  TranslateSuccess,
   VerifyTextErrorCode,
   VerifyTextRequest,
   VerifyTextSuccess,
@@ -16,6 +19,7 @@ export type ApiRoutes = {
     success: SuggestExpertsSuccess;
     errorCode: SuggestExpertsErrorCode;
   };
+  "/api/translate": { request: TranslateRequest; success: TranslateSuccess; errorCode: TranslateErrorCode };
   "/api/editorial/angles": { request: EditorialAnglesRequest; success: EditorialAnglesSuccess; errorCode: never };
 };
 
