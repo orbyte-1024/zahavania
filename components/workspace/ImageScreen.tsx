@@ -264,6 +264,24 @@ export function ImageScreen() {
                 </ul>
               </motion.div>
             )}
+            <motion.div className="journalist-block" variants={rise} style={{ marginTop: "1.25rem", padding: "1rem", border: "1px solid var(--rule)", borderRadius: "6px", background: "var(--surface)" }}>
+              <h3 className="mono" style={{ fontSize: "0.75rem", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: "0.75rem" }}>Pour le journaliste : que faire maintenant ?</h3>
+              <p style={{ fontSize: "0.95rem", lineHeight: 1.55, marginBottom: "0.75rem" }}>
+                <strong>Indice de confiance : indicatif 0–100</strong> — jamais une probabilité. Basé sur : statut ({report.verification.status}), indépendance et fraîcheur des sources, contradictions repérées, éléments manquants.
+              </p>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+                {["Valider", "Compléter", "Rejeter"].map((action) => (
+                  <span key={action} style={{ padding: "0.35rem 0.7rem", border: "1px solid var(--ink)", borderRadius: "4px", fontSize: "0.85rem", fontWeight: 600 }} aria-label={action}>{action}</span>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginBottom: "0.5rem" }}>
+                Limites affichées ci-dessus : une image sans anomalie n’est pas “authentique”. Les sources sont cliquables (titre, domaine, date, URL). Vérifiez avant publication.
+              </p>
+              <p style={{ fontSize: "0.85rem", fontStyle: "italic" }}>
+                Option — proposition d’angle / expert : consultez le profil suggéré dans le rapport ou contactez un expert du domaine (annuaire consentant, données fictives en démo).
+              </p>
+            </motion.div>
+
             <motion.div variants={rise}>
               <Badge>{result?.kind === "image" ? result.data.file.format.toUpperCase() : `${result?.data.frames.length ?? 0} × JPEG`}</Badge>
             </motion.div>
