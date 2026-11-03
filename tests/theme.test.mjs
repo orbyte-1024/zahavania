@@ -90,9 +90,9 @@ test("light theme text and the four statuses meet WCAG AA on every background", 
   }
 });
 
-test("dark theme: #221811 only as the page, every reading surface at WCAG AA", () => {
-  assert.equal(dark.bone, "#221811");
-  const uses = Object.entries(dark).filter(([, value]) => value.toLowerCase() === "#221811").map(([name]) => name);
+test("dark theme: the darkest brown only as the page, every reading surface at WCAG AA", () => {
+  assert.equal(dark.bone, "#170f0a");
+  const uses = Object.entries(dark).filter(([, value]) => value.toLowerCase() === dark.bone).map(([name]) => name);
   assert.deepEqual(uses, ["bone"]);
   for (const name of ["surface", "surface-2", "chrome", "field"]) assert.notEqual(dark[name], dark.bone, name);
   const foregrounds = ["ink", "ash", "accent", "accent-soft", "st-confirmed", "st-contradicted", "st-needs", "st-insufficient"];
