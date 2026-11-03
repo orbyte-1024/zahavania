@@ -16,7 +16,7 @@ Supabase project.
 | 5 | Medium | API keys shared in a chat session | Rotate the keys |
 | 6 | Low | Rate limits kept in memory on Vercel | Configuration |
 | 7 | Low | Content sent to third-party processors | Documented |
-| 8 | Info | Firefox warned that an `AudioContext` was blocked | Fixed |
+| 8 | Info | Firefox warned that an `AudioContext` was blocked | Gone: landing sound removed |
 
 ### 1. Expert directory readable through the Supabase REST API (High)
 
@@ -94,8 +94,8 @@ not submit confidential documents; the image screen already says the image is se
 
 ### 8. AudioContext warning (Info)
 
-The landing created its audio context on events Firefox does not count as a gesture. It is now created only when
-`navigator.userActivation` confirms an active gesture, on `click`, `keydown` or `touchend`.
+The landing created its audio context on events Firefox does not count as a gesture. The landing sound has since
+been removed entirely, so no audio context is created any more.
 
 ## Checked, no issue found
 

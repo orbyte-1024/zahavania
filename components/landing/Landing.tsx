@@ -13,7 +13,6 @@ import { Objections } from "@/components/landing/Objections";
 import { Process } from "@/components/landing/Process";
 import { Rule } from "@/components/landing/Rule";
 import { Tools } from "@/components/landing/Tools";
-import { useLandingSound } from "@/components/landing/useLandingSound";
 import "@/components/landing/landing.css";
 import { BRAND_NAME } from "@/lib/brand";
 
@@ -22,7 +21,6 @@ const HANDOFF_MS = 900;
 
 function Chrome() {
   const { engine, animated } = useEngine();
-  useLandingSound();
   const loaderRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLElement>(null);
   const wordRef = useRef<HTMLParagraphElement>(null);

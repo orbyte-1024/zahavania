@@ -17,12 +17,6 @@
       "dark": "Dark",
       "toLight": "Switch to the light theme",
       "toDark": "Switch to the dark theme"
-    },
-    "sound": {
-      "on": "Sound",
-      "off": "Muted",
-      "toOn": "Turn on the paper sounds",
-      "toOff": "Turn off the paper sounds"
     }
   },
   "modules": {

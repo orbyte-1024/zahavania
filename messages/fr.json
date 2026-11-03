@@ -17,12 +17,6 @@
       "dark": "Sombre",
       "toLight": "Passer au thème clair",
       "toDark": "Passer au thème sombre"
-    },
-    "sound": {
-      "on": "Son",
-      "off": "Muet",
-      "toOn": "Activer les bruits de papier",
-      "toOff": "Couper les bruits de papier"
     }
   },
   "modules": {
