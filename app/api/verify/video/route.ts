@@ -13,7 +13,7 @@ import { buildVerification, type VisionWarning } from "@/lib/verification-summar
 import { aggregateFrames, combinedAnalysis, mapWithConcurrency, VIDEO_MAX_DURATION_SECONDS } from "@/lib/video-frames";
 import { analyzeImage } from "@/lib/vision-analyzer";
 
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 const MINUTE_MS = 60_000;
 const FRAME_CONCURRENCY = 2;

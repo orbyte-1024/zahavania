@@ -13,7 +13,7 @@ import { errorResponse, jsonResponse, startTimer, tooManyRequests } from "@/lib/
 import { buildVerification, type VisionWarning } from "@/lib/verification-summary";
 import { analyzeImage } from "@/lib/vision-analyzer";
 
-export const maxDuration = 60;
+export const maxDuration = 180;
 
 const MINUTE_MS = 60_000;
 

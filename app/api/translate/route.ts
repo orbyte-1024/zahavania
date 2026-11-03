@@ -7,6 +7,8 @@ import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
 import { authenticate } from "@/lib/security/auth";
 import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 
+export const maxDuration = 300;
+
 const MAX_BODY_BYTES = 24 * 1024;
 const MINUTE_MS = 60_000;
 

@@ -8,7 +8,7 @@ import { authenticate } from "@/lib/security/auth";
 import { clientIp, createRateLimiter } from "@/lib/security/ratelimit";
 import { errorResponse, jsonResponse, readJsonBody, startTimer, tooManyRequests } from "@/lib/security/request";
 
-export const maxDuration = 60;
+export const maxDuration = 180;
 
 const MAX_BODY_BYTES = 131_072;
 const MINUTE_MS = 60_000;
