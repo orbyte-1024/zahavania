@@ -27,16 +27,25 @@ Requests are authenticated with `Authorization: Bearer <supabase access token>` 
 
 Each AI feature reads its own model variable and falls back to `AI_MODEL` when it is empty (`lib/ai/models.ts`). `AI_FALLBACK_MODEL` is shared: when a task's model fails (rate limit, provider error, invalid output), the request is retried once with it, unless it is the same model.
 
-| Task | Variable | Recommended ID to test |
-|---|---|---|
-| Claim verification | `AI_MODEL_VERIFY` | `google/gemini-3.5-flash` |
-| Translation | `AI_MODEL_TRANSLATE` | `google/gemini-3.5-flash` |
-| Story angles | `AI_MODEL_ANGLES` | `google/gemini-3.5-flash` |
-| Image and video analysis | `AI_MODEL_VISION` | `google/gemini-3.5-flash-lite` |
-| Expert classification and ranking | `AI_MODEL_EXPERTS` | `google/gemini-3.5-flash-lite` |
-| Shared fallback | `AI_FALLBACK_MODEL` | a free model (`…:free`) |
+The team uses free models only. Tasks are spread across providers so that one saturated provider does not stop every feature, and the fallback comes from another provider.
 
-These IDs were listed in the OpenRouter catalog with image input and JSON mode support; newer Gemini Flash versions also exist there. Set the values in `.env.local` only.
+| Task | Variable | Free model | Why |
+|---|---|---|---|
+| Claim verification | `AI_MODEL_VERIFY` | `nvidia/nemotron-3.5-super-vl:free` | JSON and structured output, 1M context |
+| Translation | `AI_MODEL_TRANSLATE` | `google/gemma-4-31b-it:free` | largest free Gemma, plain-text output |
+| Story angles | `AI_MODEL_ANGLES` | `google/gemma-4-31b-it:free` | JSON mode, good writing |
+| Image and video analysis | `AI_MODEL_VISION` | `google/gemma-4-26b-a4b-it:free` | image input and JSON mode |
+| Expert classification and ranking | `AI_MODEL_EXPERTS` | `google/gemma-4-26b-a4b-it:free` | JSON mode, fast |
+| Shared fallback | `AI_FALLBACK_MODEL` | `dots-studio/dots-3-note-preview:free` | image input and JSON mode, different provider |
+
+These IDs were listed in the OpenRouter catalog on 2026-11-03. Free models come and go: check the catalog before the demo. Set the values in `.env.local` only.
+
+Limits of free models, to keep in mind before the demo:
+
+- **Web search is never free.** Claim verification uses the OpenRouter `web` plugin, billed per search whatever the model. Without credits, verification cannot find sources, and every claim stays `insufficient`. Lower `AI_WEB_MAX_RESULTS` to reduce the cost per check.
+- **Daily quota.** OpenRouter caps free-model requests per account and per day, and the cap is much higher once the account has bought credits. A rehearsal can use up the quota before the demo.
+- **Privacy.** Some free providers log prompts or use them for training, and OpenRouter only routes to them when that is allowed in the account's privacy settings. Never submit confidential or unpublished material while free models are configured.
+- **Quality.** Malagasy output from free models is weak: every Malagasy translation stays marked "to be reviewed".
 
 In code, pick the task, never a model id:
 
@@ -52,8 +61,6 @@ const vision = await askJson({
 ```
 
 Both keep the same retry, reasoning budget, timeout and fallback behaviour. `askText` retries once when the answer is empty, truncated or rejected by `accept`. A failed call throws an `AiError` whose `code` and `providerStatus` are safe to log.
-
-Free models are a fallback, not a default. Some free providers may log prompts or use them for training, so never route confidential material to them: a journalist's unpublished document must only reach a paid model whose provider does not train on prompts.
 
 ## Cache and demo fallback
 
