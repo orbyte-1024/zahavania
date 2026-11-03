@@ -152,3 +152,42 @@ test("a missing model fails clearly before any request", async () => {
   assert.equal(requests.length, 0);
   process.env.AI_MODEL = saved;
 });
+
+function quotaReply() {
+  return new Response(JSON.stringify({ error: { message: "Rate limit exceeded: free-models-per-day.", code: 429 } }), {
+    status: 429,
+    headers: { "content-type": "application/json" },
+  });
+}
+
+test("a rate limit is not retried by the SDK: one request, then the fallback", async () => {
+  requests.length = 0;
+  respond = (body) => (body.model === "verify/model" ? reply(null, { status: 429 }) : reply({ ok: true }));
+  const result = await askJson({ task: "verify", system: "s", user: "u", schema });
+  assert.deepEqual(requests.map((r) => r.body.model), ["verify/model", "fallback/model"]);
+  assert.equal(result.model, "fallback/model");
+});
+
+test("the shared daily free quota skips a free fallback, which would fail the same way", async () => {
+  process.env.AI_FALLBACK_MODEL = "other/model:free";
+  requests.length = 0;
+  respond = () => quotaReply();
+  await assert.rejects(askJson({ task: "verify", system: "s", user: "u", schema }), (error) => error.code === "rate_limited");
+  assert.deepEqual(requests.map((r) => r.body.model), ["verify/model"]);
+
+  process.env.AI_FALLBACK_MODEL = "paid/model";
+  requests.length = 0;
+  respond = (body) => (body.model === "paid/model" ? reply({ ok: true }) : quotaReply());
+  const result = await askJson({ task: "verify", system: "s", user: "u", schema });
+  assert.equal(result.model, "paid/model");
+  process.env.AI_FALLBACK_MODEL = "fallback/model";
+});
+
+test("timeoutMs is the budget for the whole call: a retry never starts without time left", async () => {
+  requests.length = 0;
+  respond = () => new Promise((resolve) => setTimeout(() => resolve(reply({ wrong: 1 })), 1_000));
+  const started = Date.now();
+  await assert.rejects(askJson({ task: "verify", system: "s", user: "u", schema, timeoutMs: 3_500 }), (error) => error.code === "timeout");
+  assert.equal(requests.length, 1);
+  assert.ok(Date.now() - started < 2_000);
+});

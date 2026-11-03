@@ -11,6 +11,8 @@ const DEFAULT_BASE_URL = "https://openrouter.ai/api/v1";
 const DEFAULT_TIMEOUT_MS = 25_000;
 const DEFAULT_MAX_TOKENS = 2_000;
 const DEFAULT_OUTPUT_RETRIES = 1;
+const MIN_ATTEMPT_MS = 3_000;
+const SHARED_FREE_QUOTA = /free-models-per-day/i;
 
 export type AiErrorCode =
   | "config_missing"
@@ -104,7 +106,7 @@ function getClient(): OpenAI {
     baseURL: process.env.LLM_BASE_URL || DEFAULT_BASE_URL,
     apiKey,
     timeout: DEFAULT_TIMEOUT_MS,
-    maxRetries: 1,
+    maxRetries: 0,
   });
   return client;
 }
@@ -153,7 +155,7 @@ function extractJson(raw: string): unknown {
 function toAiError(error: unknown): AiError {
   if (error instanceof AiError) return error;
   if (error instanceof OpenAI.APIConnectionTimeoutError) return new AiError("timeout", "provider timeout");
-  if (error instanceof OpenAI.RateLimitError) return new AiError("rate_limited", "provider rate limit", 429);
+  if (error instanceof OpenAI.RateLimitError) return new AiError("rate_limited", `provider rate limit: ${error.message}`, 429);
   if (error instanceof OpenAI.APIError) {
     return new AiError("provider_error", `provider status ${error.status ?? "unknown"}: ${error.message}`, error.status ?? null);
   }
@@ -191,9 +193,16 @@ async function complete(params: ChatParams, timeoutMs: number): Promise<Completi
 
 type Parsed<R> = { value: R } | { error: AiError };
 
+function remainingMs(deadline: number): number {
+  const left = deadline - Date.now();
+  if (left < MIN_ATTEMPT_MS) throw new AiError("timeout", "time budget exhausted");
+  return left;
+}
+
 async function runAttempts<R>(
   params: ChatParams,
   options: BaseOptions,
+  deadline: number,
   parse: (completion: Completion) => Parsed<R>,
 ): Promise<{ value: R; usage: AiUsage; attempts: number; citedUrls: string[] }> {
   const maxAttempts = 1 + (options.outputRetries ?? DEFAULT_OUTPUT_RETRIES);
@@ -201,7 +210,7 @@ async function runAttempts<R>(
   let lastError = new AiError("invalid_output", "no attempt made");
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    const completion = await complete(params, options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+    const completion = await complete(params, remainingMs(deadline));
     usage.promptTokens += completion.usage.promptTokens;
     usage.completionTokens += completion.usage.completionTokens;
     usage.totalTokens += completion.usage.totalTokens;
@@ -229,10 +238,18 @@ async function withFallback<R extends { attempts: number }>(
   } catch (error) {
     const failure = toAiError(error);
     const fallback = resolveFallback(task);
-    if (!fallback || !FALLBACK_CODES.has(failure.code)) throw failure;
+    if (!fallback || !FALLBACK_CODES.has(failure.code) || sharesExhaustedQuota(failure, fallback)) throw failure;
     const result = await run(fallback, 0);
     return { ...result, attempts: result.attempts + 1 + (outputRetries ?? DEFAULT_OUTPUT_RETRIES), model: fallback };
   }
+}
+
+function sharesExhaustedQuota(failure: AiError, fallback: string): boolean {
+  return failure.code === "rate_limited" && SHARED_FREE_QUOTA.test(failure.message) && fallback.endsWith(":free");
+}
+
+function deadlineFor(options: BaseOptions): number {
+  return Date.now() + (options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
 }
 
 export async function askJson<T>(options: AskJsonOptions<T>): Promise<AskJsonResult<T>> {
@@ -247,8 +264,9 @@ export async function askJson<T>(options: AskJsonOptions<T>): Promise<AskJsonRes
     }
   };
 
+  const deadline = deadlineFor(options);
   const result = await withFallback(options.task, options.outputRetries, (modelId, retries) =>
-    runAttempts(buildChatParams(options, modelId, "json"), { ...options, outputRetries: retries }, parse),
+    runAttempts(buildChatParams(options, modelId, "json"), { ...options, outputRetries: retries }, deadline, parse),
   );
   return { data: result.value, citedUrls: result.citedUrls, usage: result.usage, attempts: result.attempts, model: result.model };
 }
@@ -261,8 +279,9 @@ export async function askText(options: AskTextOptions): Promise<AskTextResult> {
     return { value: text };
   };
 
+  const deadline = deadlineFor(options);
   const result = await withFallback(options.task, options.outputRetries, (modelId, retries) =>
-    runAttempts(buildChatParams(options, modelId, "text"), { ...options, outputRetries: retries }, parse),
+    runAttempts(buildChatParams(options, modelId, "text"), { ...options, outputRetries: retries }, deadline, parse),
   );
   return { text: result.value, usage: result.usage, attempts: result.attempts, model: result.model };
 }
