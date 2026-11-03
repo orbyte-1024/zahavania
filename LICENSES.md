@@ -4,14 +4,10 @@
 | ------ | ------- | ------- |
 | @supabase/ssr | 0.12.7 | MIT |
 | @supabase/supabase-js | 2.118.0 | MIT |
-| c2pa-node | 0.5.26 | MIT |
 | exifr | 7.1.3 | MIT |
 | image-size | 2.0.4 | MIT |
 | openai | 7.47.0 | Apache-2.0 |
 | server-only | 0.0.1 | MIT |
-| server-only | 0.0.1 | MIT |
-| @supabase/supabase-js | 2.118.0 | MIT |
-| @supabase/ssr | 0.12.7 | MIT |
 | three | 0.187.0 | MIT |
 | @react-three/fiber | 9.8.2 | MIT |
 | gsap | 3.15.0 | Standard "no charge" GSAP license (https://gsap.com/standard-license) |
@@ -25,6 +21,17 @@
 | next-intl | 4.14.9 | MIT |
 | vitest | 5.1.0 | MIT |
 | vite | 8.3.5 | MIT |
+| react-dom | 19.3.0 | MIT |
+| typescript | 5.9.3 | Apache-2.0 |
+| eslint | 9.39.5 | MIT |
+| eslint-config-next | 16.4.3 | MIT |
+| tailwindcss | 4.3.3 | MIT |
+| @tailwindcss/turbopack | 4.3.3 | MIT |
+| @types/node | 24.19.2 | MIT |
+| @types/react | 19.3.0 | MIT |
+| @types/react-dom | 19.3.0 | MIT |
+| next | 16.4.3 | MIT |
+| react | 19.3.0 | MIT |
 
 ## Photos
 
