@@ -80,7 +80,7 @@ test("audited sources and districts cover every region defined by the app", () =
     assert.ok(["fr", "mg", "en"].includes(source.lang));
   }
   for (const source of sources.sources.filter((entry) => entry.scope === "international")) {
-    assert.ok(source.requireTerms.length > 0, `${source.id} needs a Madagascar term filter`);
+    assert.ok(source.requireTerms.length > 0, `${source.id} requires a Madagascar term filter`);
   }
 
   assert.equal(MONITOR_DISTRICTS.regions.length, REGIONS.length);

@@ -481,7 +481,7 @@
   "offline": {
     "kicker": "NO CONNECTION",
     "title": "You are offline",
-    "lead": "Checking a claim needs the network: sources are searched live and nothing is invented without them.",
+    "lead": "Checking a claim requires the network: sources are searched live and nothing is invented without them.",
     "files": "Your saved dossiers stay on this device. They will show again as soon as the connection is back.",
     "retry": "Try again"
   },

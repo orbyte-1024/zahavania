@@ -73,7 +73,7 @@ To record the demo scenarios (each run is a real, paid model call):
 DEMO_RECORD=true USE_MOCK=false DEMO_MODE=true npm run dev
 ```
 
-Send each scenario once, check the files written to `data/demo/`, review them and commit them. They contain the scenario input and output, so record only public demo content, never confidential material. To replay them, set `DEMO_FALLBACK=on_error` (or `always` to skip the network entirely) and run `npm run build && npm start`. With the network off, Supabase cannot validate sessions, so offline rehearsals need `DEMO_MODE=true` in development.
+Send each scenario once, check the files written to `data/demo/`, review them and commit them. They contain the scenario input and output, so record only public demo content, never confidential material. To replay them, set `DEMO_FALLBACK=on_error` (or `always` to skip the network entirely) and run `npm run build && npm start`. With the network off, Supabase cannot validate sessions, so offline rehearsals require `DEMO_MODE=true` in development.
 
 ## Text verification
 

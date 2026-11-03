@@ -72,7 +72,7 @@ export const MAX_CLAIM_TEXT_LENGTH = 1_000;
 export const MAX_VERIFICATION_ID_LENGTH = 128;
 export const MAX_ANGLES_CLAIMS = 50;
 
-// Stateless hand-off: the client echoes back only what the angles logic needs
+// Stateless hand-off: the client echoes back only what the angles logic requires
 // (text + status), so no server-side storage of verifications is required.
 export const angleClaimRefSchema = z.object({
   text: z.string().trim().min(1).max(MAX_CLAIM_TEXT_LENGTH),

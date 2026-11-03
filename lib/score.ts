@@ -94,7 +94,7 @@ function adjustStatus(claim: Claim, aligned: Map<string, SourceKind>): { status:
     return { status: "insufficient", reason: claim.status === "insufficient" ? null : "no usable source" };
   }
   if (claim.status === "confirmed" && reliableDomainCount(aligned) < 2) {
-    return { status: "needs_verification", reason: "confirmation needs at least 2 independent reliable domains" };
+    return { status: "needs_verification", reason: "confirmation requires at least 2 independent reliable domains" };
   }
   if (claim.status === "contradicted" && reliableDomainCount(aligned) < 1) {
     return { status: "needs_verification", reason: "no reliable source contradicts the claim" };
