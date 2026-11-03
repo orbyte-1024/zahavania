@@ -21,20 +21,20 @@
   },
   "modules": {
     "verify": {
-      "name": "Hamarino vaovao",
+      "name": "Hamarino ny vaovao",
       "short": "Hamarino",
       "desc": "Lahatsoratra na rohy. Sarahina ireo filazana, ampitahaina amin'ny loharano hitan'ny fikarohana an-tranonkala, ary isain'ny kaody.",
       "need": "FILANA 1",
       "state": "MANDEHA",
-      "rail": "Hamarino vaovao"
+      "rail": "Hamarino ny vaovao"
     },
     "image": {
-      "name": "Hamarino sary",
+      "name": "Hamarino ny sary",
       "short": "Sary",
       "desc": "Metadata EXIF, fandinihana ny sary atolotra ho famantarana, rohy fikarohana mivadika. Tsy milaza mihitsy hoe « marina » na « diso ».",
       "need": "FILANA 2",
       "state": "MANDEHA",
-      "rail": "Hamarino sary"
+      "rail": "Hamarino ny sary"
     },
     "monitor": {
       "name": "Fanaraha-maso nasionaly",
@@ -172,7 +172,7 @@
       "reassurance": "TSY MILA KAONTY — MALAGASY, FRANTSAY, ANGLISY",
       "left": "© 2026 — {brand}",
       "middle": "MG · FR · EN",
-      "right": "NATAO HO AN'NY TRANOM-GAZETY ETO MADAGASIKARA"
+      "right": "NATAO HO AN'NY TRANON-GAZETY ETO MADAGASIKARA"
     }
   },
   "workspace": {
