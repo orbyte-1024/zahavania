@@ -150,8 +150,11 @@ Direction "Site Immersif" (voir le skill du même nom) : sombre "latérite", typ
 
 ## 11. Hors ligne
 
-Hors périmètre pour l'instant (décision d'équipe). "Mes dossiers" fonctionne sans réseau car il est stocké
-sur l'appareil, mais aucune file d'attente ni service worker n'est en place.
+Le hors-ligne complet reste hors périmètre (décision d'équipe). L'application est une PWA installable
+(`app/manifest.ts`, icônes dans `public/icons/`, régénérées par `scripts/generate-icons.mjs`).
+`public/sw.js` ne fait qu'une chose : afficher `/offline` quand une navigation échoue faute de réseau.
+Il ne met en cache ni les appels `/api`, ni les pages, et il n'y a aucune file d'attente.
+Les données de "Mes dossiers" restent sur l'appareil (`localStorage`).
 
 ## 12. Priorités
 
