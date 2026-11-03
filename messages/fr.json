@@ -330,6 +330,8 @@
     "submit": "Analyser",
     "change": "Changer de fichier",
     "summary": "Synthèse",
+    "summaryMore": "Voir plus",
+    "summaryLess": "Voir moins",
     "supporting": "Indices concordants",
     "contradictory": "Indices contradictoires",
     "metadata": "Métadonnées",
