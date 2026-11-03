@@ -1,11 +1,11 @@
-# AGENTS.md — Zahavan'Ia (hackathon)
+# AGENTS.md — Zahavan'ia (hackathon)
 
 > Lis ce fichier en entier avant d'écrire du code. Il prime sur tes habitudes.
 > Pour Claude Code : créer un fichier `CLAUDE.md` contenant uniquement `@AGENTS.md`.
 
 ## 1. Mission
 
-Zahavan'Ia est un **assistant d'investigation journalistique**
+Zahavan'ia est un **assistant d'investigation journalistique**
 pour Madagascar. Question centrale : *comment aider un journaliste à passer d'une
 information reçue à une information vérifiée, documentée et exploitable ?*
 
@@ -142,10 +142,11 @@ messages/{mg,fr,en}.json
 Direction "Site Immersif" (voir le skill du même nom) : sombre "latérite", typographique, animé.
 - Tokens dans `app/globals.css` : `--bone`, `--surface`, `--ink`, `--ash`, `--accent` (cuivre, seul accent),
   `--accent-deep` (petits boutons), statuts `--st-*`. Polices : Bricolage Grotesque + DM Mono.
-- Thème sombre : page cuivre (`--bone: #996e52`), texte blanc, et tout ce qui se lit (panneaux `--surface`,
-  barre latérale et menus `--chrome`, champs `--field`) en marron du logo. Thème clair crème avec encre marron.
+- Thème sombre : `#221811` uniquement pour le fond de page (`--bone`). Barre latérale et menus (`--chrome`),
+  panneaux (`--surface`, `--surface-2`) et champs (`--field`) ont chacun leur brun ; texte crème, accent cuivre
+  clair, et `#996E52` réservé aux éléments décoratifs (jamais au texte). Thème clair crème avec encre marron.
   Chaque couleur est un token redéfini sous `:root[data-theme="light"]` ; `tests/theme.test.mjs` vérifie le
-  niveau AA des panneaux et champs. Seul le texte posé sur le cuivre est à 4,46:1, le maximum possible.
+  niveau AA partout et que `#221811` n'est utilisé que pour la page.
 - Logo source : `assets/zahavania.png`. Les icônes (favicon, PWA, Apple) en sont dérivées par
   `node scripts/generate-icons.mjs` ; ne pas les retoucher à la main.
 - Filets fins plutôt que cartes ombrées. Pas de dégradé décoratif, pas de glassmorphism, pas d'emoji.

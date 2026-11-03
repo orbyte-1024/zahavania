@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --ink-rgb: 255, 255, 255;
-  --bone-rgb: 153, 110, 82;
-  --surface-rgb: 57, 35, 26;
-  --bone: #996e52;
-  --surface: #39231a;
-  --surface-2: #452c22;
-  --chrome: #39231a;
-  --field: #2b1a13;
-  --ink: #ffffff;
-  --ash: #f6eee4;
+  --ink-rgb: 244, 236, 225;
+  --bone-rgb: 34, 24, 17;
+  --surface-rgb: 51, 37, 28;
+  --bone: #221811;
+  --surface: #33251c;
+  --surface-2: #3e2d22;
+  --chrome: #2b1f17;
+  --field: #281c14;
+  --ink: #f4ece1;
+  --ash: #c9b9a8;
   --ink-faint: rgba(var(--ink-rgb), 0.16);
   --ink-hair: rgba(var(--ink-rgb), 0.09);
 
@@ -18,7 +18,7 @@
   --accent-rgb: 210, 154, 114;
   --accent-deep: #c08661;
   --accent-soft: #ecc9ad;
-  --accent-ink: #39231a;
+  --accent-ink: #2b1f17;
 
   --st-confirmed: #b5cfa2;
   --st-contradicted: #f0a594;
@@ -27,9 +27,9 @@
   --st-needs-rgb: 232, 197, 124;
   --st-insufficient: #c2b4a4;
 
-  --scene-paper: #fbf6ee;
-  --scene-dim: #6b4630;
-  --scene-accent: #39231a;
+  --scene-paper: #e9dfd0;
+  --scene-dim: #4a3527;
+  --scene-accent: #c58d66;
 
   --sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo, monospace;
