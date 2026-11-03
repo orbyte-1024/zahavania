@@ -11,7 +11,13 @@
     "skip": "Aller au contenu",
     "rule": "La règle",
     "menu": "Menu",
-    "close": "Fermer"
+    "close": "Fermer",
+    "theme": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "toLight": "Passer au thème clair",
+      "toDark": "Passer au thème sombre"
+    }
   },
   "modules": {
     "verify": {

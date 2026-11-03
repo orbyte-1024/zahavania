@@ -11,7 +11,13 @@
     "skip": "Skip to content",
     "rule": "The rule",
     "menu": "Menu",
-    "close": "Close"
+    "close": "Close",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "toLight": "Switch to the light theme",
+      "toDark": "Switch to the dark theme"
+    }
   },
   "modules": {
     "verify": {

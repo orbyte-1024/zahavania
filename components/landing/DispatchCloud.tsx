@@ -1,9 +1,10 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { easeInOut, mix, seededRandom, seg } from "@/lib/motion/scroll";
+import { subscribeTheme } from "@/lib/theme";
 
 export type CloudState = { progress: number; mx: number; my: number; still: boolean };
 
@@ -16,9 +17,27 @@ const GAP_X = 0.84;
 const GAP_Y = 1.06;
 const SOURCED_RATIO = 0.075;
 
-const PAPER = new THREE.Color("#d9d0c3");
-const DIM = new THREE.Color("#3b342c");
-const ACCENT = new THREE.Color("#b8865f");
+type Palette = { background: string; paper: THREE.Color; dim: THREE.Color; accent: THREE.Color };
+
+function cssColor(styles: CSSStyleDeclaration, name: string, fallback: string): string {
+  return styles.getPropertyValue(name).trim() || fallback;
+}
+
+function readPalette(): Palette {
+  const styles = getComputedStyle(document.documentElement);
+  return {
+    background: cssColor(styles, "--bone", "#15130f"),
+    paper: new THREE.Color(cssColor(styles, "--scene-paper", "#d9d0c3")),
+    dim: new THREE.Color(cssColor(styles, "--scene-dim", "#3b342c")),
+    accent: new THREE.Color(cssColor(styles, "--scene-accent", "#b8865f")),
+  };
+}
+
+function usePalette(): Palette {
+  const [palette, setPalette] = useState(readPalette);
+  useEffect(() => subscribeTheme(() => setPalette(readPalette())), []);
+  return palette;
+}
 
 type Slip = {
   chaos: THREE.Vector3;
@@ -79,7 +98,7 @@ function paperTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-function Slips({ state }: { state: RefObject<CloudState> }) {
+function Slips({ state, palette }: { state: RefObject<CloudState>; palette: Palette }) {
   const mesh = useRef<THREE.InstancedMesh>(null);
   const group = useRef<THREE.Group>(null);
   const slips = useMemo(() => buildSlips(), []);
@@ -106,9 +125,9 @@ function Slips({ state }: { state: RefObject<CloudState> }) {
   useEffect(() => {
     const instanced = mesh.current;
     if (!instanced) return;
-    for (let i = 0; i < COUNT; i += 1) instanced.setColorAt(i, PAPER);
+    for (let i = 0; i < COUNT; i += 1) instanced.setColorAt(i, palette.paper);
     if (instanced.instanceColor) instanced.instanceColor.needsUpdate = true;
-  }, []);
+  }, [palette]);
 
   useFrame(({ clock, camera }) => {
     const instanced = mesh.current;
@@ -139,7 +158,7 @@ function Slips({ state }: { state: RefObject<CloudState> }) {
       object.updateMatrix();
       instanced.setMatrixAt(i, object.matrix);
 
-      color.copy(PAPER).lerp(slip.sourced ? ACCENT : DIM, t);
+      color.copy(palette.paper).lerp(slip.sourced ? palette.accent : palette.dim, t);
       instanced.setColorAt(i, color);
     }
 
@@ -162,6 +181,7 @@ function Slips({ state }: { state: RefObject<CloudState> }) {
 }
 
 export default function DispatchCloud({ state, active }: { state: RefObject<CloudState>; active: boolean }) {
+  const palette = usePalette();
   return (
     <Canvas
       className="dispatch-canvas"
@@ -171,9 +191,9 @@ export default function DispatchCloud({ state, active }: { state: RefObject<Clou
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       aria-hidden="true"
     >
-      <color attach="background" args={["#15130f"]} />
-      <fog attach="fog" args={["#15130f", 14, 30]} />
-      <Slips state={state} />
+      <color key={`bg-${palette.background}`} attach="background" args={[palette.background]} />
+      <fog key={`fog-${palette.background}`} attach="fog" args={[palette.background, 14, 30]} />
+      <Slips state={state} palette={palette} />
     </Canvas>
   );
 }

@@ -1,6 +1,6 @@
 import type { ModuleId } from "@/lib/modules";
 
-const HAIR = "rgba(240, 235, 227, 0.22)";
+const HAIR = "rgba(var(--ink-rgb), 0.22)";
 const ACCENT = "var(--accent)";
 
 export function ModuleGlyph({ id, className = "" }: { id: ModuleId; className?: string }) {
@@ -77,7 +77,7 @@ export function ModuleGlyph({ id, className = "" }: { id: ModuleId; className?: 
                   width="16"
                   height="16"
                   fill={accent ? ACCENT : "none"}
-                  stroke={accent ? "none" : marked ? "rgba(240, 235, 227, 0.55)" : HAIR}
+                  stroke={accent ? "none" : marked ? "rgba(var(--ink-rgb), 0.55)" : HAIR}
                 />
               );
             }),

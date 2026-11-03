@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type MouseEvent, type Ref } from "react";
 import { LanguageMenu } from "@/components/LanguageMenu";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useEngine } from "@/components/landing/engine";
 
 const SECTIONS = [
@@ -107,6 +108,7 @@ export function Dock({ wordmarkRef, wordmark }: { wordmarkRef: Ref<HTMLAnchorEle
           ))}
         </nav>
         <div className="dock-actions">
+          <ThemeToggle className="dock-theme" />
           <LanguageMenu />
           <Link className="dock-cta" href="/app">
             {t("open")}
@@ -157,6 +159,7 @@ export function Dock({ wordmarkRef, wordmark }: { wordmarkRef: Ref<HTMLAnchorEle
               ))}
             </nav>
             <LanguageMenu variant="list" />
+            <ThemeToggle />
             <Link className="dock-cta dock-sheet-cta" href="/app">
               {t("open")}
               <span aria-hidden="true">→</span>

@@ -98,7 +98,7 @@
   gap: 18px;
   width: min(940px, calc(100% - 28px));
   padding: 8px 8px 8px 20px;
-  background: rgba(34, 30, 25, 0.94);
+  background: rgba(var(--surface-rgb), 0.94);
   border: 1px solid var(--ink-hair);
   border-radius: var(--radius);
   transform: translate(-50%, -180%);
@@ -512,7 +512,7 @@ body.is-ready .fl {
   letter-spacing: -0.02em;
   color: var(--ink);
   white-space: nowrap;
-  text-shadow: 0 2px 30px rgba(21, 19, 15, 0.8);
+  text-shadow: 0 2px 30px rgba(var(--bone-rgb), 0.8);
 }
 
 .spot-intro span {
@@ -1328,7 +1328,8 @@ body.is-static .footer-name .chi {
   }
 
   .dock-nav,
-  .dock-actions .lang-menu {
+  .dock-actions .lang-menu,
+  .dock-actions .dock-theme {
     display: none;
   }
 
